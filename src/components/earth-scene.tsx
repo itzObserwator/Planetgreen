@@ -12,7 +12,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { Group, SRGBColorSpace, Vector2 } from "three";
+import { Group, Mesh, SRGBColorSpace, Vector2 } from "three";
 
 export type EarthMotion = { progress: number };
 
@@ -81,6 +81,7 @@ function CloudBank({ time }: { time: RefObject<number> }) {
     CLOUD_BANK.map((cloud) => `/textures/reference/cloud-${cloud.file}.png`),
   );
   const bank = useRef<Group>(null);
+  const puffs = useRef<Array<Mesh | null>>([]);
   const invalidate = useThree((state) => state.invalidate);
   const textures = useMemo(
     () =>
@@ -105,7 +106,23 @@ function CloudBank({ time }: { time: RefObject<number> }) {
     };
   }, [textures, invalidate]);
   useFrame(() => {
-    if (bank.current) bank.current.position.x = Math.sin(time.current * 0.06) * 0.012;
+    const t = time.current;
+    if (bank.current) bank.current.position.x = Math.sin(t * 0.12) * 0.02;
+    // Separate speeds and phases keep the cloud bank from moving like one image.
+    // Follow the circular crest as each puff drifts; gentle scaling adds billowing.
+    puffs.current.forEach((mesh, index) => {
+      if (!mesh) return;
+      const cloud = CLOUD_BANK[index];
+      const phase = index * 1.3;
+      const wave = Math.sin(t * (0.22 + index * 0.025) + phase) - Math.sin(phase);
+      const x = cloud.x + wave * (0.04 + index * 0.004);
+      const arc = Math.sqrt(Math.max(0.01, 1 - x * x)) - Math.sqrt(1 - cloud.x * cloud.x);
+      const breath = Math.sin(t * 0.32 + phase) - Math.sin(phase);
+      mesh.position.x = x;
+      mesh.position.y = cloud.y + arc + breath * 0.012;
+      mesh.rotation.z = breath * 0.014;
+      mesh.scale.set(1 + breath * 0.025, 1 + breath * 0.045, 1);
+    });
   });
   return (
     <>
@@ -122,6 +139,9 @@ function CloudBank({ time }: { time: RefObject<number> }) {
         {CLOUD_BANK.map((cloud, index) => (
           <mesh
             key={cloud.file}
+            ref={(mesh) => {
+              puffs.current[index] = mesh;
+            }}
             position={[cloud.x, cloud.y, 1.15 + index * 0.002]}
             renderOrder={20 + index}
           >
