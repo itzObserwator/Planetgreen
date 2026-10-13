@@ -12,7 +12,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { Group, Mesh, SRGBColorSpace, Vector2 } from "three";
+import { Group, SRGBColorSpace, Vector2 } from "three";
 
 export type EarthMotion = { progress: number };
 
@@ -21,7 +21,6 @@ const MAPS = [
   "/textures/earth-color.jpg",
   "/textures/earth-normal.jpg",
   "/textures/earth-specular.jpg",
-  "/textures/earth-clouds.png",
 ];
 const INDIA_LONGITUDE = 78;
 // Look slightly south of the equator, so India appears above the opening headline.
@@ -49,7 +48,7 @@ const atmosphereFragment = `
 `;
 
 // Two translucent shells give the reference's wispy rim real spherical depth.
-// Density fades over the front face so India and its coastline remain visible.
+// A view-facing cap confines the clouds to the top edge even as Earth rotates.
 const cloudVertex = `
   varying vec3 vNormal;
   varying vec3 vPosition;
@@ -89,12 +88,12 @@ const cloudFragment = `
   void main() {
     vec3 n = normalize(vNormal);
     float rim = 1.0 - abs(n.z);
-    float upper = smoothstep(-0.1, 0.5, n.y);
-    float band = smoothstep(0.27, 0.67, rim) * (1.0 - smoothstep(0.86, 1.0, rim));
-    float billows = fbm(vLocal * 23.0 + vec3(time * 0.018, 0.0, time * 0.009));
-    float wisps = smoothstep(0.27, 0.65, billows);
+    float upper = smoothstep(0.74, 0.9, n.y);
+    float band = smoothstep(0.18, 0.45, rim) * (1.0 - smoothstep(0.92, 1.0, rim));
+    float billows = fbm(vLocal * 12.0 + vec3(time * 0.018, 0.0, time * 0.009));
+    float wisps = smoothstep(0.2, 0.55, billows);
     float alpha = upper * band * wisps * strength;
-    vec3 color = mix(vec3(0.77, 0.81, 0.82), vec3(1.0, 0.99, 0.96), billows);
+    vec3 color = mix(vec3(0.92, 0.94, 0.93), vec3(1.0, 0.99, 0.96), billows);
     gl_FragColor = vec4(color, alpha);
   }
 `;
@@ -152,18 +151,16 @@ function RealisticEarth({
   onReady: () => void;
   motion: RefObject<EarthMotion>;
 }) {
-  const [surface, normal, specular, clouds] = useTexture(MAPS);
+  const [surface, normal, specular] = useTexture(MAPS);
   const globe = useRef<Group>(null);
-  const cloudLayer = useRef<Mesh>(null);
   const firstFrame = useRef(false);
   const elapsed = useRef(0);
   const viewport = useThree((state) => state.viewport);
   const radius = Math.min(viewport.height * 0.42, viewport.width * 0.38);
   useEffect(() => {
     surface.colorSpace = SRGBColorSpace;
-    clouds.colorSpace = SRGBColorSpace;
-    surface.needsUpdate = clouds.needsUpdate = true;
-  }, [surface, clouds]);
+    surface.needsUpdate = true;
+  }, [surface]);
   useFrame((_, delta) => {
     if (!firstFrame.current) {
       firstFrame.current = true;
@@ -175,7 +172,6 @@ function RealisticEarth({
     // reverses rotation exactly, and the opening always starts facing India.
     if (globe.current)
       globe.current.rotation.y = INITIAL_ROTATION + Math.min(motion.current.progress, 1.5) * 0.95;
-    if (cloudLayer.current) cloudLayer.current.rotation.y = elapsed.current * 0.006;
   });
   return (
     <>
@@ -196,13 +192,9 @@ function RealisticEarth({
               shininess={16}
             />
           </mesh>
-          <mesh ref={cloudLayer} scale={1.012}>
-            <sphereGeometry args={[1, 96, 64]} />
-            <meshPhongMaterial map={clouds} transparent opacity={0.42} depthWrite={false} />
-          </mesh>
         </group>
-        <RimClouds scale={1.035} strength={0.95} time={elapsed} />
-        <RimClouds scale={1.065} strength={0.65} time={elapsed} />
+        <RimClouds scale={1.045} strength={1.15} time={elapsed} />
+        <RimClouds scale={1.08} strength={0.9} time={elapsed} />
         <mesh scale={1.12}>
           <sphereGeometry args={[1, 96, 64]} />
           <shaderMaterial
