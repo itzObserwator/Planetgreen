@@ -48,6 +48,8 @@ To change the visual style, edit the color variables, typography and section rul
 
 For animation changes, use `hero.tsx` for the recording's scroll map, `ui.tsx` for text reveals, `photo-stack.tsx` for the photograph interaction, and `earth-scene.tsx` for independently drifting cloud layers. `earth-background.tsx` aligns the five overlapping foliage scenes to page sections and remeasures them when the layout changes. `motion-provider.tsx` connects Lenis to GSAP's ticker. Keep one smooth-scroll controller. Reduced-motion preferences and a fallback for unavailable WebGL are supported.
 
+The hero's downward movement and zoom use the same scroll value as its text scenes: the globe scales from 1× to 2× over the first viewport of scrolling. Headings reveal individual masked words over a 0.6-second stagger, enter in one second, and exit in 0.3 seconds. Hero paragraphs enter after 0.2 seconds. Section headings and their supporting paragraphs share an observer so an extra wrapper animation does not delay the words.
+
 ## Commands
 
 | Command             | Purpose                                   |

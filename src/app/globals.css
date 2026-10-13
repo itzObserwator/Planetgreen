@@ -182,6 +182,47 @@ textarea:focus-visible {
 .heading-word > span {
   display: inline-block;
 }
+.reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.03em;
+  vertical-align: bottom;
+}
+.reveal-word-inner {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition-delay: 0s;
+}
+.word-reveal.is-visible .reveal-word-inner {
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: 1s;
+  transition-delay: var(--word-delay, 0s);
+}
+.reveal-overline {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.reveal-copy {
+  opacity: 0;
+  transform: translateY(3rem);
+  transition:
+    opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition-delay: 0s;
+}
+.is-revealed > .reveal-overline {
+  opacity: 1;
+}
+.is-revealed > .reveal-copy {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: var(--copy-delay, 0.15s);
+}
 .editorial-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -551,15 +592,16 @@ textarea:focus-visible {
   text-align: center;
   padding: 0 24px;
   z-index: 3;
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
-  transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .hero[data-scene="opening"] .hero-opening {
   opacity: 1;
   pointer-events: auto;
 }
 .hero-kicker {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   position: absolute;
   top: calc(50% - 170px);
   text-transform: uppercase;
@@ -567,6 +609,10 @@ textarea:focus-visible {
   font-size: 12px;
   color: #4d6043;
   margin-bottom: 32px;
+}
+.hero[data-scene="opening"] .hero-kicker {
+  opacity: 1;
+  transition-duration: 0.6s;
 }
 .hero-opening h1 {
   font-size: clamp(38px, 6vw, 82px);
@@ -589,23 +635,28 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   text-align: center;
-  opacity: 0;
+  opacity: 1;
   padding-inline: 24px;
   pointer-events: none;
   z-index: 3;
-  transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.hero-introduction h2,
 .hero-introduction > p {
-  transform: translateY(18px);
-  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  opacity: 0;
+  transform: translateY(-0.5em);
+  transition:
+    opacity 0.4s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .hero[data-scene="introduction"] .hero-introduction {
   opacity: 1;
 }
-.hero[data-scene="introduction"] .hero-introduction h2,
 .hero[data-scene="introduction"] .hero-introduction > p {
+  opacity: 1;
   transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition-delay: 0.2s;
 }
 .hero-introduction h2 {
   font-size: clamp(26px, 4vw, 48px);
@@ -676,7 +727,7 @@ textarea:focus-visible {
 }
 
 .philosophy {
-  margin-top: -10vh;
+  margin-top: -20vh;
   z-index: 2;
 }
 .pillars {
@@ -1646,7 +1697,7 @@ dialog[open] {
     padding-block: 80px;
   }
   .philosophy {
-    margin-top: -70px;
+    margin-top: -20svh;
   }
   .statement {
     font-size: 44px;
@@ -1962,6 +2013,13 @@ dialog[open] {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .word-reveal .reveal-word-inner,
+  .reveal-group .reveal-copy,
+  .reveal-group .reveal-overline {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+  }
   *,
   *::before,
   *::after {

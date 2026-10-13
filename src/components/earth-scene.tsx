@@ -38,10 +38,11 @@ const fragmentShader = `
   void main() {
     vec4 pixel = texture2D(artwork, vUv);
     float luminance = dot(pixel.rgb, vec3(0.2126, 0.7152, 0.0722));
-    float vegetation = smoothstep(0.008, 0.05, pixel.g - max(pixel.r, pixel.b) * 0.85);
+    float greenRatio = pixel.g / max(pixel.r + pixel.b, 0.001);
+    float vegetation = smoothstep(0.7, 1.15, greenRatio) * smoothstep(0.001, 0.02, luminance);
     float terrain = max(smoothstep(0.06, 0.45, luminance), vegetation);
     vec3 surface = mix(daylight, pixel.rgb, terrain * 0.9);
-    vec3 mist = mix(daylight, pixel.rgb, 0.15);
+    vec3 mist = mix(daylight, pixel.rgb, 0.75);
     gl_FragColor = vec4(mix(surface, mist, cloud), pixel.a);
     #include <colorspace_fragment>
   }
