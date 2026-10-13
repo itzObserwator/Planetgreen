@@ -2,7 +2,7 @@
 // Uses the project's installed Chrome/Playwright. No remote services are needed.
 import { chromium } from "playwright";
 import { readFile, writeFile } from "node:fs/promises";
-const source = await readFile(new URL("../public/textures/earth-color.jpg", import.meta.url));
+const source = await readFile(new URL("../public/textures/earth-daylight.jpg", import.meta.url));
 const browser = await chromium.launch({
   executablePath:
     process.env.PLAYWRIGHT_CHROME_PATH ||
@@ -42,7 +42,7 @@ try {
           const index =
             (Math.floor(v * (map.height - 1)) * map.width + Math.floor(u * (map.width - 1))) * 4;
           const target = (py * 1024 + px) * 4;
-          const shade = 0.72 + 0.28 * z;
+          const shade = 0.86 + 0.14 * z;
           for (let channel = 0; channel < 3; channel++)
             pixels.data[target + channel] = original[index + channel] * shade;
           pixels.data[target + 3] = Math.min(255, (1 - distance) * 12000);

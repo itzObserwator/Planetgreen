@@ -18,7 +18,7 @@ export type EarthMotion = { progress: number };
 
 const ARTWORK = "/textures/earth-india-fallback.png";
 const MAPS = [
-  "/textures/earth-color.jpg",
+  "/textures/earth-daylight.jpg",
   "/textures/earth-normal.jpg",
   "/textures/earth-specular.jpg",
 ];
@@ -187,10 +187,10 @@ function RealisticEarth({
   });
   return (
     <>
-      <ambientLight intensity={1.2} />
-      <hemisphereLight args={["#fffdf3", "#839eaf", 1.2]} />
-      <directionalLight position={[-3, 4, 5]} intensity={2.1} color="#fff9ec" />
-      <directionalLight position={[4, 0, 4]} intensity={0.8} color="#dceeff" />
+      <ambientLight intensity={0.8} />
+      <hemisphereLight args={["#fffdf3", "#bbcbb3", 0.9]} />
+      <directionalLight position={[-3, 4, 5]} intensity={1.6} color="#fff9ec" />
+      <directionalLight position={[4, 0, 4]} intensity={0.6} color="#f0f7eb" />
       <group scale={radius} rotation={[(VIEW_LATITUDE * Math.PI) / 180, 0, 0]}>
         <group ref={globe} rotation={[0, INITIAL_ROTATION, 0]}>
           <mesh>
@@ -200,7 +200,7 @@ function RealisticEarth({
               normalMap={normal}
               normalScale={new Vector2(0.4, 0.4)}
               specularMap={specular}
-              specular="#6c8195"
+              specular="#d8e5d2"
               shininess={16}
             />
           </mesh>
