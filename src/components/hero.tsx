@@ -7,12 +7,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown } from "lucide-react";
 import { WordReveal } from "./ui";
+import type { EarthMotion } from "./earth-scene";
 
 const EarthScene = dynamic(() => import("./earth-scene"), { ssr: false });
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
+  const earthMotion = useRef<EarthMotion>({ progress: 0 });
   const [scene, setScene] = useState("opening");
   const [initialized, setInitialized] = useState(false);
   useEffect(() => {
@@ -38,6 +40,7 @@ export function Hero() {
             2,
             -bounds.top / Math.max(1, bounds.height - window.innerHeight),
           );
+          earthMotion.current.progress = p;
           gsap.set(globe, {
             y: 0,
             yPercent: 6 + 100 * p,
@@ -87,7 +90,7 @@ export function Hero() {
               <span />
             </div>
           </div>
-          <EarthScene />
+          <EarthScene motion={earthMotion} />
         </div>
         <div className="hero-opening" aria-hidden={scene !== "opening"}>
           <p className="hero-kicker">Rooted in nature. Made for life.</p>

@@ -166,3 +166,66 @@ test("realistic Earth renders and its geographic fallback survives a lost WebGL 
     .toBe(true);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
+
+test("scroll rotates the geographic surface and reversing returns it to India", async ({
+  page,
+}) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator(".hero-earth canvas")).toHaveCSS("opacity", "1");
+  // Hold the CSS zoom/descent still and hide copy: a geographic change must
+  // come from rotation inside WebGL, rather than movement of the whole canvas.
+  await page.addStyleTag({
+    content:
+      ".hero-earth { transform: none !important; } .hero-opening, .hero-introduction { visibility: hidden !important; }",
+  });
+  const viewport = page.viewportSize()!;
+  const radius = Math.min(
+    viewport.height * 0.42,
+    viewport.width * (viewport.width < 640 ? 1.2 : 1) * 0.38,
+  );
+  const size = Math.floor(radius * 0.35);
+  const clip = {
+    x: Math.floor(viewport.width / 2 - size / 2),
+    y: Math.floor(viewport.height / 2 - radius * 0.52 - size / 2),
+    width: size,
+    height: size,
+  };
+  // Let the renderer finish a frame after removing the CSS transform.
+  await page.waitForTimeout(700);
+  const opening = await page.screenshot({ clip });
+  await page.evaluate((height) => window.scrollTo(0, height * 0.6), viewport.height);
+  await expect(page.locator(".hero")).toHaveAttribute("data-scene", "introduction");
+  await page.waitForTimeout(700);
+  const rotated = await page.screenshot({ clip });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page.locator(".hero")).toHaveAttribute("data-scene", "opening");
+  await page.waitForTimeout(700);
+  const returned = await page.screenshot({ clip });
+  const differences = await page.evaluate(
+    async (images) => {
+      const arrays = await Promise.all(
+        images.map(async (source) => {
+          const image = new Image();
+          image.src = "data:image/png;base64," + source;
+          await image.decode();
+          const canvas = document.createElement("canvas");
+          canvas.width = image.width;
+          canvas.height = image.height;
+          const context = canvas.getContext("2d")!;
+          context.drawImage(image, 0, 0);
+          return context.getImageData(0, 0, image.width, image.height).data;
+        }),
+      );
+      return arrays.slice(1).map((pixels) => {
+        let total = 0;
+        for (let i = 0; i < pixels.length; i++)
+          if (i % 4 !== 3) total += Math.abs(pixels[i] - arrays[0][i]);
+        return total / (pixels.length * 0.75);
+      });
+    },
+    [opening, rotated, returned].map((buffer) => buffer.toString("base64")),
+  );
+  expect(differences[0]).toBeGreaterThan(8);
+  expect(differences[1]).toBeLessThan(differences[0] * 0.3 + 2);
+});
