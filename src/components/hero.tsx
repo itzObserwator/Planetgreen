@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -16,11 +16,6 @@ export function Hero() {
   const root = useRef<HTMLElement>(null);
   const earthMotion = useRef<EarthMotion>({ progress: 0 });
   const [scene, setScene] = useState("opening");
-  const [initialized, setInitialized] = useState(false);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setInitialized(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
   useGSAP(
     () => {
       const media = gsap.matchMedia();
@@ -49,7 +44,7 @@ export function Hero() {
             visibility: p < 1.5 ? "visible" : "hidden",
           });
           gsap.set(orbits, { opacity: 1 - Math.min(p, 1) });
-          const next = p < 0.2 ? "opening" : p > 0.2 && p < 1 ? "introduction" : "complete";
+          const next = p <= 0.2 ? "opening" : p > 0.2 && p < 1 ? "introduction" : "complete";
           setScene((previous) => (previous === next ? previous : next));
           root.current?.classList.toggle("show-scroll-cue", p < 0.05);
         };
@@ -98,14 +93,15 @@ export function Hero() {
             as="h1"
             id="hero-title"
             lines={["A little closer to nature.", "A better way to live."]}
-            visible={initialized && scene === "opening"}
+            visible={scene === "opening"}
           />
+          <p className="hero-summary">Nature-led communities. Rooted in a better tomorrow.</p>
         </div>
         <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>
           <WordReveal
             lines={["We create communities", "where people and", "nature grow together."]}
-            visible={initialized && scene === "introduction"}
+            visible={scene === "introduction"}
           />
           <p>
             Thoughtfully imagined places. Deeply rooted values.

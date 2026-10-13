@@ -229,3 +229,28 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
   expect(differences[0]).toBeGreaterThan(8);
   expect(differences[1]).toBeLessThan(differences[0] * 0.3 + 2);
 });
+
+test.describe("hero copy before JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+  test("title and supporting text are visible without waiting for initialization", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator(".hero-summary")).toHaveText(
+      "Nature-led communities. Rooted in a better tomorrow.",
+    );
+    await expect(page.locator(".hero-summary")).toHaveCSS("opacity", "1");
+    await expect(page.locator(".hero-kicker")).toHaveCSS("opacity", "1");
+    expect(
+      await page
+        .locator(".hero-opening .reveal-word-inner")
+        .evaluateAll((elements) =>
+          elements.every((element) => getComputedStyle(element).opacity === "1"),
+        ),
+    ).toBe(true);
+    expect(
+      await page.locator("#hero-title").evaluate((element) => getComputedStyle(element).fontFamily),
+    ).toContain("Plus Jakarta Sans");
+  });
+});
