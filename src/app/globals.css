@@ -528,8 +528,12 @@ textarea:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0.4;
-  filter: saturate(0.8) brightness(1.3);
+  opacity: 1;
+  padding: 5vh 0;
+  transition: opacity 600ms ease;
+}
+.earth-artwork[data-ready="true"] .earth-artwork-fallback {
+  opacity: 0;
 }
 .orbit-system {
   position: absolute;
@@ -611,10 +615,16 @@ textarea:focus-visible {
   margin-bottom: 32px;
 }
 .hero[data-scene="opening"] .hero-kicker {
+  color: #fffdf5;
+  text-shadow: 0 1px 4px #172c32;
   opacity: 1;
   transition-duration: 0.6s;
 }
 .hero-opening h1 {
+  color: #fffdf5;
+  text-shadow:
+    0 2px 12px rgba(14, 31, 40, 0.7),
+    0 1px 3px rgba(14, 31, 40, 0.9);
   font-size: clamp(38px, 6vw, 82px);
   line-height: 1.13;
   letter-spacing: -0.025em;
@@ -639,6 +649,26 @@ textarea:focus-visible {
   padding-inline: 24px;
   pointer-events: none;
   z-index: 3;
+}
+/* Copy stays readable as the detailed Earth descends behind it. */
+.hero-introduction::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 29% at 50% 49%,
+    rgba(246, 245, 238, 0.95) 0%,
+    rgba(246, 245, 238, 0.9) 43%,
+    rgba(246, 245, 238, 0.5) 72%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.hero[data-scene="introduction"] .hero-introduction::before {
+  opacity: 1;
 }
 .hero-introduction > p {
   opacity: 0;
@@ -1668,8 +1698,10 @@ dialog[open] {
     font-size: clamp(35px, 8.5vw, 50px);
     line-height: 1.17;
   }
-  .hero-kicker {
-    top: calc(50% - 120px);
+  .hero[data-scene="opening"] .hero-kicker {
+    top: calc(50% - 150px);
+    color: var(--ink);
+    text-shadow: none;
     font-size: 9px;
     letter-spacing: 0.09em;
     margin-bottom: 26px;

@@ -3,48 +3,36 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Color, Mesh, SRGBColorSpace, type Texture } from "three";
+import { Group, Mesh, SRGBColorSpace, Vector2 } from "three";
 
-const ARTWORK = "/textures/reference/earth.png";
-const LAYERS = [
-  ARTWORK,
-  ...Array.from(
-    { length: 10 },
-    (_, index) => `/textures/reference/cloud-${String(index + 1).padStart(2, "0")}.png`,
-  ),
+const ARTWORK = "/textures/earth-india-fallback.png";
+const MAPS = [
+  "/textures/earth-color.jpg",
+  "/textures/earth-normal.jpg",
+  "/textures/earth-specular.jpg",
+  "/textures/earth-clouds.png",
 ];
-const CLOUD_ARCS = [
-  [-10, 8],
-  [5, -7],
-  [-8, 10],
-  [10, -5],
-];
+const INDIA_LONGITUDE = 78;
+// Look slightly south of the equator, so India appears above the opening headline.
+const VIEW_LATITUDE = -20;
+const INITIAL_ROTATION = (-(90 + INDIA_LONGITUDE) * Math.PI) / 180;
 
-const vertexShader = `
-  varying vec2 vUv;
+const atmosphereVertex = `
+  varying vec3 vNormal;
+  varying vec3 vPosition;
   void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vNormal = normalize(normalMatrix * normal);
+    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+    vPosition = viewPosition.xyz;
+    gl_Position = projectionMatrix * viewPosition;
   }
 `;
-
-// Preserve the terrain and alpha silhouette. Lift the shadowed ocean into pale
-// sage so the reference illustration works with the requested light theme.
-const fragmentShader = `
-  uniform sampler2D artwork;
-  uniform vec3 daylight;
-  uniform float cloud;
-  varying vec2 vUv;
+const atmosphereFragment = `
+  varying vec3 vNormal;
+  varying vec3 vPosition;
   void main() {
-    vec4 pixel = texture2D(artwork, vUv);
-    float luminance = dot(pixel.rgb, vec3(0.2126, 0.7152, 0.0722));
-    float greenRatio = pixel.g / max(pixel.r + pixel.b, 0.001);
-    float vegetation = smoothstep(0.7, 1.15, greenRatio) * smoothstep(0.001, 0.02, luminance);
-    float terrain = max(smoothstep(0.06, 0.45, luminance), vegetation);
-    vec3 surface = mix(daylight, pixel.rgb, terrain * 0.9);
-    vec3 mist = mix(daylight, pixel.rgb, 0.75);
-    gl_FragColor = vec4(mix(surface, mist, cloud), pixel.a);
-    #include <colorspace_fragment>
+    float rim = pow(1.0 - abs(dot(normalize(vNormal), normalize(-vPosition))), 3.0);
+    gl_FragColor = vec4(0.47, 0.76, 0.87, rim * 0.3);
   }
 `;
 
@@ -62,94 +50,70 @@ class WebGLBoundary extends Component<{ children: ReactNode }, { failed: boolean
   }
 }
 
-function ArtworkPlane({
-  texture,
-  index,
-  animate,
-}: {
-  texture: Texture;
-  index: number;
-  animate: boolean;
-}) {
-  const mesh = useRef<Mesh>(null);
+function RealisticEarth({ animate, onReady }: { animate: boolean; onReady: () => void }) {
+  const [surface, normal, specular, clouds] = useTexture(MAPS);
+  const globe = useRef<Group>(null);
+  const cloudLayer = useRef<Mesh>(null);
+  const firstFrame = useRef(false);
   const elapsed = useRef(0);
   const viewport = useThree((state) => state.viewport);
-  const ratio = 2304 / 2228;
-  const height = Math.min(viewport.height, viewport.width / ratio);
-  const uniforms = useMemo(
-    () => ({
-      artwork: { value: texture },
-      daylight: { value: new Color(index === 0 ? "#dfe8d5" : "#f4f6ef") },
-      cloud: { value: index === 0 ? 0 : 1 },
-    }),
-    [texture, index],
-  );
-
-  useFrame((_, delta) => {
-    if (index === 0 || !mesh.current) return;
-    if (animate) elapsed.current += Math.min(delta, 0.05);
-    const arc = CLOUD_ARCS[(index - 1) % CLOUD_ARCS.length];
-    const duration = 20 + index * 2;
-    const phase = 0.5 - 0.5 * Math.cos((Math.PI * elapsed.current) / duration);
-    mesh.current.rotation.z = ((arc[0] + (arc[1] - arc[0]) * phase) * Math.PI) / 180;
-  });
-
-  return (
-    <mesh ref={mesh} position={[0, 0, index * 0.01]} renderOrder={index}>
-      <planeGeometry args={[height * ratio, height]} />
-      <shaderMaterial
-        uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        transparent
-        depthWrite={false}
-        depthTest={false}
-        toneMapped={false}
-      />
-    </mesh>
-  );
-}
-
-function IllustratedEarth({ animate, onReady }: { animate: boolean; onReady: () => void }) {
-  const textures = useTexture(LAYERS);
-  const invalidate = useThree((state) => state.invalidate);
-  const firstFrame = useRef(false);
+  const radius = Math.min(viewport.height * 0.42, viewport.width * 0.38);
   useEffect(() => {
-    textures.forEach((texture, index) => {
-      texture.colorSpace = SRGBColorSpace;
-      // Soft cloud layers do not need eleven full-size GPU images.
-      const source = texture.image as HTMLImageElement;
-      const limit = index === 0 ? 2048 : 1024;
-      if (source.width > limit) {
-        const canvas = document.createElement("canvas");
-        canvas.width = limit;
-        canvas.height = Math.round((source.height * limit) / source.width);
-        const context = canvas.getContext("2d");
-        if (context) {
-          context.drawImage(source, 0, 0, canvas.width, canvas.height);
-          texture.image = canvas;
-        }
-      }
-      texture.needsUpdate = true;
-    });
-    invalidate();
-  }, [textures, invalidate]);
-  useFrame(() => {
+    surface.colorSpace = SRGBColorSpace;
+    clouds.colorSpace = SRGBColorSpace;
+    surface.needsUpdate = clouds.needsUpdate = true;
+  }, [surface, clouds]);
+  useFrame((_, delta) => {
     if (!firstFrame.current) {
       firstFrame.current = true;
       requestAnimationFrame(onReady);
     }
+    if (!animate) return;
+    elapsed.current += Math.min(delta, 0.05);
+    // A small rotation shows genuine curved terrain without taking India out of view.
+    if (globe.current)
+      globe.current.rotation.y = INITIAL_ROTATION + Math.sin(elapsed.current * 0.06) * 0.14;
+    if (cloudLayer.current) cloudLayer.current.rotation.y = elapsed.current * 0.006;
   });
   return (
     <>
-      {textures.map((texture, index) => (
-        <ArtworkPlane key={index} texture={texture} index={index} animate={animate} />
-      ))}
+      <ambientLight intensity={1.2} />
+      <hemisphereLight args={["#fffdf3", "#839eaf", 1.2]} />
+      <directionalLight position={[-3, 4, 5]} intensity={2.1} color="#fff9ec" />
+      <directionalLight position={[4, 0, 4]} intensity={0.8} color="#dceeff" />
+      <group scale={radius} rotation={[(VIEW_LATITUDE * Math.PI) / 180, 0, 0]}>
+        <group ref={globe} rotation={[0, INITIAL_ROTATION, 0]}>
+          <mesh>
+            <sphereGeometry args={[1, 128, 96]} />
+            <meshPhongMaterial
+              map={surface}
+              normalMap={normal}
+              normalScale={new Vector2(0.4, 0.4)}
+              specularMap={specular}
+              specular="#6c8195"
+              shininess={16}
+            />
+          </mesh>
+          <mesh ref={cloudLayer} scale={1.006}>
+            <sphereGeometry args={[1, 96, 64]} />
+            <meshPhongMaterial map={clouds} transparent opacity={0.2} depthWrite={false} />
+          </mesh>
+        </group>
+        <mesh scale={1.025}>
+          <sphereGeometry args={[1, 96, 64]} />
+          <shaderMaterial
+            vertexShader={atmosphereVertex}
+            fragmentShader={atmosphereFragment}
+            transparent
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
     </>
   );
 }
 
-/** Flat WebGL layers reproduce the reference illustration without sphere distortion. */
+/** A true textured sphere with India kept in the front hemisphere. */
 export default function EarthScene({ className = "" }: { className?: string }) {
   const container = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(true);
@@ -171,14 +135,19 @@ export default function EarthScene({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div ref={container} className={`earth-artwork ${className}`} aria-hidden="true">
+    <div
+      ref={container}
+      className={`earth-artwork ${className}`}
+      data-ready={ready && !contextLost}
+      aria-hidden="true"
+    >
       <ArtworkFallback />
       {!contextLost && (
         <WebGLBoundary>
           <Canvas
             orthographic
             resize={{ offsetSize: true }}
-            camera={{ position: [0, 0, 5], zoom: 1, near: 0.1, far: 20 }}
+            camera={{ position: [0, 0, 2000], zoom: 1, near: 0.1, far: 5000 }}
             dpr={[1, 1.25]}
             frameloop={reduced || !visible ? "demand" : "always"}
             gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
@@ -192,7 +161,7 @@ export default function EarthScene({ className = "" }: { className?: string }) {
             }}
           >
             <Suspense fallback={null}>
-              <IllustratedEarth animate={!reduced && visible} onReady={onReady} />
+              <RealisticEarth animate={!reduced && visible} onReady={onReady} />
             </Suspense>
           </Canvas>
         </WebGLBoundary>

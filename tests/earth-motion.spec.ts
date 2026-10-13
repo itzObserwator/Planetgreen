@@ -138,3 +138,31 @@ test.describe("reduced-motion Earth", () => {
     await expect(page.locator(".hero-earth")).not.toBeInViewport();
   });
 });
+
+test("realistic Earth renders and its geographic fallback survives a lost WebGL context", async ({
+  page,
+}) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const artwork = page.locator(".earth-artwork");
+  await expect(artwork).toHaveAttribute("data-ready", "true");
+  await expect(artwork.locator("canvas")).toHaveCSS("opacity", "1");
+  const fallback = artwork.locator(":scope > .earth-artwork-fallback");
+  await expect(fallback).toHaveCSS("opacity", "0");
+  await artwork.locator("canvas").evaluate((canvas: HTMLCanvasElement) => {
+    const context = canvas.getContext("webgl2");
+    if (!context) throw new Error("Expected a real WebGL renderer");
+    const extension = context.getExtension("WEBGL_lose_context");
+    if (!extension) throw new Error("Context-loss verification is unavailable");
+    extension.loseContext();
+  });
+  await expect(artwork).toHaveAttribute("data-ready", "false");
+  await expect(artwork.locator("canvas")).toHaveCount(0);
+  await expect(fallback).toHaveCSS("opacity", "1");
+  await expect(fallback).toHaveAttribute("src", "/textures/earth-india-fallback.png");
+  await expect
+    .poll(() =>
+      fallback.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
+    )
+    .toBe(true);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});

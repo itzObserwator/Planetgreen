@@ -25,7 +25,7 @@ src/
     site.tsx               Assembles the page and manages dialogs
     navigation.tsx         Desktop navigation and mobile menu
     hero.tsx               Introductory copy and GSAP scroll timeline
-    earth-scene.tsx        Illustrated globe and cloud layers rendered in WebGL
+    earth-scene.tsx        Realistic India-facing 3D Earth, clouds and atmosphere
     earth-background.tsx   Section-aligned Earth textures behind the full page
     sections.tsx           Philosophy, communities, experience and contact sections
     photo-stack.tsx        Interactive layered photographs
@@ -46,7 +46,7 @@ Start with `src/data/content.ts` to edit communities, images, contact details or
 
 To change the visual style, edit the color variables, typography and section rules in `globals.css`. It also contains the mobile breakpoints. Tailwind utility classes can be used alongside these named styles.
 
-For animation changes, use `hero.tsx` for the recording's scroll map, `ui.tsx` for text reveals, `photo-stack.tsx` for the photograph interaction, and `earth-scene.tsx` for independently drifting cloud layers. `earth-background.tsx` aligns the five overlapping foliage scenes to page sections and remeasures them when the layout changes. `motion-provider.tsx` connects Lenis to GSAP's ticker. Keep one smooth-scroll controller. Reduced-motion preferences and a fallback for unavailable WebGL are supported.
+For animation changes, use `hero.tsx` for the recording's scroll map, `ui.tsx` for text reveals, `photo-stack.tsx` for the photograph interaction, and `earth-scene.tsx` for the Earth’s geographic orientation, terrain, lighting and cloud movement. `earth-background.tsx` aligns the five overlapping foliage scenes to page sections and remeasures them when the layout changes. `motion-provider.tsx` connects Lenis to GSAP's ticker. Keep one smooth-scroll controller. Reduced-motion preferences and a fallback for unavailable WebGL are supported.
 
 The hero's downward movement and zoom use the same scroll value as its text scenes: the globe scales from 1× to 2× over the first viewport of scrolling. Headings reveal individual masked words over a 0.6-second stagger, enter in one second, and exit in 0.3 seconds. Hero paragraphs enter after 0.2 seconds. Section headings and their supporting paragraphs share an observer so an extra wrapper animation does not delay the words.
 
@@ -92,6 +92,7 @@ Versions installed for this implementation:
 - **Design reference:** [Fin-Erth](https://www.fin-erth.com/). Its layout and motion were analyzed in [research/fin-erth-analysis.md](research/fin-erth-analysis.md). The implementation uses a light palette and original application code.
 - **Content, photographs and brand marks:** the supplied [Planet Green website](https://planetgreen.co.in/index.html) and its official project sites: [Farm Natura](https://www.farmnatura.in/), [Dates County](https://www.thedatescounty.in/), [Green Land Capital](https://greenlandcapital.in/) and [Veda Bharath](https://vedabharath.com/). Exact asset URLs and verified content notes are in [research/planet-content.json](research/planet-content.json). Dates County imagery includes promotional visualizations. Project facts should be checked against these sources when updated.
 - **Typography:** locally hosted [Libre Caslon Display](https://fonts.google.com/specimen/Libre+Caslon+Display) and [Manrope](https://fonts.google.com/specimen/Manrope), open-source alternatives to Fin-Erth's commercial Suisse Works and PP Pangram Sans families.
-- **Earth imagery:** the user-requested reference artwork is locally hosted in `public/textures/reference/`. The hero uses [Fin-Erth's illustrated Earth](https://www.fin-erth.com/assets/images/earth/earth.png) and ten separate `cloud-01.png` through `cloud-10.png` layers from the same directory. Page backgrounds use `footer-green-events.png`, `footer-green-partners.png`, `footer-green-awards.png` and [the footer texture](https://www.fin-erth.com/assets/textures/footer-green-02.png). A WebGL shader adapts the shadow colors to light sage while preserving the artwork's silhouette and terrain. Earlier Three.js example textures remain available but are no longer used by the hero.
+- **Hero Earth:** full-world color, normal, specular and cloud maps from the Three.js Earth texture examples are hosted in `public/textures/`. The sphere starts at longitude 78°E, with a southern viewing latitude that places India above the headline. Gentle rotation keeps India visible. Natural geographic colors, terrain detail, ocean highlights and a thin atmosphere replace the earlier illustration. The light page theme and scroll timing are preserved. The matching non-WebGL fallback can be regenerated with `node scripts/generate-earth-fallback.mjs`.
+- **Page Earth backgrounds:** the requested Fin-Erth foliage remains locally hosted in `public/textures/reference/`. Page backgrounds use `footer-green-events.png`, `footer-green-partners.png`, `footer-green-awards.png` and the footer texture. The old illustrated globe/cloud layers remain available but are not used by the hero.
 
 The downloaded Fin-Erth files under `research/reference/` are reference material. They are not imported by the website.
