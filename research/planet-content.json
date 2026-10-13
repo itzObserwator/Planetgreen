@@ -1,0 +1,308 @@
+{
+  "verifiedOn": "2026-10-13",
+  "organization": {
+    "name": "Planet Green",
+    "legalName": "Planet Green Infra Pvt Ltd",
+    "tagline": "Move to Nature",
+    "pillars": [
+      "Indulge",
+      "Involve",
+      "Impact"
+    ],
+    "description": "Planet Green brings natural farming and green living communities together to help families reconnect with nature.",
+    "philosophy": "Restore the relationship between people and land through natural farming, soil renewal, and communities built around nature.",
+    "source": "https://www.planetgreen.co.in/about-us.html"
+  },
+  "contact": {
+    "phoneDisplay": "+91 9555 700 900",
+    "phoneHref": "tel:+919555700900",
+    "email": "marketing@planetgreen.co.in",
+    "address": "2nd Floor, Regent Square Building, Q-City Road, Gowlidoddi, Hyderabad – 500075",
+    "source": "https://www.planetgreen.co.in/contact-us.html",
+    "note": "Original site has inconsistent legacy header telephone links. Its displayed number and footer tel link consistently match this number. The email is decoded from the official site's Cloudflare email protection."
+  },
+  "communities": [
+    {
+      "name": "Farm Natura",
+      "url": "https://www.farmnatura.in/",
+      "category": "Managed natural farming estates",
+      "description": "A managed natural farming community in Kandukur, near Hyderabad, where families can own farmland, cultivate seasonal produce, and reconnect with nature.",
+      "image": "/images/farm-natura-12.jpg",
+      "logo": "/brand/farm-natura.svg",
+      "publishedFacts": [
+        {
+          "value": "110+",
+          "unit": "acres of managed farmland"
+        },
+        {
+          "value": "6+",
+          "unit": "years of soil revitalisation"
+        },
+        {
+          "value": "4",
+          "unit": "years of managed maintenance"
+        }
+      ],
+      "location": "Kandukur, Srisailam Highway, Hyderabad",
+      "source": "https://www.farmnatura.in/"
+    },
+    {
+      "name": "Dates County",
+      "url": "https://www.thedatescounty.in/",
+      "category": "Nature-inspired villa plot community",
+      "description": "A villa plot community in Kandukur, Hyderabad, combining residential living with green parks, natural landscapes, and shared spaces.",
+      "image": "/images/dates-county-community.jpg",
+      "imageType": "Official promotional visualization",
+      "logo": "/brand/dates-county.svg",
+      "publishedFacts": [
+        {
+          "value": "300+",
+          "unit": "acres"
+        }
+      ],
+      "source": "https://www.thedatescounty.in/"
+    },
+    {
+      "name": "Green Land Capital",
+      "url": "https://greenlandcapital.in/",
+      "category": "Sustainable farmland",
+      "description": "A platform focused on verified natural farming farmlands and restoring land for productive, sustainable agriculture.",
+      "image": "/images/green-land-capital.jpg",
+      "logo": "/brand/green-land-capital.svg",
+      "source": "https://greenlandcapital.in/"
+    },
+    {
+      "name": "Veda Bharath",
+      "url": "https://vedabharath.com/",
+      "category": "Traditional natural rice",
+      "description": "Reviving India's traditional rice varieties through natural farming, seed preservation, and the knowledge of farming communities.",
+      "image": "/images/veda-bharath-farming.jpg",
+      "logo": "/brand/veda-bharath.webp",
+      "source": "https://vedabharath.com/"
+    }
+  ],
+  "collaborations": {
+    "title": "Sustainable Living with Shilpa Reddy",
+    "description": "Conversations about life choices, sustainable living, and connecting with nature, powered by Planet Green's Farm Natura.",
+    "videos": [
+      {
+        "title": "Dia Mirza on Sustainable Living",
+        "url": "https://www.youtube.com/watch?v=qDiovuw6kxc",
+        "embed": "https://www.youtube.com/embed/qDiovuw6kxc"
+      },
+      {
+        "title": "Samantha on Sustainable Living",
+        "url": "https://www.youtube.com/watch?v=N_iSKzS9c2E",
+        "embed": "https://www.youtube.com/embed/N_iSKzS9c2E"
+      }
+    ],
+    "source": "https://www.planetgreen.co.in/collaborations.html"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/planetgreeneco_official/",
+    "facebook": "https://www.facebook.com/people/PlanetGreen/100077443677660/",
+    "youtube": "https://www.youtube.com/channel/UCoClvBsQCNd5kgbN12dMYDA",
+    "linkedin": "https://www.linkedin.com/company/planet-green-infra-pvt-ltd/"
+  },
+  "assetRecommendations": {
+    "botanicalHero": [
+      "/images/farm-natura-07.jpg",
+      "/images/farm-natura-08.jpg"
+    ],
+    "realFarmAerials": [
+      "/images/farm-natura-10.jpg",
+      "/images/farm-natura-12.jpg",
+      "/images/farm-natura-16.jpg"
+    ],
+    "livingFeature": "/images/farm-natura-living.jpg",
+    "farmhouseFeature": "/images/farm-natura-building.jpg",
+    "video": "/images/planet-green-original.mp4",
+    "brand": "/brand/planet-green.svg",
+    "note": "Dates County hero photos are promotional rendered visualizations. Farm Natura gallery numbered images are actual field, farm building, produce, and dining images from Planet Green's original gallery."
+  },
+  "contentNotes": [
+    "No fabricated statistics or testimonials have been added.",
+    "Numeric Farm Natura claims are published by the project website, rather than independently audited.",
+    "Avoid claims promising investment returns or medical benefits from food.",
+    "Copy here is paraphrased for this redesign."
+  ],
+  "assets": [
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/logo-dark.svg",
+      "path": "public/brand/planet-green.svg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/logo.svg",
+      "path": "public/brand/planet-green-white.svg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/dates-county-logo.svg",
+      "path": "public/brand/dates-county.svg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/farm-natura-logo.webp",
+      "path": "public/brand/farm-natura.webp"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/green-land-capitol.svg",
+      "path": "public/brand/green-land-capital.svg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/vedha-bharath-logo.webp",
+      "path": "public/brand/veda-bharath.webp"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/dates-county-elevation.jpg",
+      "path": "public/images/dates-county.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/farm-natura-elevation.jpg",
+      "path": "public/images/farm-natura.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/green-land-elevation.jpg",
+      "path": "public/images/green-land-capital.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/vedha-bharath-elevation.jpg",
+      "path": "public/images/veda-bharath.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/planet-bg.jpg",
+      "path": "public/images/planet-landscape.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/planet-green-hyderabad.jpg",
+      "path": "public/images/planet-green-hyderabad.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/about-one-img-1.jpg",
+      "path": "public/images/nature-01.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/img/about-one-img-2.jpg",
+      "path": "public/images/nature-02.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/1.jpg",
+      "path": "public/images/farm-natura-01.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/2.jpg",
+      "path": "public/images/farm-natura-02.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/3.jpg",
+      "path": "public/images/farm-natura-03.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/6.jpg",
+      "path": "public/images/farm-natura-06.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/7.jpg",
+      "path": "public/images/farm-natura-07.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/8.jpg",
+      "path": "public/images/farm-natura-08.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/9.jpg",
+      "path": "public/images/farm-natura-09.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/10.jpg",
+      "path": "public/images/farm-natura-10.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/11.jpg",
+      "path": "public/images/farm-natura-11.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/12.jpg",
+      "path": "public/images/farm-natura-12.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/13.jpg",
+      "path": "public/images/farm-natura-13.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/gallery/farmnatura/16.jpg",
+      "path": "public/images/farm-natura-16.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/banner4.jpg",
+      "path": "public/images/farm-natura-landscape.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/bg4-2.jpg",
+      "path": "public/images/farm-natura-living.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/building1.jpg",
+      "path": "public/images/farm-natura-building.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/greenbg.jpg",
+      "path": "public/images/farm-natura-green.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/elder.jpg",
+      "path": "public/images/farm-natura-family.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/design1.jpg",
+      "path": "public/images/farm-natura-design.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/home/choose-img1-1.jpg",
+      "path": "public/images/farm-natura-paddy.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/images/gallery/farm.jpg",
+      "path": "public/images/farm-natura-farm.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/images/gallery/farmhouse.jpg",
+      "path": "public/images/farm-natura-farmhouse.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/images/gallery/farmhouse2.jpg",
+      "path": "public/images/farm-natura-farmhouse-02.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/images/gallery/goshalatopview.jpg",
+      "path": "public/images/farm-natura-goshala-aerial.jpg"
+    },
+    {
+      "source": "https://www.farmnatura.in/images/highlights/logo.svg",
+      "path": "public/brand/farm-natura.svg"
+    },
+    {
+      "source": "https://www.thedatescounty.in/hero/slider1.jpg",
+      "path": "public/images/dates-county-trees.jpg"
+    },
+    {
+      "source": "https://www.thedatescounty.in/hero/slider2.jpg",
+      "path": "public/images/dates-county-community.jpg"
+    },
+    {
+      "source": "https://www.thedatescounty.in/hero/slider3.jpg",
+      "path": "public/images/dates-county-life.jpg"
+    },
+    {
+      "source": "https://www.thedatescounty.in/hero/slider4.jpg",
+      "path": "public/images/dates-county-nature.jpg"
+    },
+    {
+      "source": "https://vedabharath.com/cdn/shop/files/WhatsApp_Image_2023-01-07_at_11.01.39_AM_1.jpg?v=1673074578&width=1280",
+      "path": "public/images/veda-bharath-farming.jpg"
+    },
+    {
+      "source": "https://www.planetgreen.co.in/assets/slider-video.mp4",
+      "path": "public/images/planet-green-original.mp4",
+      "bytes": 24722316
+    }
+  ]
+}

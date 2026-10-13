@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+.DS_Store
+*.tsbuildinfo
+test-results/
+playwright-report/
+.env*
+.openai/.state/
+research/reference/
