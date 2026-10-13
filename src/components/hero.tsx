@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -12,63 +12,79 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
+  const [scene, setScene] = useState("opening");
   useGSAP(
     () => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      gsap.from(".hero-heading-line", {
-        yPercent: 110,
-        duration: 1.5,
-        stagger: 0.16,
-        ease: "power3.out",
-        delay: 0.2,
-      });
-      gsap.from(".hero-kicker, .hero-bottom", { opacity: 0, duration: 1.5, delay: 0.65 });
-      const timeline = gsap.timeline({
-        scrollTrigger: {
+      const media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from(".hero-heading-line", {
+          yPercent: 110,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.16,
+          ease: "power3.inOut",
+          delay: 0.2,
+        });
+        const globe = root.current?.querySelector<HTMLElement>(".hero-earth");
+        const orbits = root.current?.querySelector<HTMLElement>(".orbit-system");
+        if (!globe || !orbits) return;
+
+        // Reference: p = scrollY / (200vh - viewportHeight). The fixed globe
+        // descends by 100p%, scales by 1+p, and only fades after the intro.
+        const update = (progress: number) => {
+          const p = progress * 1.5;
+          gsap.set(globe, {
+            y: 0,
+            yPercent: 6 + 100 * p,
+            scale: 1 + p,
+            opacity: 1 - gsap.utils.clamp(0, 1, (p - 1) / 0.4),
+            visibility: p < 1.5 ? "visible" : "hidden",
+          });
+          gsap.set(orbits, { opacity: 1 - Math.min(p, 1) });
+          const next = p < 0.2 ? "opening" : p < 1 ? "introduction" : "complete";
+          setScene((previous) => (previous === next ? previous : next));
+          root.current?.classList.toggle("show-scroll-cue", p < 0.05);
+        };
+        const trigger = ScrollTrigger.create({
           trigger: root.current,
           start: "top top",
-          end: "bottom bottom",
-          scrub: 0.5,
-        },
+          end: () => `+=${Math.max(1, (root.current!.offsetHeight - window.innerHeight) * 1.5)}`,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => update(self.progress),
+          onRefresh: (self) => update(self.progress),
+        });
+        update(trigger.progress);
       });
-      timeline
-        .to(".hero-opening", { opacity: 0, y: -55, duration: 0.2 }, 0.02)
-        .to(".hero-bottom", { opacity: 0, duration: 0.15 }, 0)
-        .fromTo(
-          ".hero-introduction",
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.25 },
-          0.23,
-        )
-        .to(".hero-introduction", { opacity: 0, y: -50, duration: 0.15 }, 0.83)
-        .to(".hero-earth", { yPercent: 43, scale: 1.45, duration: 1, ease: "none" }, 0)
-        .to(".hero-earth", { opacity: 0, duration: 0.45 }, 0.5)
-        .to(
-          ".orbit-system",
-          { rotation: 22, scale: 1.15, opacity: 0, duration: 1, ease: "none" },
-          0,
-        );
+      return () => media.revert();
     },
     { scope: root },
   );
 
   return (
-    <section id="home" ref={root} className="hero" aria-labelledby="hero-title">
+    <section
+      id="home"
+      ref={root}
+      className="hero show-scroll-cue"
+      data-scene={scene}
+      aria-labelledby="hero-title"
+    >
       <div className="hero-stage">
         <div className="hero-haze" />
-        <div className="orbit-system" aria-hidden="true">
-          <div className="orbit orbit-one">
-            <span />
-          </div>
-          <div className="orbit orbit-two">
-            <span />
-          </div>
-          <div className="orbit orbit-three" />
-        </div>
         <div className="hero-earth">
+          <div className="orbit-system" aria-hidden="true">
+            <div className="orbit orbit-one">
+              <span />
+            </div>
+            <div className="orbit orbit-two">
+              <span />
+            </div>
+            <div className="orbit orbit-three">
+              <span />
+            </div>
+          </div>
           <EarthScene />
         </div>
-        <div className="hero-opening">
+        <div className="hero-opening" aria-hidden={scene !== "opening"}>
           <p className="hero-kicker">Rooted in nature. Made for life.</p>
           <h1 id="hero-title">
             <span className="line-mask">
@@ -79,7 +95,7 @@ export function Hero() {
             </span>
           </h1>
         </div>
-        <div className="hero-introduction">
+        <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>
           <h2>
             We create communities

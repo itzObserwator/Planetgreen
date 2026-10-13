@@ -25,7 +25,8 @@ src/
     site.tsx               Assembles the page and manages dialogs
     navigation.tsx         Desktop navigation and mobile menu
     hero.tsx               Introductory copy and GSAP scroll timeline
-    earth-scene.tsx        Three.js globe, lighting, textures and fallback
+    earth-scene.tsx        Illustrated globe and cloud layers rendered in WebGL
+    earth-background.tsx   Section-aligned Earth textures behind the full page
     sections.tsx           Philosophy, communities, experience and contact sections
     photo-stack.tsx        Interactive layered photographs
     contact-dialog.tsx     Enquiry form and email draft
@@ -45,7 +46,7 @@ Start with `src/data/content.ts` to edit communities, images, contact details or
 
 To change the visual style, edit the color variables, typography and section rules in `globals.css`. It also contains the mobile breakpoints. Tailwind utility classes can be used alongside these named styles.
 
-For animation changes, use `hero.tsx` for scroll timing, `ui.tsx` for text reveals, `photo-stack.tsx` for the photograph interaction, and `earth-scene.tsx` for globe movement and lighting. `motion-provider.tsx` connects Lenis to GSAP's ticker. Keep one smooth-scroll controller. Reduced-motion preferences and a fallback for unavailable WebGL are supported.
+For animation changes, use `hero.tsx` for the recording's scroll map, `ui.tsx` for text reveals, `photo-stack.tsx` for the photograph interaction, and `earth-scene.tsx` for independently drifting cloud layers. `earth-background.tsx` aligns the five overlapping foliage scenes to page sections and remeasures them when the layout changes. `motion-provider.tsx` connects Lenis to GSAP's ticker. Keep one smooth-scroll controller. Reduced-motion preferences and a fallback for unavailable WebGL are supported.
 
 ## Commands
 
@@ -89,6 +90,6 @@ Versions installed for this implementation:
 - **Design reference:** [Fin-Erth](https://www.fin-erth.com/). Its layout and motion were analyzed in [research/fin-erth-analysis.md](research/fin-erth-analysis.md). The implementation uses a light palette and original application code.
 - **Content, photographs and brand marks:** the supplied [Planet Green website](https://planetgreen.co.in/index.html) and its official project sites: [Farm Natura](https://www.farmnatura.in/), [Dates County](https://www.thedatescounty.in/), [Green Land Capital](https://greenlandcapital.in/) and [Veda Bharath](https://vedabharath.com/). Exact asset URLs and verified content notes are in [research/planet-content.json](research/planet-content.json). Dates County imagery includes promotional visualizations. Project facts should be checked against these sources when updated.
 - **Typography:** locally hosted [Libre Caslon Display](https://fonts.google.com/specimen/Libre+Caslon+Display) and [Manrope](https://fonts.google.com/specimen/Manrope), open-source alternatives to Fin-Erth's commercial Suisse Works and PP Pangram Sans families.
-- **Earth imagery:** texture assets distributed with the Three.js examples: [surface](https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg), [clouds](https://threejs.org/examples/textures/planets/earth_clouds_1024.png), [normal](https://threejs.org/examples/textures/planets/earth_normal_2048.jpg) and [specular](https://threejs.org/examples/textures/planets/earth_specular_2048.jpg). Separate asset licensing was not independently established; retain this attribution when distributing them.
+- **Earth imagery:** the user-requested reference artwork is locally hosted in `public/textures/reference/`. The hero uses [Fin-Erth's illustrated Earth](https://www.fin-erth.com/assets/images/earth/earth.png) and ten separate `cloud-01.png` through `cloud-10.png` layers from the same directory. Page backgrounds use `footer-green-events.png`, `footer-green-partners.png`, `footer-green-awards.png` and [the footer texture](https://www.fin-erth.com/assets/textures/footer-green-02.png). A WebGL shader adapts the shadow colors to light sage while preserving the artwork's silhouette and terrain. Earlier Three.js example textures remain available but are no longer used by the hero.
 
 The downloaded Fin-Erth files under `research/reference/` are reference material. They are not imported by the website.

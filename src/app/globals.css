@@ -46,6 +46,7 @@
 }
 html {
   scroll-padding-top: 110px;
+  overflow-x: clip;
 }
 body {
   margin: 0;
@@ -375,48 +376,128 @@ textarea:focus-visible {
   bottom: 20px;
 }
 
-/* The 200vh opening and its two scroll-linked text scenes. */
+/* One continuous, section-aligned Earth landscape behind the whole page. */
+.site-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.earth-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: clip;
+}
+.earth-landscape {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.earth-landscape-glow {
+  position: absolute;
+  inset: -35% -20%;
+  background: radial-gradient(ellipse, #d5e4c4aa, #e7eedc55 35%, transparent 68%);
+}
+.earth-landscape-image {
+  position: absolute;
+  width: 150%;
+  max-width: none;
+  height: auto;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  opacity: 0.2;
+  filter: saturate(0.8);
+  mix-blend-mode: multiply;
+}
+.earth-landscape-roots .earth-landscape-image {
+  top: 70%;
+}
+.earth-landscape-partners .earth-landscape-image {
+  width: 100%;
+  left: 65%;
+  top: 65%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  opacity: 0.26;
+}
+.earth-landscape-ventures .earth-landscape-image {
+  width: 115%;
+  left: 80%;
+  top: 40%;
+  opacity: 0.23;
+}
+.earth-landscape-story .earth-landscape-image {
+  left: 45%;
+  width: 130%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.earth-landscape-footer .earth-landscape-image {
+  width: 120%;
+  left: 50%;
+  top: auto;
+  bottom: -8%;
+  transform: translateX(-50%);
+  opacity: 0.36;
+}
+.earth-landscape-footer .earth-landscape-glow {
+  background: radial-gradient(ellipse at 30% 55%, #d4e2bfaa, transparent 70%);
+}
+
+/* Fixed 200vh opening. Earth movement follows the recording's exact scroll map. */
 .hero {
   height: 200vh;
   height: 200svh;
   position: relative;
 }
 .hero-stage {
-  position: sticky;
-  top: 0;
+  position: static;
   height: 100vh;
   height: 100svh;
-  overflow: hidden;
-  isolation: isolate;
+  overflow: visible;
 }
 .hero-haze {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: 160vh;
   background: radial-gradient(ellipse at 50% 55%, #dce6ce 0%, #e5eadc 34%, #f6f5ee 72%);
   z-index: -3;
 }
 .hero-earth {
-  position: absolute;
-  width: min(85vw, 82vh);
-  width: min(85vw, 82svh);
-  height: min(85vw, 82vh);
-  height: min(85vw, 82svh);
-  top: 51%;
-  left: 50%;
-  translate: -50% -50%;
-  z-index: -1;
-  opacity: 0.27;
-  mix-blend-mode: multiply;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 1;
+  transform: translate3d(0, 6%, 0);
+  pointer-events: none;
   will-change: transform, opacity;
+}
+.earth-artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.earth-artwork-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.4;
+  filter: saturate(0.8) brightness(1.3);
 }
 .orbit-system {
   position: absolute;
-  top: 51%;
+  top: 50%;
   left: 50%;
-  width: min(83vw, 87vh);
-  height: min(83vw, 87vh);
+  width: 100vmin;
+  height: 100vmin;
   translate: -50% -50%;
-  z-index: -2;
+  z-index: 0;
 }
 .orbit {
   position: absolute;
@@ -433,25 +514,25 @@ textarea:focus-visible {
   width: 130%;
   height: 130%;
   animation-duration: 70s;
-  animation-direction: reverse;
+  transform: rotate(120deg);
 }
 .orbit-three {
   width: 160%;
   height: 160%;
   animation-duration: 80s;
+  transform: rotate(240deg);
 }
 .orbit span {
   position: absolute;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  top: 72%;
-  right: 4.8%;
+  top: 50%;
+  right: -3px;
   background: #698445;
 }
 .orbit-two span {
-  top: 12%;
-  right: 18%;
+  right: -2px;
   width: 4px;
   height: 4px;
 }
@@ -461,16 +542,26 @@ textarea:focus-visible {
   }
 }
 .hero-opening {
-  position: absolute;
+  position: fixed;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 70px 24px 0;
+  padding: 0 24px;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.hero[data-scene="opening"] .hero-opening {
+  opacity: 1;
+  pointer-events: auto;
 }
 .hero-kicker {
+  position: absolute;
+  top: calc(50% - 170px);
   text-transform: uppercase;
   letter-spacing: 0.13em;
   font-size: 12px;
@@ -478,7 +569,7 @@ textarea:focus-visible {
   margin-bottom: 32px;
 }
 .hero-opening h1 {
-  font-size: clamp(38px, 6.1vw, 88px);
+  font-size: clamp(38px, 6vw, 82px);
   line-height: 1.13;
   letter-spacing: -0.025em;
 }
@@ -491,7 +582,7 @@ textarea:focus-visible {
   display: block;
 }
 .hero-introduction {
-  position: absolute;
+  position: fixed;
   inset: 0;
   display: flex;
   flex-direction: column;
@@ -501,9 +592,23 @@ textarea:focus-visible {
   opacity: 0;
   padding-inline: 24px;
   pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.hero-introduction h2,
+.hero-introduction > p {
+  transform: translateY(18px);
+  transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.hero[data-scene="introduction"] .hero-introduction {
+  opacity: 1;
+}
+.hero[data-scene="introduction"] .hero-introduction h2,
+.hero[data-scene="introduction"] .hero-introduction > p {
+  transform: none;
 }
 .hero-introduction h2 {
-  font-size: clamp(32px, 4.15vw, 60px);
+  font-size: clamp(26px, 4vw, 48px);
   max-width: 20em;
   margin-bottom: 28px;
 }
@@ -512,7 +617,7 @@ textarea:focus-visible {
   max-width: 35em;
 }
 .hero-bottom {
-  position: absolute;
+  position: fixed;
   left: var(--gutter);
   right: var(--gutter);
   bottom: 40px;
@@ -522,6 +627,18 @@ textarea:focus-visible {
   font-size: 11px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+}
+.hero.show-scroll-cue .hero-bottom {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 .hero-bottom > a {
   position: absolute;
@@ -1073,7 +1190,7 @@ textarea:focus-visible {
 .footer {
   position: relative;
   overflow: hidden;
-  background: #e7eddc;
+  background: linear-gradient(#e7eddc22, #e7eddc33);
   padding-top: 13vh;
 }
 .footer::before {
@@ -1083,7 +1200,7 @@ textarea:focus-visible {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse, #cfdebc88, transparent 70%);
+  background: none;
   pointer-events: none;
 }
 .footer > .container {
@@ -1452,6 +1569,12 @@ dialog[open] {
   }
 }
 @media (max-width: 639px) {
+  .earth-landscape-footer .earth-landscape-image {
+    width: 240%;
+    bottom: 25%;
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0.25;
+  }
   :root {
     --gutter: 20px;
   }
@@ -1476,15 +1599,16 @@ dialog[open] {
     padding-block: 10px;
   }
   .hero-earth {
-    width: 108vw;
-    height: 108vw;
-    top: 47%;
-    opacity: 0.23;
+    width: 120vw;
+    height: 100svh;
+    top: 0;
+    left: -10vw;
+    opacity: 1;
   }
   .orbit-system {
-    width: 116vw;
-    height: 116vw;
-    top: 47%;
+    width: 100vmin;
+    height: 100vmin;
+    top: 50%;
   }
   .hero-opening {
     padding: 0 16px;
@@ -1494,12 +1618,13 @@ dialog[open] {
     line-height: 1.17;
   }
   .hero-kicker {
+    top: calc(50% - 120px);
     font-size: 9px;
     letter-spacing: 0.09em;
     margin-bottom: 26px;
   }
   .hero-introduction h2 {
-    font-size: 37px;
+    font-size: 30px;
   }
   .hero-introduction > p:last-child {
     font-size: 15px;
@@ -1856,8 +1981,16 @@ dialog[open] {
   }
   .hero-opening,
   .hero-bottom {
+    position: absolute;
     opacity: 1 !important;
     transform: none !important;
+  }
+  .hero-earth {
+    position: absolute;
+  }
+  .hero-bottom {
+    visibility: visible;
+    pointer-events: auto;
   }
   .philosophy {
     margin-top: 0;

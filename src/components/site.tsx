@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Navigation } from "./navigation";
 import { Hero } from "./hero";
+import { EarthBackground } from "./earth-background";
 import {
   Philosophy,
   FarmExperience,
@@ -27,7 +28,8 @@ export function Site() {
     setVisitOpen(true);
   };
   return (
-    <>
+    <div className="site-shell">
+      <EarthBackground />
       <a className="skip-link" href="#philosophy">
         Skip to content
       </a>
@@ -55,6 +57,6 @@ export function Site() {
         onClose={() => setCommunity(null)}
         onVisit={openVisit}
       />
-    </>
+    </div>
   );
 }
