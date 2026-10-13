@@ -524,12 +524,15 @@ textarea:focus-visible {
 }
 .earth-artwork-fallback {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: min(78.933vh, 81.067%);
+  width: min(78.933svh, 81.067%);
+  height: auto;
+  max-width: none;
   object-fit: contain;
   opacity: 1;
-  padding: 5vh 0;
   transition: opacity 600ms ease;
 }
 .earth-artwork[data-ready="true"] .earth-artwork-fallback {

@@ -181,7 +181,7 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
   });
   const viewport = page.viewportSize()!;
   const radius = Math.min(
-    viewport.height * 0.42,
+    viewport.height * 0.37,
     viewport.width * (viewport.width < 640 ? 1.2 : 1) * 0.38,
   );
   const size = Math.floor(radius * 0.35);
