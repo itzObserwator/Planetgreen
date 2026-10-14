@@ -1,31 +1,9 @@
 @import "tailwindcss";
 
-/* Self-hosted Poppins keeps typography consistent without external font requests. */
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/poppins-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Poppins";
-  src: url("/fonts/poppins-500.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Poppins";
-  src: url("/fonts/poppins-600.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Poppins";
-  src: url("/fonts/poppins-700.woff2") format("woff2");
-  font-weight: 700;
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/plus-jakarta-sans-variable.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
@@ -35,8 +13,8 @@
   --color-paper: #f6f5ee;
   --color-forest: #243d30;
   --color-sage: #dce7c9;
-  --font-sans: "Poppins", Arial, sans-serif;
-  --font-heading: "Poppins", Arial, sans-serif;
+  --font-sans: "Plus Jakarta Sans", Arial, sans-serif;
+  --font-heading: "Plus Jakarta Sans", Arial, sans-serif;
 }
 
 :root {
@@ -46,8 +24,8 @@
   --accent: #dce7c9;
   --rule: #294a322b;
   --gutter: 2.5vw;
-  --heading: "Poppins", Arial, sans-serif;
-  --sans: "Poppins", Arial, sans-serif;
+  --heading: "Plus Jakarta Sans", Arial, sans-serif;
+  --sans: "Plus Jakarta Sans", Arial, sans-serif;
 }
 * {
   box-sizing: border-box;
