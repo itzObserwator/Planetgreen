@@ -91,6 +91,16 @@ export const communities = [
 
 export type Community = (typeof communities)[number];
 
+// Sustainability themes supported by the venture descriptions above.
+export const sustainabilityThemes = [
+  { id: "farming", label: "Natural farming" },
+  { id: "living", label: "Green communities" },
+  { id: "rice", label: "Traditional rice" },
+  { id: "soil", label: "Soil health" },
+  { id: "restoration", label: "Land restoration" },
+  { id: "seeds", label: "Seed preservation" },
+] as const;
+
 export const gallery = [
   {
     image: "/images/farm-natura-building.webp",

@@ -5,11 +5,21 @@ import { DeferredEarth } from "./deferred-earth";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, Leaf, Sprout, Trees, Wheat } from "lucide-react";
+import { ArrowDown, Bean, Layers3, Leaf, Sprout, TreePine, Trees, Wheat } from "lucide-react";
+import { sustainabilityThemes } from "@/data/content";
 import { Action, WordReveal } from "./ui";
 import type { EarthMotion } from "./earth-scene";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const sustainabilityIcons = {
+  farming: Sprout,
+  living: Trees,
+  rice: Wheat,
+  soil: Layers3,
+  restoration: TreePine,
+  seeds: Bean,
+};
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -90,13 +100,13 @@ export function Hero() {
         </div>
         <div className="hero-opening" aria-hidden={scene !== "opening"}>
           <p className="hero-kicker">
-            <Leaf size={18} strokeWidth={1.3} aria-hidden="true" />
+            <Leaf className="hero-nature-icon" strokeWidth={1.8} aria-hidden="true" />
             Rooted in nature. Made for life.
           </p>
           <WordReveal
             as="h1"
             id="hero-title"
-            lines={["Sustainable", "development.", "Rooted in nature."]}
+            lines={["Sustainable development.", "Rooted in nature."]}
             visible={scene === "opening"}
           />
           <p className="hero-summary">
@@ -115,26 +125,15 @@ export function Hero() {
             <span />
             People · Land · Life
           </div>
-          <div className="hero-nature-label hero-nature-farming">
-            <Sprout size={23} strokeWidth={1.2} />
-            <span>Natural farming</span>
-          </div>
-          <div className="hero-nature-label hero-nature-living">
-            <Trees size={23} strokeWidth={1.2} />
-            <span>Green communities</span>
-          </div>
-          <div className="hero-nature-label hero-nature-rice">
-            <Wheat size={23} strokeWidth={1.2} />
-            <span>Traditional rice</span>
-          </div>
-          <div className="hero-globe-caption">
-            <span>Our connection to the earth</span>
-            <p>
-              A closer connection
-              <br />
-              between people and land.
-            </p>
-          </div>
+          {sustainabilityThemes.map(({ id, label }) => {
+            const Icon = sustainabilityIcons[id];
+            return (
+              <div key={id} className={`hero-nature-label hero-nature-${id}`}>
+                <Icon className="hero-nature-icon" strokeWidth={1.8} />
+                <span>{label}</span>
+              </div>
+            );
+          })}
         </div>
         <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>
