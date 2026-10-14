@@ -473,6 +473,8 @@ textarea:focus-visible {
 
 /* Fixed 200vh opening. Earth movement follows the recording's exact scroll map. */
 .hero {
+  --hero-orbit-size: 100vmin;
+  --hero-orbit-duration: 60s;
   height: 200vh;
   height: 200svh;
   position: relative;
@@ -557,8 +559,8 @@ textarea:focus-visible {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100vmin;
-  height: 100vmin;
+  width: var(--hero-orbit-size);
+  height: var(--hero-orbit-size);
   translate: -50% -50%;
   z-index: 0;
 }
@@ -571,19 +573,17 @@ textarea:focus-visible {
   translate: -50% -50%;
   width: 100%;
   height: 100%;
-  animation: orbit-spin 60s linear infinite;
+  animation: orbit-spin var(--hero-orbit-duration) linear infinite;
 }
 .orbit-two {
   width: 130%;
   height: 130%;
   animation-duration: 70s;
-  transform: rotate(120deg);
 }
 .orbit-three {
   width: 160%;
   height: 160%;
   animation-duration: 80s;
-  transform: rotate(240deg);
 }
 .orbit span {
   position: absolute;
@@ -671,11 +671,10 @@ textarea:focus-visible {
   padding-bottom: 0.1em;
 }
 /* A soft central veil keeps the title legible against the globe. */
-.hero-opening::before {
-  content: "";
-  position: absolute;
+.hero-copy-veil {
+  position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 3;
   pointer-events: none;
   background: radial-gradient(
     ellipse 62% 33% at 50% 52%,
@@ -687,7 +686,7 @@ textarea:focus-visible {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.hero[data-scene="opening"] .hero-opening::before {
+.hero[data-scene="opening"] .hero-copy-veil {
   opacity: 1;
 }
 .hero-summary {
@@ -716,7 +715,7 @@ textarea:focus-visible {
 .hero-details {
   position: fixed;
   inset: 0;
-  z-index: 6;
+  z-index: 4;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -727,15 +726,6 @@ textarea:focus-visible {
 .hero[data-scene="opening"] .hero-details {
   opacity: 1;
   visibility: visible;
-}
-.hero-botanical {
-  position: absolute;
-  left: 2vw;
-  bottom: 14%;
-  width: 175px;
-  stroke: #78915a;
-  stroke-width: 0.8;
-  opacity: 0.17;
 }
 .hero-world-note {
   position: absolute;
@@ -751,57 +741,121 @@ textarea:focus-visible {
   letter-spacing: 0.13em;
   color: #3f5934;
 }
-.hero-world-note > span {
-  width: 32px;
-  height: 1px;
-  background: #80946e;
+/* Each three-icon group shares its outline's radius and rotation duration. */
+.hero-badge-orbit-frame {
+  position: absolute;
+  inset: 0;
+  height: 100svh;
+  transform: translate3d(0, 6%, 0);
+  pointer-events: none;
+}
+.hero-badge-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--badge-orbit-size);
+  height: var(--badge-orbit-size);
+  translate: -50% -50%;
+  animation: orbit-spin var(--badge-orbit-duration) linear infinite;
+}
+.hero-badge-orbit-two {
+  --badge-orbit-size: calc(var(--hero-orbit-size) * 1.3);
+  --badge-orbit-duration: 70s;
+}
+.hero-badge-orbit-three {
+  --badge-orbit-size: calc(var(--hero-orbit-size) * 1.6);
+  --badge-orbit-duration: 80s;
+}
+.hero-badge-slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--badge-angle)) translateX(calc(var(--badge-orbit-size) / 2))
+    rotate(calc(-1 * var(--badge-angle)));
+}
+.hero-badge-counter {
+  width: 0;
+  height: 0;
+  animation: orbit-counter-spin var(--badge-orbit-duration) linear infinite;
+}
+@keyframes orbit-counter-spin {
+  to {
+    rotate: -360deg;
+  }
 }
 .hero-nature-label {
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 17px;
+  justify-content: center;
+  width: max-content;
+  translate: -50% -50%;
+  padding: 12px;
   border: 1px solid #526b3933;
-  border-radius: 999px;
+  border-radius: 50%;
   background: #f6f5eeed;
   color: #3f5934;
   font-size: 12px;
   box-shadow: 0 6px 24px #243d3005;
-  animation: nature-drift 8s ease-in-out infinite;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
 }
-.hero-nature-farming {
-  left: 10%;
-  top: 27%;
+.hero[data-scene="opening"] .hero-nature-label {
+  pointer-events: auto;
 }
-.hero-nature-living {
-  right: 10%;
-  top: 27%;
-  animation-delay: -3s;
+.hero-nature-label > span {
+  position: absolute;
+  left: calc(100% + 10px);
+  padding: 10px 15px;
+  border: 1px solid #526b3933;
+  border-radius: 999px;
+  background: #f6f5eef5;
+  width: max-content;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
 }
-.hero-nature-rice {
-  left: 12%;
-  bottom: 20%;
-  animation-delay: -5s;
+.hero-nature-label[data-label-side="left"] > span {
+  left: auto;
+  right: calc(100% + 10px);
 }
-.hero-nature-soil {
-  left: 4%;
-  top: 49%;
-  animation-delay: -2s;
+.hero-nature-label:is(:focus-visible, [data-expanded="true"]) {
+  border-color: #526b3966;
+  background: #eef2e6;
 }
-.hero-nature-restoration {
-  right: 4%;
-  top: 49%;
-  animation-delay: -6s;
+.hero-nature-label:is(:focus-visible, [data-expanded="true"]) > span {
+  opacity: 1;
+  visibility: visible;
 }
-.hero-nature-seeds {
-  right: 12%;
-  bottom: 20%;
-  animation-delay: -4s;
+.hero:has(.hero-nature-label:is(:focus-visible, [data-expanded="true"]))
+  :is(.hero-badge-orbit, .hero-badge-counter, .orbit-two, .orbit-three) {
+  animation-play-state: paused;
 }
-@keyframes nature-drift {
-  50% {
-    transform: translateY(-7px);
+.hero:has(.hero-nature-label:is(:focus-visible, [data-expanded="true"])) .hero-details {
+  z-index: 6;
+}
+@media (hover: hover) {
+  .hero:has(.hero-nature-label:hover) .hero-details {
+    z-index: 6;
+  }
+  .hero-nature-label:hover {
+    border-color: #526b3966;
+    background: #eef2e6;
+  }
+  .hero-nature-label:hover > span {
+    opacity: 1;
+    visibility: visible;
+  }
+  .hero:has(.hero-nature-label:hover)
+    :is(.hero-badge-orbit, .hero-badge-counter, .orbit-two, .orbit-three) {
+    animation-play-state: paused;
   }
 }
 @media (max-width: 1000px) and (min-width: 640px) {
@@ -813,33 +867,7 @@ textarea:focus-visible {
   }
   .hero-nature-label {
     font-size: 10px;
-    padding: 10px 12px;
-  }
-  .hero-nature-farming {
-    left: 5%;
-    top: 26%;
-  }
-  .hero-nature-living {
-    right: 5%;
-    top: 26%;
-  }
-  .hero-nature-soil {
-    left: 5%;
-    top: auto;
-    bottom: 27%;
-  }
-  .hero-nature-restoration {
-    right: 5%;
-    top: auto;
-    bottom: 27%;
-  }
-  .hero-nature-rice {
-    left: 5%;
-    bottom: 17%;
-  }
-  .hero-nature-seeds {
-    right: 5%;
-    bottom: 17%;
+    padding: 10px;
   }
 }
 .hero-introduction {
@@ -939,29 +967,62 @@ textarea:focus-visible {
   flex-direction: column;
   gap: 9px;
 }
-.scroll-line {
-  display: block;
-  height: 48px;
+.hero-scroll-stem {
   width: 1px;
-  background: #69844544;
+  height: 24px;
+  background: linear-gradient(180deg, transparent, #78936388);
+}
+.hero-scroll-disc {
   position: relative;
-  overflow: hidden;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid #48614355;
+  border-radius: 50%;
+  background: #e8efdbda;
+  color: var(--ink);
+  box-shadow: 0 4px 18px #243d3008;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
-.scroll-line::before {
+.hero-scroll-disc::before {
   content: "";
-  display: block;
-  width: 1px;
-  height: 30px;
-  background: #698445;
-  animation: scroll-indicator 3s ease infinite;
+  position: absolute;
+  inset: -7px;
+  border: 1px solid #48614324;
+  border-radius: 50%;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
-@keyframes scroll-indicator {
-  0% {
-    transform: translateY(-40px);
-  }
-  70%,
+.hero-scroll-disc svg {
+  animation: hero-scroll-nudge 3s ease-in-out infinite;
+}
+.hero-scroll-control:is(:hover, :focus-visible) .hero-scroll-disc {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.hero-scroll-control:is(:hover, :focus-visible) .hero-scroll-disc::before {
+  transform: scale(1.08);
+  border-color: #48614355;
+}
+@keyframes hero-scroll-nudge {
+  0%,
+  65%,
   100% {
-    transform: translateY(55px);
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-disc svg {
+    animation: none;
   }
 }
 
@@ -1877,18 +1938,21 @@ dialog[open] {
     padding-block: 10px;
   }
   .earth-artwork {
-    --earth-radius: min(37svh, 45.6vw);
+    --earth-radius: min(37svh, 38vw);
+  }
+  .hero {
+    --hero-orbit-size: calc((100vw - 56px) / 1.6);
   }
   .hero-earth {
-    width: 120vw;
+    width: 100vw;
     height: 100svh;
     top: 0;
-    left: -10vw;
+    left: 0;
     opacity: 1;
   }
   .orbit-system {
-    width: 100vmin;
-    height: 100vmin;
+    width: var(--hero-orbit-size);
+    height: var(--hero-orbit-size);
     top: 50%;
   }
   .hero-opening {
@@ -1905,7 +1969,7 @@ dialog[open] {
     gap: 8px;
     margin-bottom: 20px;
   }
-  .hero-opening::before {
+  .hero-copy-veil {
     background: radial-gradient(
       ellipse 95% 34% at 50% 50%,
       #f6f5eef5 0%,
@@ -1930,60 +1994,20 @@ dialog[open] {
     width: 40px;
     height: 40px;
   }
-  .hero-earth {
-    left: -10vw;
-    top: 0;
-  }
   .hero-nature-label {
-    padding: 7px 10px;
+    padding: 8px;
     font-size: 10px;
-    gap: 6px;
+    gap: 0;
   }
   .hero-nature-label svg {
     width: 28px;
     height: 28px;
     padding: 6px;
   }
-  .hero-nature-farming {
-    left: 5%;
-    top: 23%;
-    bottom: auto;
-  }
-  .hero-nature-living {
-    right: 5%;
-    top: 23%;
-    bottom: auto;
-  }
-  .hero-nature-soil {
-    left: 5%;
-    top: auto;
-    bottom: 22%;
-  }
-  .hero-nature-restoration {
-    right: 5%;
-    top: auto;
-    bottom: 22%;
-  }
-  .hero-nature-rice {
-    left: 5%;
-    bottom: 15%;
-  }
-  .hero-nature-seeds {
-    right: 5%;
-    bottom: 15%;
-  }
-  .hero-botanical {
-    width: 115px;
-    left: -45px;
-    bottom: 19%;
-  }
   .hero-world-note {
     top: 18%;
     font-size: 9px;
     letter-spacing: 0.1em;
-  }
-  .hero-world-note > span {
-    width: 22px;
   }
   .hero-introduction h2 {
     font-size: 28px;
@@ -1995,8 +2019,16 @@ dialog[open] {
     bottom: 27px;
     font-size: 9px;
   }
-  .scroll-line {
-    height: 34px;
+  .hero-scroll-stem {
+    height: 16px;
+  }
+  .hero-scroll-disc {
+    width: 44px;
+    height: 44px;
+  }
+  .hero-scroll-disc svg {
+    width: 21px;
+    height: 21px;
   }
   .desktop-break {
     display: none;
@@ -2368,6 +2400,7 @@ dialog[open] {
     display: none;
   }
   .hero-opening,
+  .hero-copy-veil,
   .hero-bottom {
     position: absolute;
     opacity: 1 !important;
@@ -3072,6 +3105,26 @@ dialog[open] {
   transform: translateY(-2%);
   pointer-events: none;
 }
+.preloading .site-preloader[data-phase="exiting"][data-morph="true"] {
+  opacity: 1;
+  transform: none;
+  background: transparent;
+  transition: background 800ms ease;
+}
+.site-preloader[data-morph="true"] .preloader-inner > :not(.preloader-planet),
+.site-preloader[data-morph="true"] .preloader-footnote,
+.site-preloader[data-morph="true"] .preloader-orbit {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+.site-preloader[data-morph="true"] .preloader-planet {
+  background: none;
+}
+.site-preloader[data-morph="true"] .preloader-planet > img {
+  opacity: 0;
+  transition: opacity 300ms ease 900ms;
+  will-change: transform;
+}
 .preloader-inner {
   display: flex;
   flex-direction: column;
@@ -3291,18 +3344,19 @@ dialog[open] {
   .hero-details {
     position: absolute;
   }
-  .hero-nature-label {
+  .hero-badge-orbit,
+  .hero-badge-counter {
     animation: none;
   }
 }
 
-/* Keep six labels clear of the central copy on shorter phone screens. */
+/* Compact controls keep the outer orbits usable on shorter phone screens. */
 @media (max-width: 639px) and (max-height: 740px) {
   .hero-world-note {
     top: 13%;
   }
   .hero-nature-label {
-    padding: 5px 9px;
+    padding: 9px;
     font-size: 9px;
   }
   .hero-nature-label svg {
@@ -3310,16 +3364,24 @@ dialog[open] {
     height: 25px;
     padding: 5px;
   }
-  .hero-nature-farming,
-  .hero-nature-living {
-    top: 19%;
+}
+
+/* Preserve the original stagger, but begin it when the six-second loader clears. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .preloading .hero-earth .earth-artwork {
+    opacity: 0;
   }
-  .hero-nature-soil,
-  .hero-nature-restoration {
-    bottom: 19%;
+  .preloading:has(.site-preloader[data-morph="true"]) .hero-earth .earth-artwork {
+    opacity: 1;
+    transition: opacity 300ms ease 900ms;
   }
-  .hero-nature-rice,
-  .hero-nature-seeds {
-    bottom: 12%;
+  .preloading .hero-opening .reveal-word-inner {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: none;
+  }
+  .preloading .hero-opening :is(.hero-kicker, .hero-summary, .hero-action) {
+    opacity: 0;
+    transition: none;
   }
 }

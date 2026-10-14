@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { DeferredEarth } from "./deferred-earth";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -21,10 +21,37 @@ const sustainabilityIcons = {
   seeds: Bean,
 };
 
+// Fixed irregular angles avoid hydration mismatches while keeping the topics mixed.
+const sustainabilityOrbits = [
+  {
+    circle: "two",
+    members: [
+      { id: "restoration", angle: 24 },
+      { id: "farming", angle: 171 },
+      { id: "seeds", angle: 282 },
+    ],
+  },
+  {
+    circle: "three",
+    members: [
+      { id: "soil", angle: 61 },
+      { id: "rice", angle: 207 },
+      { id: "living", angle: 329 },
+    ],
+  },
+] as const;
+
+function positionBadgeLabel(button: HTMLButtonElement) {
+  const bounds = button.getBoundingClientRect();
+  button.dataset.labelSide =
+    bounds.left + bounds.width / 2 > window.innerWidth / 2 ? "left" : "right";
+}
+
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const earthMotion = useRef<EarthMotion>({ progress: 0 });
   const [scene, setScene] = useState("opening");
+  const [activeBadge, setActiveBadge] = useState<string | null>(null);
   useGSAP(
     () => {
       const media = gsap.matchMedia();
@@ -32,6 +59,7 @@ export function Hero() {
         const globe = root.current?.querySelector<HTMLElement>(".hero-earth");
         const orbits = root.current?.querySelector<HTMLElement>(".orbit-system");
         if (!globe || !orbits) return;
+        const movingLayers = root.current!.querySelectorAll(".hero-earth, .hero-badge-orbit-frame");
 
         // Reference: p = scrollY / (200vh - viewportHeight). The fixed globe
         // descends by 100p%, scales by 1+p, and only fades after the intro.
@@ -45,7 +73,7 @@ export function Hero() {
             -bounds.top / Math.max(1, bounds.height - window.innerHeight),
           );
           earthMotion.current.progress = p;
-          gsap.set(globe, {
+          gsap.set(movingLayers, {
             y: 0,
             yPercent: 6 + 100 * p,
             scale: 1 + p,
@@ -98,6 +126,7 @@ export function Hero() {
           </div>
           <DeferredEarth hero={root} motion={earthMotion} />
         </div>
+        <div className="hero-copy-veil" aria-hidden="true" />
         <div className="hero-opening" aria-hidden={scene !== "opening"}>
           <p className="hero-kicker">
             <Leaf className="hero-nature-icon" strokeWidth={1.8} aria-hidden="true" />
@@ -116,24 +145,52 @@ export function Hero() {
             Explore our ventures
           </Action>
         </div>
-        <div className="hero-details" aria-hidden="true">
-          <svg className="hero-botanical" viewBox="0 0 260 300" fill="none">
-            <path d="M30 290C80 220 108 134 182 28M77 209C7 213 8 129 21 98C70 119 103 161 77 209ZM114 147C176 158 223 98 223 60C162 56 114 91 114 147ZM150 80C112 75 104 25 116 4C147 20 169 47 150 80Z" />
-            <path d="M77 209L21 98M114 147L223 60M150 80L116 4" />
-          </svg>
-          <div className="hero-world-note">
-            <span />
+        <div className="hero-details" aria-hidden={scene !== "opening"} inert={scene !== "opening"}>
+          <div className="hero-world-note" aria-hidden="true">
             People · Land · Life
           </div>
-          {sustainabilityThemes.map(({ id, label }) => {
-            const Icon = sustainabilityIcons[id];
-            return (
-              <div key={id} className={`hero-nature-label hero-nature-${id}`}>
-                <Icon className="hero-nature-icon" strokeWidth={1.8} />
-                <span>{label}</span>
+          <div className="hero-badge-orbit-frame">
+            {sustainabilityOrbits.map(({ circle, members }) => (
+              <div key={circle} className={`hero-badge-orbit hero-badge-orbit-${circle}`}>
+                {members.map(({ id, angle }) => {
+                  const Icon = sustainabilityIcons[id];
+                  const label = sustainabilityThemes.find((theme) => theme.id === id)!.label;
+                  return (
+                    <div
+                      key={id}
+                      className="hero-badge-slot"
+                      style={{ "--badge-angle": `${angle}deg` } as CSSProperties}
+                    >
+                      <div className="hero-badge-counter">
+                        <button
+                          type="button"
+                          className={`hero-nature-label hero-nature-${id}`}
+                          aria-label={label}
+                          data-expanded={activeBadge === id}
+                          onPointerEnter={(event) => positionBadgeLabel(event.currentTarget)}
+                          onFocus={(event) => positionBadgeLabel(event.currentTarget)}
+                          onClick={(event) => {
+                            positionBadgeLabel(event.currentTarget);
+                            setActiveBadge((current) => (current === id ? null : id));
+                          }}
+                          onBlur={() => setActiveBadge(null)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Escape") {
+                              setActiveBadge(null);
+                              event.currentTarget.blur();
+                            }
+                          }}
+                        >
+                          <Icon className="hero-nature-icon" strokeWidth={1.8} aria-hidden="true" />
+                          <span aria-hidden="true">{label}</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
         <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>
@@ -148,9 +205,15 @@ export function Hero() {
         </div>
         <div className="hero-bottom">
           <span>Hyderabad, India</span>
-          <a href="#philosophy" aria-label="Scroll to our philosophy">
-            <span className="scroll-line" />
-            <ArrowDown size={18} strokeWidth={1.2} />
+          <a
+            href="#philosophy"
+            className="hero-scroll-control"
+            aria-label="Scroll to our philosophy"
+          >
+            <span className="hero-scroll-stem" aria-hidden="true" />
+            <span className="hero-scroll-disc" aria-hidden="true">
+              <ArrowDown size={23} strokeWidth={1.5} />
+            </span>
           </a>
           <span>Scroll to discover</span>
         </div>

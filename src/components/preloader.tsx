@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const GLOBE_TRANSITION_MS = 1200;
+
 /** A first-visit veil: wait for first-paint assets, never the whole WebGL scene. */
 export function Preloader() {
   const logo = useRef<HTMLImageElement>(null);
   const globe = useRef<HTMLImageElement>(null);
   const [phase, setPhase] = useState<"loading" | "exiting" | "done">("loading");
+  const [morphsToHero, setMorphsToHero] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -18,6 +21,7 @@ export function Preloader() {
     let exitTimer: ReturnType<typeof setTimeout>;
     let deadline: ReturnType<typeof setTimeout>;
     let minimumTimer: ReturnType<typeof setTimeout>;
+    let globeExpansion: Animation | undefined;
     const background = Array.from(
       document.querySelectorAll<HTMLElement>("header.navigation, main, footer, .skip-link"),
     );
@@ -42,21 +46,49 @@ export function Preloader() {
     Promise.all([Promise.race([ready, bounded]), minimumDisplay]).then(() => {
       if (cancelled) return;
       clearTimeout(deadline);
-      restore();
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hero = firstImage?.closest<HTMLElement>(".hero");
+      let transitionDuration = reducedMotion ? 0 : 600;
+      // Measure the actual hero image, including its responsive size and scroll transform.
+      // Both images use the same artwork, so the enlarged loader can hand it over precisely.
+      if (!reducedMotion && globe.current && firstImage && hero?.dataset.scene === "opening") {
+        const image = globe.current;
+        const breathingTransform = getComputedStyle(image).transform;
+        image.style.animation = "none";
+        image.style.transform = breathingTransform;
+        const from = image.getBoundingClientRect();
+        const to = firstImage.getBoundingClientRect();
+        if (to.width > 0 && to.height > 0) {
+          setMorphsToHero(true);
+          transitionDuration = GLOBE_TRANSITION_MS;
+          globeExpansion = image.animate(
+            [
+              { transform: breathingTransform },
+              {
+                transform: `translate(${to.x + to.width / 2 - from.x - from.width / 2}px, ${to.y + to.height / 2 - from.y - from.height / 2}px) scale(${to.width / image.offsetWidth})`,
+              },
+            ],
+            {
+              duration: GLOBE_TRANSITION_MS,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              fill: "forwards",
+            },
+          );
+        }
+      }
       setPhase("exiting");
-      exitTimer = setTimeout(
-        () => {
-          root.classList.remove("preloading");
-          setPhase("done");
-        },
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 600,
-      );
+      exitTimer = setTimeout(() => {
+        root.classList.remove("preloading");
+        restore();
+        setPhase("done");
+      }, transitionDuration);
     });
     return () => {
       cancelled = true;
       clearTimeout(deadline);
       clearTimeout(exitTimer);
       clearTimeout(minimumTimer);
+      globeExpansion?.cancel();
       restore();
     };
   }, []);
@@ -66,6 +98,7 @@ export function Preloader() {
     <div
       className="site-preloader"
       data-phase={phase}
+      data-morph={morphsToHero}
       role="status"
       aria-live="polite"
       aria-label="Loading Planet Green"
