@@ -25,21 +25,35 @@ export function DeferredEarth({
       clearTimeout(timer);
       if (idle !== undefined) window.cancelIdleCallback(idle);
     };
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      cancel();
+      setEnhanced(true);
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+    const onScroll = () => {
+      const bounds = element.getBoundingClientRect();
+      // Do not initialize an offscreen globe when opening a lower hash section.
+      // Once the user starts the hero animation, prioritize 3D over idle loading.
+      if (bounds.top < -1 && bounds.bottom > 0 && -bounds.top < window.innerHeight * 1.4) load();
+    };
     const observer = new IntersectionObserver(([entry]) => {
       cancel();
       if (!entry.isIntersecting) return;
       timer = setTimeout(() => {
-        const load = () => {
-          setEnhanced(true);
-          observer.disconnect();
-        };
         if ("requestIdleCallback" in window)
           idle = window.requestIdleCallback(load, { timeout: 1500 });
         else load();
       }, 750);
     });
     observer.observe(element);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => {
+      window.removeEventListener("scroll", onScroll);
       cancel();
       observer.disconnect();
     };

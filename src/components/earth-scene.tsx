@@ -13,7 +13,7 @@ import {
 } from "react";
 import { Group, Mesh, SRGBColorSpace, Vector2, TextureLoader } from "three";
 
-export type EarthMotion = { progress: number };
+export type EarthMotion = { progress: number; requestRender?: () => void };
 
 const ARTWORK = "/textures/earth-india-fallback.webp";
 const MAPS = [
@@ -146,8 +146,16 @@ function CloudBank({ time }: { time: RefObject<number> }) {
   );
 }
 
-function FrameBudget({ animate }: { animate: boolean }) {
+function FrameBudget({ animate, motion }: { animate: boolean; motion: RefObject<EarthMotion> }) {
   const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => {
+    const control = motion.current;
+    control.requestRender = invalidate;
+    invalidate();
+    return () => {
+      if (control.requestRender === invalidate) delete control.requestRender;
+    };
+  }, [motion, invalidate]);
   useEffect(() => {
     if (!animate) return;
     const timer = window.setInterval(invalidate, 1000 / 30);
@@ -208,12 +216,12 @@ function RealisticEarth({
       firstFrame.current = true;
       requestAnimationFrame(onReady);
     }
-    if (!animate) return;
-    elapsed.current += Math.min(delta, 0.05);
     // Share the very same progress as GSAP's descent/zoom. Scrolling backwards
     // reverses rotation exactly, and the opening always starts facing India.
     if (globe.current)
       globe.current.rotation.y = INITIAL_ROTATION + Math.min(motion.current.progress, 1.5) * 0.95;
+    // Rotation is driven by scroll redraws, independently of the cloud timer.
+    if (animate) elapsed.current += Math.min(delta, 0.05);
   });
   return (
     <>
@@ -322,7 +330,7 @@ export default function EarthScene({
               );
             }}
           >
-            <FrameBudget animate={!reduced && visible} />
+            <FrameBudget animate={!reduced && visible} motion={motion} />
             <Suspense fallback={null}>
               <RealisticEarth animate={!reduced && visible} onReady={onReady} motion={motion} />
             </Suspense>

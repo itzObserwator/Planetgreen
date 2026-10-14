@@ -43,6 +43,8 @@ export function Hero() {
             visibility: p < 1.5 ? "visible" : "hidden",
           });
           gsap.set(orbits, { opacity: 1 - Math.min(p, 1) });
+          // A demand-rendered canvas must be explicitly redrawn after each scroll.
+          earthMotion.current.requestRender?.();
           const next = p <= 0.2 ? "opening" : p > 0.2 && p < 1 ? "introduction" : "complete";
           setScene((previous) => (previous === next ? previous : next));
           root.current?.classList.toggle("show-scroll-cue", p < 0.05);

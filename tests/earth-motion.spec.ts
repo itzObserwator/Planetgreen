@@ -170,6 +170,14 @@ test("realistic Earth renders and its geographic fallback survives a lost WebGL 
 test("scroll rotates the geographic surface and reversing returns it to India", async ({
   page,
 }) => {
+  // Pause the cloud animation timer: scrolling must independently draw frames.
+  await page.addInitScript(() => {
+    const interval = window.setInterval.bind(window);
+    window.setInterval = ((handler: TimerHandler, delay?: number, ...args: unknown[]) =>
+      delay === 1000 / 30
+        ? 999999
+        : interval(handler, delay, ...args)) as typeof window.setInterval;
+  });
   await page.goto("/", { waitUntil: "networkidle" });
   await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
   await expect(page.locator(".hero-earth canvas")).toHaveCSS("opacity", "1");
@@ -198,6 +206,11 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
   await expect(page.locator(".hero")).toHaveAttribute("data-scene", "introduction");
   await page.waitForTimeout(700);
   const rotated = await page.screenshot({ clip });
+  // Keep the introduction scene unchanged: React rerenders must not be needed.
+  await page.evaluate((height) => window.scrollTo(0, height * 0.85), viewport.height);
+  await page.waitForTimeout(700);
+  const furtherRotated = await page.screenshot({ clip });
+  expect(furtherRotated.equals(rotated)).toBe(false);
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page.locator(".hero")).toHaveAttribute("data-scene", "opening");
   await page.waitForTimeout(700);
@@ -274,4 +287,15 @@ test("opening Farm Natura skips offscreen WebGL and paints the first photograph 
   await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
   await expect(page.locator(".hero-earth canvas")).toBeVisible();
   expect(await firstPaint?.evaluate((image) => image.isConnected)).toBe(true);
+});
+
+test("scrolling activates the 3D globe even while idle loading is delayed", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.requestIdleCallback = () => 999999;
+    window.cancelIdleCallback = () => {};
+  });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.evaluate(() => window.scrollTo(0, innerHeight * 0.15));
+  await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator(".hero-earth canvas")).toHaveCSS("opacity", "1");
 });
