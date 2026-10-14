@@ -1,27 +1,12 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url("/fonts/plus-jakarta-sans-variable.woff2") format("woff2");
-  font-weight: 200 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Manrope";
-  src: url("/fonts/manrope-variable.woff2") format("woff2");
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* The light version of Fin-Erth's atmospheric palette and editorial type scale. */
 @theme inline {
   --color-paper: #f6f5ee;
   --color-forest: #243d30;
   --color-sage: #dce7c9;
-  --font-sans: "Manrope", Arial, sans-serif;
-  --font-heading: "Plus Jakarta Sans", Arial, sans-serif;
+  --font-sans: "Times New Roman", Times, serif;
+  --font-heading: "Times New Roman", Times, serif;
 }
 
 :root {
@@ -31,8 +16,8 @@
   --accent: #dce7c9;
   --rule: #294a322b;
   --gutter: 2.5vw;
-  --heading: "Plus Jakarta Sans", Arial, sans-serif;
-  --sans: "Manrope", Arial, sans-serif;
+  --heading: "Times New Roman", Times, serif;
+  --sans: "Times New Roman", Times, serif;
 }
 * {
   box-sizing: border-box;

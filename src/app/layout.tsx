@@ -35,13 +35,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="/textures/reference/foliage-events-mobile.webp"
           media="(max-width: 640px)"
         />
-        <link
-          rel="preload"
-          href="/fonts/plus-jakarta-sans-variable.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
       </head>
       <body>
         <Preloader />
