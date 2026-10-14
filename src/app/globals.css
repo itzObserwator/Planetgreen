@@ -975,62 +975,74 @@ textarea:focus-visible {
 .community-intro p {
   max-width: 580px;
 }
-.visit-timeline {
-  max-width: 480px;
-  margin-left: 7%;
-  padding-top: 14px;
+/* The journey uses the same cream surfaces, pill shapes and fine rules as the site. */
+.journey-panel {
+  width: 100%;
+  max-width: 600px;
+  justify-self: end;
+  padding: clamp(26px, 3vw, 42px);
+  border: 1px solid var(--rule);
+  border-radius: 28px;
+  background: #f6f5eed9;
+  box-shadow: 0 20px 60px #243d3005;
 }
-.visit-timeline > .eyebrow {
-  margin-bottom: 36px;
+.journey-panel > .eyebrow {
+  margin-bottom: 26px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
 }
-.timeline-item {
-  padding-left: 32px;
-  padding-bottom: 36px;
-  border-left: 1px solid var(--rule);
-  position: relative;
+.journey-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.timeline-item:last-child {
+.journey-step {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 20px;
+  padding-block: 25px;
+  border-top: 1px solid var(--rule);
+}
+.journey-step:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.journey-step:last-child {
   padding-bottom: 0;
 }
-.timeline-dot {
-  position: absolute;
-  left: -5px;
-  top: 8px;
-  width: 9px;
-  height: 9px;
+.journey-step-number {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: #809864;
-}
-.is-current .timeline-dot::after {
-  content: "";
-  position: absolute;
-  inset: -7px;
-  border: 1px solid #80986460;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,
-  100% {
-    scale: 1;
-    opacity: 0.8;
-  }
-  60% {
-    scale: 1.4;
-    opacity: 0.15;
-  }
-}
-.timeline-number {
+  background: #e4ecd8;
+  color: #617748;
   font-size: 12px;
-  color: #82916d;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
-.timeline-item h3 {
-  font-size: 30px;
+.journey-step-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
   margin-bottom: 12px;
+  min-height: 42px;
 }
-.timeline-item p {
-  font-size: 17px;
-  margin-bottom: 0;
+.journey-step-heading h3 {
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.15;
+}
+.journey-step-icon {
+  color: #7e9461;
+  flex-shrink: 0;
+}
+.journey-step-copy p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #66715f;
+  margin: 0;
 }
 .ventures-label {
   margin-bottom: 24px;
@@ -1686,9 +1698,6 @@ dialog[open] {
   .gallery-photo > img {
     height: 350px;
   }
-  .visit-timeline {
-    margin-left: 0;
-  }
   .footer-top {
     gap: 4vw;
   }
@@ -1905,12 +1914,25 @@ dialog[open] {
   .community-intro h2 {
     font-size: 47px;
   }
-  .visit-timeline {
-    padding-left: 5px;
-    max-width: 100%;
+  .journey-panel {
+    max-width: none;
+    padding: 24px;
+    border-radius: 22px;
   }
-  .timeline-item p {
-    font-size: 16px;
+  .journey-step {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 14px;
+    padding-block: 22px;
+  }
+  .journey-step-number {
+    width: 34px;
+    height: 34px;
+  }
+  .journey-step-heading {
+    min-height: 34px;
+  }
+  .journey-step-copy p {
+    font-size: 15px;
   }
   .community-row-button {
     padding-block: 23px;

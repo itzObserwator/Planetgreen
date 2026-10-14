@@ -3,7 +3,16 @@ import { pageDirectory } from "@/data/page-directory";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Plus, Play } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Plus,
+  Play,
+  Compass,
+  Footprints,
+  Sprout,
+} from "lucide-react";
 import { communities, contact, gallery, pillars, type Community } from "@/data/content";
 import { Action, Eyebrow, Heading, Reveal } from "./ui";
 import { PhotoStack } from "./photo-stack";
@@ -181,29 +190,48 @@ export function Communities({
             <p>Our approach brings land, farming and community life together.</p>
             <Action onClick={onVisit}>Find your connection</Action>
           </Reveal>
-          <Reveal className="visit-timeline" delay={0.15}>
+          <Reveal className="journey-panel" delay={0.15}>
             <Eyebrow>Your journey starts here</Eyebrow>
-            {[
-              {
-                title: "Discover",
-                text: "Explore the four ventures and their approach to living and farming with nature.",
-              },
-              {
-                title: "Experience",
-                text: "Speak with our team to learn about a project and arrange a site visit.",
-              },
-              {
-                title: "Belong",
-                text: "Understand the project, its location and the farming or living experience it offers.",
-              },
-            ].map((step, i) => (
-              <div className={`timeline-item ${i === 0 ? "is-current" : ""}`} key={step.title}>
-                <span className="timeline-dot" />
-                <span className="timeline-number">0{i + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </div>
-            ))}
+            <ol className="journey-steps">
+              {[
+                {
+                  title: "Discover",
+                  text: "Explore the four ventures and their approach to living and farming with nature.",
+                  icon: Compass,
+                },
+                {
+                  title: "Experience",
+                  text: "Speak with our team to learn about a project and arrange a site visit.",
+                  icon: Footprints,
+                },
+                {
+                  title: "Belong",
+                  text: "Understand the project, its location and the farming or living experience it offers.",
+                  icon: Sprout,
+                },
+              ].map((step, i) => {
+                const Icon = step.icon;
+                return (
+                  <li className="journey-step" key={step.title}>
+                    <span className="journey-step-number" aria-hidden="true">
+                      0{i + 1}
+                    </span>
+                    <div className="journey-step-copy">
+                      <div className="journey-step-heading">
+                        <h3>{step.title}</h3>
+                        <Icon
+                          className="journey-step-icon"
+                          size={22}
+                          strokeWidth={1.25}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <p>{step.text}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
           </Reveal>
         </div>
         <Eyebrow className="ventures-label">Explore our four ventures</Eyebrow>
