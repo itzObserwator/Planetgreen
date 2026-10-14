@@ -1,4 +1,5 @@
 "use client";
+import { pageDirectory } from "@/data/page-directory";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
@@ -564,11 +565,18 @@ export function Footer({ onVisit }: { onVisit: () => void }) {
             </a>
           </div>
         </div>
+        <nav className="footer-page-links" aria-label="Website pages">
+          {pageDirectory.map((page) => (
+            <a key={page.slug} href={`/${page.slug}/`}>
+              {page.label}
+            </a>
+          ))}
+        </nav>
         <div className="footer-wordmark" aria-hidden="true">
           Move to Nature.
         </div>
         <div className="footer-bottom">
-          <a href="#home" aria-label="Return to Planet Green home">
+          <a href="/" aria-label="Return to Planet Green home">
             <img
               src="/brand/planet-green.svg"
               alt="Planet Green"

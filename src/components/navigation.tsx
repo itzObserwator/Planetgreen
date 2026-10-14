@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Action } from "./ui";
+import { pageDirectory } from "@/data/page-directory";
+import Link from "next/link";
 
 const links = [
   { href: "#philosophy", label: "Our philosophy" },
@@ -11,7 +13,20 @@ const links = [
   { href: "#farm-natura", label: "Farm Natura" },
 ];
 
-export function Navigation({ onVisit }: { onVisit: () => void }) {
+export function Navigation({
+  onVisit,
+  interior = false,
+}: {
+  onVisit: () => void;
+  interior?: boolean;
+}) {
+  const primary = interior
+    ? [
+        { href: "/about-us/", label: "About us" },
+        { href: "/philosophy/", label: "Philosophy" },
+        { href: "/communities/", label: "Communities" },
+      ]
+    : links;
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -62,15 +77,33 @@ export function Navigation({ onVisit }: { onVisit: () => void }) {
   return (
     <>
       <header className={`navigation ${scrolled ? "is-scrolled" : ""}`}>
-        <a className="brand" href="#home" aria-label="Planet Green home">
+        <a className="brand" href={interior ? "/" : "#home"} aria-label="Planet Green home">
           <img src="/brand/planet-green.svg" alt="Planet Green" width="167" height="60" />
         </a>
         <nav className="desktop-navigation" aria-label="Main navigation">
-          {links.map((link) => (
+          {primary.map((link) => (
             <a key={link.href} href={link.href}>
               {link.label}
             </a>
           ))}
+          <details className="navigation-pages">
+            <summary>
+              Explore <span aria-hidden="true">↗</span>
+            </summary>
+            <div className="navigation-page-list">
+              {pageDirectory.map((page) => (
+                <Link
+                  key={page.slug}
+                  href={`/${page.slug}/`}
+                  onClick={(e) => {
+                    e.currentTarget.closest("details")?.removeAttribute("open");
+                  }}
+                >
+                  {page.label}
+                </Link>
+              ))}
+            </div>
+          </details>
           <Action onClick={onVisit}>Visit us</Action>
         </nav>
         <button
@@ -88,19 +121,28 @@ export function Navigation({ onVisit }: { onVisit: () => void }) {
         {open && (
           <motion.nav
             id="mobile-navigation"
-            className="mobile-navigation"
+            className="mobile-navigation has-page-links"
             aria-label="Mobile navigation"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {links.map((link, i) => (
+            {primary.map((link, i) => (
               <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
                 <span>0{i + 1}</span>
                 {link.label}
               </a>
             ))}
+            <div className="mobile-page-links">
+              {pageDirectory
+                .filter((page) => !primary.some((link) => link.href === `/${page.slug}/`))
+                .map((page) => (
+                  <Link key={page.slug} href={`/${page.slug}/`} onClick={() => setOpen(false)}>
+                    {page.label}
+                  </Link>
+                ))}
+            </div>
             <Action
               onClick={() => {
                 setOpen(false);

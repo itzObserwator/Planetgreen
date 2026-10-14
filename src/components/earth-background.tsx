@@ -12,12 +12,12 @@ const landscapes = [
 type Placement = { top: number; height: number };
 
 /** Section-aligned Earth textures form one continuous page background. */
-export function EarthBackground() {
+export function EarthBackground({ interior = false }: { interior?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const [placements, setPlacements] = useState<Placement[]>([]);
   useEffect(() => {
     const shell = root.current?.parentElement;
-    if (!shell) return;
+    if (!shell || interior) return;
     const measure = () => {
       const origin = shell.getBoundingClientRect().top;
       const next = landscapes.map((scene) => {
@@ -43,8 +43,26 @@ export function EarthBackground() {
       observer.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [interior]);
 
+  if (interior)
+    return (
+      <div className="interior-landscape" aria-hidden="true">
+        <picture>
+          <source
+            media="(max-width: 640px)"
+            srcSet="/textures/reference/foliage-events-mobile.webp"
+          />
+          <img
+            src="/textures/reference/foliage-events.webp"
+            alt=""
+            width={1080}
+            height={1080}
+            decoding="async"
+          />
+        </picture>
+      </div>
+    );
   return (
     <div ref={root} className="earth-background" aria-hidden="true">
       {landscapes.map(

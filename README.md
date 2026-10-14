@@ -117,3 +117,9 @@ CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npx l
 Omit `--preset=desktop` for the default mobile profile. Results vary with hardware and browser conditions.
 
 Latest recorded audits are in `research/performance-results.json`: the Farm Natura deep link scored 100 desktop and 87 mobile in the final run; the animated homepage scored 79 under mobile throttling. The remaining mobile homepage cost is WebGL initialization/animation. These are estimates from the production preview, not development-server scores.
+
+### Inner pages
+
+The eleven live Planet Green pages are rebuilt in the landing page theme. Routes and labels live in `src/data/page-directory.ts`; original editorial copy lives in `src/data/live-pages.json`. The [content audit](research/live-pages-audit.md) documents every source URL and handling of the empty Careers page and historical 2023 events. Edit copy separately from `page-content.tsx` and shared `page-shell.tsx`.
+
+Gallery images and video IDs are the originals from the live site. Run `node scripts/import-live-assets.mjs` to restore missing optimized media, or append `--refresh` to re-download. The contact form prepares an email draft; this static build has no PHP mail endpoint. Inner-page QA: `npm run test:e2e -- tests/pages.spec.ts`.
