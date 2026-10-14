@@ -84,11 +84,6 @@ test("Earth backgrounds load behind the footer and keep their placement when a v
   await page.goto("/", { waitUntil: "networkidle" });
   const landscape = page.locator(".earth-landscape-footer");
   const image = landscape.locator("img");
-  await expect
-    .poll(() =>
-      image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0),
-    )
-    .toBe(true);
   const top = await landscape.evaluate((element) =>
     Number.parseFloat((element as HTMLElement).style.top),
   );
@@ -120,6 +115,11 @@ test("Earth backgrounds load behind the footer and keep their placement when a v
     .evaluate((element) =>
       window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 100),
     );
+  await expect
+    .poll(() =>
+      image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0),
+    )
+    .toBe(true);
   const bounds = (await image.boundingBox())!;
   expect(bounds.height).toBeGreaterThan(200);
   expect(bounds.y).toBeLessThan(page.viewportSize()!.height);
@@ -158,7 +158,7 @@ test("realistic Earth renders and its geographic fallback survives a lost WebGL 
   await expect(artwork).toHaveAttribute("data-ready", "false");
   await expect(artwork.locator("canvas")).toHaveCount(0);
   await expect(fallback).toHaveCSS("opacity", "1");
-  await expect(fallback).toHaveAttribute("src", "/textures/earth-india-fallback.png");
+  await expect(fallback).toHaveAttribute("src", "/textures/earth-india-fallback.webp");
   await expect
     .poll(() =>
       fallback.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
@@ -253,4 +253,25 @@ test.describe("hero copy before JavaScript", () => {
       await page.locator("#hero-title").evaluate((element) => getComputedStyle(element).fontFamily),
     ).toContain("Plus Jakarta Sans");
   });
+});
+
+test("opening Farm Natura skips offscreen WebGL and paints the first photograph immediately", async ({
+  page,
+}) => {
+  const globeRequests: string[] = [];
+  page.on("request", (request) => {
+    if (/earth-daylight|earth-normal|earth-specular/.test(request.url()))
+      globeRequests.push(request.url());
+  });
+  await page.goto("/#farm-natura", { waitUntil: "networkidle" });
+  await expect(page.locator("#farm-natura")).toBeInViewport();
+  await expect(page.locator("#farm-natura .stack-front")).toHaveCSS("opacity", "1");
+  await page.waitForTimeout(1600);
+  await expect(page.locator(".hero-earth canvas")).toHaveCount(0);
+  expect(globeRequests).toEqual([]);
+  const firstPaint = await page.locator(".earth-artwork > .earth-artwork-fallback").elementHandle();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator(".hero-earth canvas")).toBeVisible();
+  expect(await firstPaint?.evaluate((image) => image.isConnected)).toBe(true);
 });

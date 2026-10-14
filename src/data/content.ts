@@ -32,8 +32,8 @@ export const communities = [
     name: "Dates County",
     category: "A landscape of possibilities",
     logo: "/brand/dates-county.svg",
-    image: "/images/dates-county.jpg",
-    detailImage: "/images/dates-county-community.jpg",
+    image: "/images/dates-county.webp",
+    detailImage: "/images/dates-county-community.webp",
     description:
       "A 300+ acre villa plot community in Kandukur, where green landscapes and shared spaces bring families closer to nature.",
     detail:
@@ -47,8 +47,8 @@ export const communities = [
     name: "Farm Natura",
     category: "The farm life, beautifully reimagined",
     logo: "/brand/farm-natura.svg",
-    image: "/images/farm-natura.jpg",
-    detailImage: "/images/farm-natura-building.jpg",
+    image: "/images/farm-natura.webp",
+    detailImage: "/images/farm-natura-building.webp",
     description:
       "A 110+ acre managed farming estate shaped by living soil, indigenous seeds, and the simple pleasure of growing together.",
     detail:
@@ -62,8 +62,8 @@ export const communities = [
     name: "Green Land Capital",
     category: "A greener vision for tomorrow",
     logo: "/brand/green-land-capital.svg",
-    image: "/images/green-land-capital.jpg",
-    detailImage: "/images/green-land-capital.jpg",
+    image: "/images/green-land-capital.webp",
+    detailImage: "/images/green-land-capital.webp",
     description:
       "A platform connecting people with verified natural farming farmlands, with transparency and sustainability at its heart.",
     detail:
@@ -77,8 +77,8 @@ export const communities = [
     name: "Veda Bharath",
     category: "Ancient wisdom. A living future.",
     logo: "/brand/veda-bharath.webp",
-    image: "/images/veda-bharath.jpg",
-    detailImage: "/images/veda-bharath-farming.jpg",
+    image: "/images/veda-bharath.webp",
+    detailImage: "/images/veda-bharath-farming.webp",
     description:
       "Traditional Indian rice varieties, cultivated through natural farming and rooted in generations of farming knowledge.",
     detail:
@@ -92,23 +92,23 @@ export type Community = (typeof communities)[number];
 
 export const gallery = [
   {
-    image: "/images/farm-natura-building.jpg",
+    image: "/images/farm-natura-building.webp",
     caption: "Room to come home to yourself",
     tag: "Living",
   },
-  { image: "/images/farm-natura-07.jpg", caption: "Good things take root here", tag: "Growing" },
+  { image: "/images/farm-natura-07.webp", caption: "Good things take root here", tag: "Growing" },
   {
-    image: "/images/farm-natura-01.jpg",
+    image: "/images/farm-natura-01.webp",
     caption: "Places that bring us together",
     tag: "Belonging",
   },
   {
-    image: "/images/farm-natura-family.jpg",
+    image: "/images/farm-natura-family.webp",
     caption: "A slower pace. A fuller life.",
     tag: "Connecting",
   },
   {
-    image: "/images/farm-natura-farmhouse-02.jpg",
+    image: "/images/farm-natura-farmhouse-02.webp",
     caption: "A new perspective on home",
     tag: "Discovering",
   },

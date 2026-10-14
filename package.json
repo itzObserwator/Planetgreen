@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "format": "prettier --write src tests *.ts *.mjs *.json README.md"
+    "format": "prettier --write src tests *.ts *.mjs *.json README.md",
+    "preview": "node scripts/preview.mjs",
+    "optimize-assets": "node scripts/optimize-assets.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -31,7 +33,9 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "^0.186.0",
+    "lighthouse": "^13.5.0",
     "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
     "typescript": "^7.0.2"
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { DeferredEarth } from "./deferred-earth";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,7 +9,6 @@ import { ArrowDown } from "lucide-react";
 import { WordReveal } from "./ui";
 import type { EarthMotion } from "./earth-scene";
 
-const EarthScene = dynamic(() => import("./earth-scene"), { ssr: false });
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function Hero() {
@@ -85,7 +84,7 @@ export function Hero() {
               <span />
             </div>
           </div>
-          <EarthScene motion={earthMotion} />
+          <DeferredEarth hero={root} motion={earthMotion} />
         </div>
         <div className="hero-opening" aria-hidden={scene !== "opening"}>
           <p className="hero-kicker">Rooted in nature. Made for life.</p>

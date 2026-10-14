@@ -56,14 +56,21 @@ export function EarthBackground() {
               style={placements[index]}
             >
               <div className="earth-landscape-glow" />
-              <img
-                className="earth-landscape-image"
-                src={`/textures/reference/foliage-${scene.texture}.png`}
-                alt=""
-                width={scene.texture === "events" ? 1080 : 1920}
-                height={scene.texture === "footer" ? 1294 : 1080}
-                loading="eager"
-              />
+              <picture>
+                <source
+                  media="(max-width: 640px)"
+                  srcSet={`/textures/reference/foliage-${scene.texture}-mobile.webp`}
+                />
+                <img
+                  className="earth-landscape-image"
+                  src={`/textures/reference/foliage-${scene.texture}.webp`}
+                  alt=""
+                  width={scene.texture === "events" ? 1080 : 1920}
+                  height={scene.texture === "footer" ? 1294 : 1080}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
           ),
       )}

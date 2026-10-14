@@ -38,13 +38,15 @@ export function PhotoStack({
             />
           );
         })}
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="popLayout" initial={false}>
           <motion.img
             className="stack-front"
             key={index}
             src={photos[index].src}
             alt={photos[index].alt}
             loading="lazy"
+            decoding="async"
+            fetchPriority="high"
             initial={{
               opacity: 0,
               scale: 0.92,
@@ -53,7 +55,7 @@ export function PhotoStack({
             animate={{
               opacity: 1,
               scale: 1,
-              rotate: reduced ? 0 : rotations[index % rotations.length],
+              rotate: rotations[index % rotations.length],
             }}
             exit={{ opacity: 0, scale: 1.1, y: -10 }}
             transition={{ duration: 0.6, ease: [0.645, 0.045, 0.355, 1] }}

@@ -57,20 +57,20 @@ export function FarmExperience({ onVisit }: { onVisit: () => void }) {
           </p>
           <Action onClick={onVisit}>Experience Farm Natura</Action>
         </Reveal>
-        <Reveal delay={0.18}>
+        <div>
           <PhotoStack
             label="Little moments. A fuller life."
             photos={[
               {
-                src: "/images/farm-natura-01.jpg",
+                src: "/images/farm-natura-01.webp",
                 alt: "Farm Natura circular clubhouse surrounded by green farmland",
               },
-              { src: "/images/farm-natura-07.jpg", alt: "Fresh gourds growing on the farm" },
-              { src: "/images/farm-natura-03.jpg", alt: "A pavilion on the Farm Natura estate" },
-              { src: "/images/farm-natura-building.jpg", alt: "A Farm Natura farmhouse at dusk" },
+              { src: "/images/farm-natura-07.webp", alt: "Fresh gourds growing on the farm" },
+              { src: "/images/farm-natura-03.webp", alt: "A pavilion on the Farm Natura estate" },
+              { src: "/images/farm-natura-building.webp", alt: "A Farm Natura farmhouse at dusk" },
             ]}
           />
-        </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -137,7 +137,15 @@ export function BrandMarquee() {
               {Array.from({ length: 4 }, (_, set) =>
                 communities.map((c) => (
                   <div className="marquee-logo" key={`${set}-${c.id}`}>
-                    <img src={c.logo} alt="" width={180} height={75} />
+                    <img
+                      src={c.logo}
+                      alt=""
+                      width={180}
+                      height={75}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                    />
                   </div>
                 )),
               )}
@@ -292,14 +300,14 @@ export function OurStory() {
           <PhotoStack
             label="Rooted in the everyday."
             photos={[
-              { src: "/images/farm-natura-08.jpg", alt: "Botanical life flourishing on the farm" },
+              { src: "/images/farm-natura-08.webp", alt: "Botanical life flourishing on the farm" },
               {
-                src: "/images/farm-natura-12.jpg",
+                src: "/images/farm-natura-12.webp",
                 alt: "Aerial photograph of Farm Natura agricultural fields",
               },
-              { src: "/images/farm-natura-02.jpg", alt: "Food and fresh produce at Farm Natura" },
+              { src: "/images/farm-natura-02.webp", alt: "Food and fresh produce at Farm Natura" },
               {
-                src: "/images/veda-bharath-farming.jpg",
+                src: "/images/veda-bharath-farming.webp",
                 alt: "A Veda Bharath farmer working in a green rice field",
               },
             ]}
@@ -463,12 +471,12 @@ export function Conversations() {
             {
               name: "Dia Mirza",
               url: "https://www.youtube.com/watch?v=qDiovuw6kxc",
-              image: "/images/nature-01.jpg",
+              image: "/images/nature-01.webp",
             },
             {
               name: "Samantha",
               url: "https://www.youtube.com/watch?v=N_iSKzS9c2E",
-              image: "/images/farm-natura-07.jpg",
+              image: "/images/farm-natura-07.webp",
             },
           ].map((video, i) => (
             <Reveal key={video.name} delay={i * 0.1}>

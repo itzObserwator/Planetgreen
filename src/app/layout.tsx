@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Planet Green — Move to Nature",
     description: "Nature-led communities. Rooted in a better tomorrow.",
-    images: ["/images/farm-natura-living.jpg"],
+    images: ["/images/farm-natura-living.webp"],
   },
   icons: { icon: "/favicon.svg" },
 };
@@ -21,9 +21,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <link
           rel="preload"
-          href="/fonts/plus-jakarta-sans-variable.ttf"
+          as="image"
+          href="/textures/reference/foliage-events.webp"
+          media="(min-width: 641px)"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/textures/reference/foliage-events-mobile.webp"
+          media="(max-width: 640px)"
+        />
+        <link
+          rel="preload"
+          href="/fonts/plus-jakarta-sans-variable.woff2"
           as="font"
-          type="font/ttf"
+          type="font/woff2"
           crossOrigin="anonymous"
         />
       </head>

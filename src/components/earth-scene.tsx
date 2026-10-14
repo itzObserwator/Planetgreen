@@ -1,7 +1,6 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useTexture } from "@react-three/drei";
+import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
 import {
   Component,
   Suspense,
@@ -12,11 +11,11 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { Group, Mesh, SRGBColorSpace, Vector2 } from "three";
+import { Group, Mesh, SRGBColorSpace, Vector2, TextureLoader } from "three";
 
 export type EarthMotion = { progress: number };
 
-const ARTWORK = "/textures/earth-india-fallback.png";
+const ARTWORK = "/textures/earth-india-fallback.webp";
 const MAPS = [
   "/textures/earth-daylight.jpg",
   "/textures/earth-normal.jpg",
@@ -77,33 +76,20 @@ const skyFragment = `
 `;
 
 function CloudBank({ time }: { time: RefObject<number> }) {
-  const sources = useTexture(
-    CLOUD_BANK.map((cloud) => `/textures/reference/cloud-${cloud.file}.png`),
+  const sources = useLoader(
+    TextureLoader,
+    CLOUD_BANK.map((cloud) => `/textures/cloud-bank/cloud-${cloud.file}.webp`),
   );
   const bank = useRef<Group>(null);
   const puffs = useRef<Array<Mesh | null>>([]);
   const invalidate = useThree((state) => state.invalidate);
-  const textures = useMemo(
-    () =>
-      sources.map((source, index) => {
-        const texture = source.clone();
-        const [x, y, width, height] = CLOUD_BANK[index].crop;
-        const image = source.image as HTMLImageElement;
-        texture.colorSpace = SRGBColorSpace;
-        texture.repeat.set(width / image.width, height / image.height);
-        texture.offset.set(x / image.width, 1 - (y + height) / image.height);
-        texture.needsUpdate = true;
-        return texture;
-      }),
-    [sources],
-  );
+  const textures = sources;
   useEffect(() => {
+    textures.forEach((texture) => {
+      texture.colorSpace = SRGBColorSpace;
+      texture.needsUpdate = true;
+    });
     invalidate();
-    const frame = requestAnimationFrame(invalidate);
-    return () => {
-      cancelAnimationFrame(frame);
-      textures.forEach((texture) => texture.dispose());
-    };
   }, [textures, invalidate]);
   useFrame(() => {
     const t = time.current;
@@ -160,17 +146,41 @@ function CloudBank({ time }: { time: RefObject<number> }) {
   );
 }
 
+function FrameBudget({ animate }: { animate: boolean }) {
+  const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => {
+    if (!animate) return;
+    const timer = window.setInterval(invalidate, 1000 / 30);
+    return () => window.clearInterval(timer);
+  }, [animate, invalidate]);
+  return null;
+}
+
 function ArtworkFallback() {
   return <img className="earth-artwork-fallback" src={ARTWORK} alt="" />;
 }
 
-class WebGLBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class WebGLBoundary extends Component<
+  { children: ReactNode; fallback?: ReactNode; onFailure?: () => void },
+  { failed: boolean }
+> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
+  componentDidCatch() {
+    this.props.onFailure?.();
+  }
   render() {
-    return this.state.failed ? <ArtworkFallback /> : this.props.children;
+    return this.state.failed ? (
+      this.props.fallback !== undefined ? (
+        this.props.fallback
+      ) : (
+        <ArtworkFallback />
+      )
+    ) : (
+      this.props.children
+    );
   }
 }
 
@@ -183,7 +193,7 @@ function RealisticEarth({
   onReady: () => void;
   motion: RefObject<EarthMotion>;
 }) {
-  const [surface, normal, specular] = useTexture(MAPS);
+  const [surface, normal, specular] = useLoader(TextureLoader, MAPS);
   const globe = useRef<Group>(null);
   const firstFrame = useRef(false);
   const elapsed = useRef(0);
@@ -214,7 +224,7 @@ function RealisticEarth({
       <group scale={radius} rotation={[(VIEW_LATITUDE * Math.PI) / 180, 0, 0]}>
         <group ref={globe} rotation={[0, INITIAL_ROTATION, 0]}>
           <mesh>
-            <sphereGeometry args={[1, 128, 96]} />
+            <sphereGeometry args={[1, 96, 64]} />
             <meshPhongMaterial
               map={surface}
               normalMap={normal}
@@ -246,16 +256,26 @@ function RealisticEarth({
 export default function EarthScene({
   className = "",
   motion,
+  embedded = false,
+  onStatus,
 }: {
   className?: string;
   motion: RefObject<EarthMotion>;
+  embedded?: boolean;
+  onStatus?: (ready: boolean) => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(true);
   const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
   const [contextLost, setContextLost] = useState(false);
-  const onReady = useMemo(() => () => setReady(true), []);
+  const onReady = useMemo(
+    () => () => {
+      setReady(true);
+      onStatus?.(true);
+    },
+    [onStatus],
+  );
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReduced(media.matches);
@@ -272,29 +292,37 @@ export default function EarthScene({
   return (
     <div
       ref={container}
-      className={`earth-artwork ${className}`}
+      className={`${embedded ? "earth-webgl" : "earth-artwork"} ${className}`}
       data-ready={ready && !contextLost}
       aria-hidden="true"
     >
-      <ArtworkFallback />
+      {!embedded && <ArtworkFallback />}
       {!contextLost && (
-        <WebGLBoundary>
+        <WebGLBoundary fallback={embedded ? null : undefined} onFailure={() => onStatus?.(false)}>
           <Canvas
             orthographic
             resize={{ offsetSize: true }}
             camera={{ position: [0, 0, 2000], zoom: 1, near: 0.1, far: 5000 }}
-            dpr={[1, 1.25]}
-            frameloop={reduced || !visible ? "demand" : "always"}
+            dpr={1}
+            frameloop="demand"
             gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
-            fallback={<ArtworkFallback />}
+            fallback={embedded ? null : <ArtworkFallback />}
             style={{ opacity: ready ? 1 : 0, transition: "opacity 600ms ease" }}
             onCreated={({ gl }) => {
               gl.setClearColor(0x000000, 0);
-              gl.domElement.addEventListener("webglcontextlost", () => setContextLost(true), {
-                once: true,
-              });
+              gl.domElement.addEventListener(
+                "webglcontextlost",
+                () => {
+                  setContextLost(true);
+                  onStatus?.(false);
+                },
+                {
+                  once: true,
+                },
+              );
             }}
           >
+            <FrameBudget animate={!reduced && visible} />
             <Suspense fallback={null}>
               <RealisticEarth animate={!reduced && visible} onReady={onReady} motion={motion} />
             </Suspense>

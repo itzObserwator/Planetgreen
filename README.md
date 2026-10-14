@@ -25,6 +25,7 @@ src/
     site.tsx               Assembles the page and manages dialogs
     navigation.tsx         Desktop navigation and mobile menu
     hero.tsx               Introductory copy and GSAP scroll timeline
+    deferred-earth.tsx     Static first paint; visibility/idle loading of WebGL
     earth-scene.tsx        Realistic India-facing 3D Earth, clouds and atmosphere
     earth-background.tsx   Section-aligned Earth textures behind the full page
     sections.tsx           Philosophy, communities, experience and contact sections
@@ -98,3 +99,21 @@ Versions installed for this implementation:
 - **Page Earth backgrounds:** the requested Fin-Erth foliage remains locally hosted in `public/textures/reference/`. Page backgrounds use `footer-green-events.png`, `footer-green-partners.png`, `footer-green-awards.png` and the footer texture. The old illustrated globe/cloud layers remain available but are not used by the hero.
 
 The downloaded Fin-Erth files under `research/reference/` are reference material. They are not imported by the website.
+
+## Performance verification
+
+The globe retains the same compact static preview image while fading WebGL over it, avoiding a late LCP replacement. It loads WebGL when the hero is visible and the browser is idle. Opening `#farm-natura` does not initialize offscreen WebGL. Reduced-motion visitors retain the static globe, cloud and sky preview. Active clouds and scroll rotation run at a capped 30 fps and pause offscreen. Cloud textures are physically cropped instead of uploading large transparent canvases; Three.js loads them directly without the Drei texture helper.
+
+Photographs and foliage have WebP delivery variants, with smaller mobile foliage and lazy loading for offscreen images. The first Farm Natura photo paints without waiting for nested reveal animations; subsequent photograph transitions remain animated. The first background texture is preloaded for each viewport. Fonts use local WOFF2 files. Original source assets are retained.
+
+To regenerate delivery images, run `npm run optimize-assets`. Run `npm run build`, then `npm run preview` to serve the production export with gzip at **http://127.0.0.1:3002**. Restart the preview after rebuilding. Use production preview for Lighthouse; `npm run dev` includes development tooling and is not a production performance benchmark.
+
+Example audit (Chrome must be installed):
+
+```bash
+CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npx lighthouse 'http://127.0.0.1:3002/#farm-natura' --preset=desktop --only-categories=performance --chrome-flags='--headless --no-sandbox'
+```
+
+Omit `--preset=desktop` for the default mobile profile. Results vary with hardware and browser conditions.
+
+Latest recorded audits are in `research/performance-results.json`: the Farm Natura deep link scored 100 desktop and 87 mobile in the final run; the animated homepage scored 79 under mobile throttling. The remaining mobile homepage cost is WebGL initialization/animation. These are estimates from the production preview, not development-server scores.

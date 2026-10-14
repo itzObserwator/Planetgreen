@@ -1,0 +1,58 @@
+{
+  "method": "Local static production export served with gzip. Default Lighthouse desktop/mobile simulation; results vary by hardware. Development screenshot and production audits are different environments.",
+  "providedScreenshot": {
+    "url": "http://127.0.0.1:3000/#farm-natura",
+    "performanceScore": 59,
+    "fcpMs": 400,
+    "lcpMs": 3200,
+    "totalBlockingMs": 580,
+    "layoutShift": 0,
+    "speedIndexMs": 1100
+  },
+  "productionAudits": [
+    {
+      "url": "/#farm-natura",
+      "profile": "desktop",
+      "performanceScore": 100,
+      "fcpMs": 323,
+      "lcpMs": 752,
+      "totalBlockingMs": 0,
+      "speedIndexMs": 363,
+      "layoutShift": 0.0003962003473134284,
+      "lighthouseVersion": "13.5.0",
+      "measuredAt": "2026-10-14T05:35:05.285Z"
+    },
+    {
+      "url": "/#farm-natura",
+      "profile": "mobile",
+      "performanceScore": 87,
+      "fcpMs": 1203,
+      "lcpMs": 3979,
+      "totalBlockingMs": 52,
+      "speedIndexMs": 1203,
+      "layoutShift": 0.003402067231005477,
+      "lighthouseVersion": "13.5.0",
+      "measuredAt": "2026-10-14T05:36:10.316Z"
+    },
+    {
+      "url": "/",
+      "profile": "mobile",
+      "performanceScore": 79,
+      "fcpMs": 1211,
+      "lcpMs": 3897,
+      "totalBlockingMs": 369,
+      "speedIndexMs": 1271,
+      "layoutShift": 0.002393275484700491,
+      "lighthouseVersion": "13.5.0",
+      "measuredAt": "2026-10-14T05:34:23.559Z"
+    }
+  ],
+  "regressionChecks": {
+    "passed": 31,
+    "skipped": 1,
+    "additionalHeroChecksPassed": 16
+  },
+  "limits": [
+    "Animated WebGL homepage is heavier under mobile CPU throttling than the Farm Natura deep link."
+  ]
+}
