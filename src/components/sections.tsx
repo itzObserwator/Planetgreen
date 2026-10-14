@@ -220,15 +220,20 @@ export function Communities({
               >
                 <span className="community-row-main">
                   <span className="community-index">{c.number}</span>
-                  <img
-                    className="community-row-logo"
-                    src={c.logo}
-                    alt=""
-                    width={144}
-                    height={70}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <span
+                    className={`community-logo-frame community-logo-frame-${c.id}`}
+                    aria-hidden="true"
+                  >
+                    <img
+                      className="community-row-logo"
+                      src={c.logo}
+                      alt=""
+                      width={144}
+                      height={70}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
                   <span>
                     <span className="community-name">{c.name}</span>
                     <span className="community-category">{c.category}</span>

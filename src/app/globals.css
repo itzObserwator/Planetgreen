@@ -2999,13 +2999,36 @@ dialog[open] {
   }
 }
 
-/* Venture wordmarks need a wide, uncropped box instead of a circular photo. */
-.community-row-main > img.community-row-logo {
+/* Equal columns, with optical sizing for each mark's visible artwork.
+   Veda's source has large transparent margins: scale those away inside the frame. */
+.community-logo-frame {
   width: 144px;
-  height: 70px;
+  height: 80px;
   flex: 0 0 144px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.community-logo-frame .community-row-logo {
+  width: var(--logo-width);
+  height: auto;
+  max-width: none;
+  flex: none;
   object-fit: contain;
   border-radius: 0;
+}
+.community-logo-frame-ecoworld {
+  --logo-width: 144px;
+}
+.community-logo-frame-farm-natura {
+  --logo-width: 120px;
+}
+.community-logo-frame-green-land-capital {
+  --logo-width: 114px;
+}
+.community-logo-frame-veda-bharath {
+  --logo-width: 128px;
 }
 .community-row-main,
 .community-row-main > span:last-child {
@@ -3017,10 +3040,22 @@ dialog[open] {
   }
 }
 @media (max-width: 639px) {
-  .community-row-main > img.community-row-logo {
+  .community-logo-frame {
     width: 92px;
-    height: 55px;
+    height: 60px;
     flex-basis: 92px;
+  }
+  .community-logo-frame-ecoworld {
+    --logo-width: 92px;
+  }
+  .community-logo-frame-farm-natura {
+    --logo-width: 82px;
+  }
+  .community-logo-frame-green-land-capital {
+    --logo-width: 78px;
+  }
+  .community-logo-frame-veda-bharath {
+    --logo-width: 102px;
   }
   .community-row-description {
     padding-left: 126px;
