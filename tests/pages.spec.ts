@@ -52,7 +52,9 @@ test("gallery filters, keyboard controls and photo viewer work", async ({ page }
     page.getByRole("button", { name: "View Farm Natura photo 1", exact: true }),
   ).toBeFocused();
   await tabs.nth(2).click();
-  await expect(page.locator(".page-photo")).toHaveCount(10);
+  await expect(tabs.nth(2)).toContainText("Veda Bharath");
+  await expect(page.locator(".page-photo")).toHaveCount(12);
+  await expect(page.getByRole("tab", { name: /Green Land Capital/ })).toHaveCount(0);
 });
 
 test("collaborations load the original videos only on play", async ({ page }) => {
