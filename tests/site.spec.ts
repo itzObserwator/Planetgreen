@@ -107,7 +107,7 @@ test("each community expands, closes, and opens an enquiry for the selected vent
   page,
 }) => {
   await openHome(page);
-  for (const venture of ["Dates County", "Farm Natura", "Green Land Capital", "Veda Bharath"]) {
+  for (const venture of ["Ecoworld", "Farm Natura", "Green Land Capital", "Veda Bharath"]) {
     const row = page
       .locator("#communities")
       .getByRole("button", { name: new RegExp(venture) })

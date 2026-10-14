@@ -193,10 +193,10 @@ export function CommunityDialog({
           <div className="community-dialog-image">
             <img
               src={community.detailImage}
-              alt={`${community.name} ${community.id === "dates-county" ? "project visualization" : "landscape"}`}
+              alt={`${community.name} ${community.id === "ecoworld" ? "project visualization" : "landscape"}`}
             />
             <span>
-              {community.id === "dates-county" ? "Project visualization" : "The Planet Green world"}
+              {community.id === "ecoworld" ? "Project visualization" : "The Planet Green world"}
             </span>
           </div>
           <div className="community-dialog-content">

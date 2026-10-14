@@ -16,7 +16,7 @@ test("navbar links use the sourced pages and projects reach the correct communit
     );
     await page.locator(".project-dropdown summary").click();
     for (const [name, id] of [
-      ["Dates County", "dates-county"],
+      ["Ecoworld", "ecoworld"],
       ["Farm Natura", "farm-natura"],
       ["Green Land Capital", "green-land-capital"],
       ["Veda Bharath", "veda-bharath"],

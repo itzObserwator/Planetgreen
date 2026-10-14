@@ -28,17 +28,17 @@ export const pillars = [
 
 export const communities = [
   {
-    id: "dates-county",
+    id: "ecoworld",
     number: "01",
-    name: "Dates County",
+    name: "Ecoworld",
     category: "Nature-led residential villa plots",
-    logo: "/brand/dates-county.svg",
+    logo: "/brand/ecoworld.png",
     image: "/images/dates-county.webp",
     detailImage: "/images/dates-county-community.webp",
     description:
       "A 300+ acre villa plot community in Kandukur, where green landscapes and shared spaces bring families closer to nature.",
     detail:
-      "Dates County is a residential villa plot community in Kandukur, Hyderabad. The project brings together green parks, a natural stream and shared recreational spaces as part of its approach to eco-friendly living.",
+      "Ecoworld is a residential villa plot community in Kandukur, Hyderabad. The project brings together green parks, a natural stream and shared recreational spaces as part of its approach to eco-friendly living.",
     facts: ["300+ acre community", "Kandukur · Hyderabad", "Residential villa plots"],
     url: "https://www.thedatescounty.in/",
   },

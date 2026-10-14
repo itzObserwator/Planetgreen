@@ -131,3 +131,7 @@ Gallery images and video IDs are the originals from the live site. Run `node scr
 ### Sustainable development messaging
 
 The main messaging now explicitly reflects Planet Green’s promotion of sustainable development through natural farming and green living communities. See [the content audit](research/sustainable-development-content-audit.md) for current source URLs and the reasoning behind each factual claim. The originally imported inner-page text is retained in `research/live-pages-original.json`; revised editorial content is in `src/data/live-pages.json`. Policy wording and historical events retain their original content.
+
+### Ecoworld brand update
+
+The former Dates County name is now **Ecoworld** throughout the rendered site, including Projects, community cards/dialogs, metrics, gallery filters/descriptions, enquiries and the event pages. `public/brand/ecoworld.png` is the user's supplied transparent logo, preserved without recolouring. The new project anchor is `/communities/#ecoworld`. Existing photographs, project facts, external project links and source provenance are retained; no new external domain or project claims are invented.

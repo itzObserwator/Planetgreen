@@ -80,10 +80,10 @@ export function FarmExperience({ onVisit }: { onVisit: () => void }) {
 export function Impact() {
   const metrics = [
     {
-      label: "Dates County",
+      label: "Ecoworld",
       value: "300",
       suffix: "+",
-      text: "acres in the Dates County residential villa plot community.",
+      text: "acres in the Ecoworld residential villa plot community.",
     },
     {
       label: "Farm Natura",
@@ -138,7 +138,7 @@ export function BrandMarquee() {
             <div className="marquee-track">
               {Array.from({ length: 4 }, (_, set) =>
                 communities.map((c) => (
-                  <div className="marquee-logo" key={`${set}-${c.id}`}>
+                  <div className={`marquee-logo marquee-logo-${c.id}`} key={`${set}-${c.id}`}>
                     <img
                       src={c.logo}
                       alt=""
@@ -245,10 +245,10 @@ export function Communities({
                       <div className="expanded-image">
                         <img
                           src={c.detailImage}
-                          alt={`${c.name} ${c.id === "dates-county" ? "project visualization" : "landscape"}`}
+                          alt={`${c.name} ${c.id === "ecoworld" ? "project visualization" : "landscape"}`}
                           loading="lazy"
                         />
-                        {c.id === "dates-county" && <span>Project visualization</span>}
+                        {c.id === "ecoworld" && <span>Project visualization</span>}
                       </div>
                       <div>
                         <p>{c.detail}</p>

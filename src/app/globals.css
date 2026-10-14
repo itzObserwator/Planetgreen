@@ -2986,3 +2986,15 @@ dialog[open] {
     width: 100%;
   }
 }
+
+/* Preserve the supplied Ecoworld wordmark's colour and wide aspect ratio. */
+.marquee-logo-ecoworld img {
+  width: 220px;
+  filter: none;
+  opacity: 1;
+}
+@media (max-width: 640px) {
+  .marquee-logo-ecoworld img {
+    width: 160px;
+  }
+}

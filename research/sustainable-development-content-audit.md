@@ -23,3 +23,7 @@ About, Philosophy, Communities and Collaborations are edited into clearer Englis
 The acreage and soil-revitalisation figures are presented as figures published by the project websites. They are not carbon, biodiversity or sustainability performance measurements. No claims of carbon neutrality, quantified environmental savings, investment returns, certification, medical benefits or additional awards were introduced.
 
 Policy wording, event dates and historical 2023 event content remain as originally imported. Careers still uses only the published HR contact information. Current project facts are separately verified against each official project website, and individual details are reflected in project summaries and enquiry dialogs.
+
+## User-directed Ecoworld branding
+
+The user subsequently supplied `Ecoworld Logo.png` and requested that Dates County's logo and name be replaced with Ecoworld across the website. Rendered names, image descriptions, gallery filters, project anchors, enquiry options and event-page labels now use Ecoworld. Original source records and historical snapshots retain their source names. Existing project information and external domain links are retained under this explicit branding instruction; no unprovided Ecoworld website URL is inferred.
