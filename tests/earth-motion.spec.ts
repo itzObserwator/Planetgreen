@@ -191,7 +191,7 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
   // come from rotation inside WebGL, rather than movement of the whole canvas.
   await page.addStyleTag({
     content:
-      ".hero-earth { transform: none !important; } .hero-opening, .hero-introduction { visibility: hidden !important; }",
+      ".hero-earth { transform: none !important; } .hero-opening, .hero-introduction, .hero-details { visibility: hidden !important; }",
   });
   const viewport = page.viewportSize()!;
   const radius = Math.min(
@@ -199,9 +199,10 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
     viewport.width * (viewport.width < 640 ? 1.2 : 1) * 0.38,
   );
   const size = Math.floor(radius * 0.35);
+  const artwork = (await page.locator(".earth-artwork").boundingBox())!;
   const clip = {
-    x: Math.floor(viewport.width / 2 - size / 2),
-    y: Math.floor(viewport.height / 2 - radius * 0.52 - size / 2),
+    x: Math.floor(artwork.x + artwork.width / 2 - size / 2),
+    y: Math.floor(artwork.y + artwork.height / 2 - radius * 0.52 - size / 2),
     width: size,
     height: size,
   };
