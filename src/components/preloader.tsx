@@ -37,7 +37,7 @@ export function Preloader() {
     });
     // Let the branding breathe even when assets are already cached.
     const minimumDisplay = new Promise<void>((resolve) => {
-      minimumTimer = setTimeout(resolve, 1800);
+      minimumTimer = setTimeout(resolve, 3000);
     });
     Promise.all([Promise.race([ready, bounded]), minimumDisplay]).then(() => {
       if (cancelled) return;

@@ -96,5 +96,5 @@ test("cached assets still leave enough time to see the preloader", async ({ page
       .preloaderTiming;
     return timing.exiting - timing.appeared;
   });
-  expect(duration).toBeGreaterThanOrEqual(1750);
+  expect(duration).toBeGreaterThanOrEqual(2950);
 });
