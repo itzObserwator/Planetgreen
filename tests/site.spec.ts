@@ -9,8 +9,8 @@ async function openEnquiry(page: Page) {
   if (page.viewportSize()!.width < 980) {
     await page.getByRole("button", { name: "Open navigation", exact: true }).click();
     await page
-      .getByRole("navigation", { name: "Mobile navigation" })
-      .getByRole("button", { name: "Plan a visit" })
+      .getByRole("navigation", { name: "More navigation" })
+      .getByRole("button", { name: "Visit us" })
       .click();
   } else {
     await page
@@ -42,28 +42,28 @@ test("navigation reaches communities and the mobile menu closes with Escape", as
   if (page.viewportSize()!.width < 980) {
     const open = page.getByRole("button", { name: "Open navigation", exact: true });
     await open.click();
-    await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "More navigation" })).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Close navigation", exact: true }),
     ).toHaveAttribute("aria-expanded", "true");
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeHidden();
+    await expect(page.getByRole("navigation", { name: "More navigation" })).toBeHidden();
     await expect(open).toHaveAttribute("aria-expanded", "false");
     await open.click();
     await page
-      .getByRole("navigation", { name: "Mobile navigation" })
-      .locator('a[href="#communities"]')
+      .getByRole("navigation", { name: "More navigation" })
+      .getByRole("link", { name: "Communities", exact: true })
       .click();
-    await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeHidden();
+    await expect(page.getByRole("navigation", { name: "More navigation" })).toBeHidden();
   } else {
     await page
       .getByRole("navigation", { name: "Main navigation" })
       .getByRole("link", { name: "Communities", exact: true })
       .click();
   }
-  await expect(page).toHaveURL(/#communities$/);
+  await expect(page).toHaveURL(/\/communities\/$/);
   await expect(
-    page.locator("#communities").getByRole("heading", { name: /Different paths/ }),
+    page.getByRole("heading", { name: /Creating Communities for Nature to Live On/ }),
   ).toBeInViewport();
 });
 
@@ -73,7 +73,7 @@ test("mobile navigation keeps keyboard focus within the menu and returns it on c
   test.skip(page.viewportSize()!.width >= 980, "The mobile menu is shown below 980px.");
   await openHome(page);
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-  const menu = page.getByRole("navigation", { name: "Mobile navigation" });
+  const menu = page.getByRole("navigation", { name: "More navigation" });
   const close = page.getByRole("button", { name: "Close navigation", exact: true });
   const first = menu.getByRole("link", { name: /Our philosophy/ });
   const controls = menu.getByRole("link").or(menu.getByRole("button")).or(close);
@@ -92,7 +92,7 @@ test("mobile navigation keeps keyboard focus within the menu and returns it on c
   await page.keyboard.press("Shift+Tab");
   await expect(close).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(menu.getByRole("button", { name: "Plan a visit" })).toBeFocused();
+  await expect(menu.getByRole("button", { name: "Visit us" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(menu).toBeHidden();
   await expect(page.getByRole("button", { name: "Open navigation", exact: true })).toBeFocused();

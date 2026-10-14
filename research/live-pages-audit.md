@@ -34,4 +34,4 @@ Audited 14 October 2026. The live navigation at https://planetgreen.co.in/index.
 
 `src/data/page-directory.ts` holds routes and menu labels. `src/app/[slug]/page.tsx` statically generates every page with individual metadata. `PageShell` supplies the shared navigation, light foliage background, footer and visit dialog. `PageContent` renders sourced server content; `page-media.tsx` provides the gallery viewer, keyboard tabs and deferred video playback. Inner pages never initialize the heavy home-page WebGL globe.
 
-Explore menus, the footer and the inner-page directory expose every route while the home page keeps its existing in-page navigation.
+The navbar links to Our philosophy and Communities. Its Projects dropdown links to the four venture sections on the Communities page. A hamburger menu exposes all remaining pages on desktop and mobile; mobile also includes primary links, projects and the Visit us CTA. The footer and inner-page directory expose every route.

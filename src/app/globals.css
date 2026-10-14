@@ -2691,3 +2691,132 @@ dialog[open] {
     width: 145%;
   }
 }
+
+/* Primary pages and projects stay in the bar; secondary pages live in the menu. */
+.navigation-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.navigation-controls .menu-toggle {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: relative;
+  z-index: 42;
+  flex-shrink: 0;
+}
+.project-dropdown {
+  font-size: inherit;
+}
+.project-dropdown summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.project-dropdown[open] summary svg {
+  transform: rotate(180deg);
+}
+.project-dropdown .navigation-page-list {
+  width: 250px;
+  font-size: 16px;
+}
+.desktop-navigation > a[aria-current="page"]::before {
+  opacity: 1;
+}
+.site-navigation-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: var(--paper);
+  padding: 140px max(var(--gutter), 6vw) 50px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 8vw;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.menu-intro {
+  align-self: center;
+}
+.menu-intro > p:last-child {
+  font-family: var(--heading);
+  font-size: clamp(42px, 5.4vw, 78px);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.menu-links {
+  align-self: center;
+}
+.menu-primary {
+  display: none;
+}
+.menu-rest-pages {
+  display: grid;
+  gap: 12px;
+}
+.menu-rest-pages > a {
+  display: grid;
+  grid-template-columns: 24px 1fr 20px;
+  gap: 15px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding-block: 9px;
+  font-family: var(--heading);
+  font-size: clamp(20px, 2.15vw, 31px);
+  line-height: 1.3;
+}
+.menu-rest-pages > a > span {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
+}
+.menu-rest-pages > a:hover {
+  color: #668341;
+}
+.menu-links > .action {
+  margin-top: 30px;
+}
+@media (max-width: 979px) {
+  .navigation-controls {
+    gap: 0;
+  }
+  .site-navigation-panel {
+    display: block;
+    padding: 115px var(--gutter) 45px;
+  }
+  .menu-intro {
+    display: none;
+  }
+  .menu-primary {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 30px;
+  }
+  .menu-primary > a {
+    font-family: var(--heading);
+    font-size: 30px;
+    line-height: 1.3;
+  }
+  .menu-primary > .eyebrow {
+    margin: 8px 0 0;
+  }
+  .menu-projects {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 20px;
+    font-size: 15px;
+  }
+  .menu-rest-pages > a {
+    font-size: 22px;
+    padding-block: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-navigation-panel {
+    transform: none !important;
+  }
+}

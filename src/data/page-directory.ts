@@ -1,7 +1,7 @@
 // Route labels mirror the live site's navigation. Content is kept in live-pages.json.
 export const pageDirectory = [
   { slug: "about-us", sourceKey: "about-us", title: "About Planet Green", label: "About us" },
-  { slug: "philosophy", sourceKey: "philosophy", title: "Philosophy", label: "Philosophy" },
+  { slug: "philosophy", sourceKey: "philosophy", title: "Our philosophy", label: "Our philosophy" },
   { slug: "communities", sourceKey: "communities", title: "Communities", label: "Communities" },
   {
     slug: "collaborations",

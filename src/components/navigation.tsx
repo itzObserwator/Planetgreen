@@ -2,16 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { Action } from "./ui";
+import { communities } from "@/data/content";
 import { pageDirectory } from "@/data/page-directory";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const links = [
-  { href: "#philosophy", label: "Our philosophy" },
-  { href: "#communities", label: "Communities" },
-  { href: "#farm-natura", label: "Farm Natura" },
+const primary = [
+  { href: "/philosophy/", label: "Our philosophy" },
+  { href: "/communities/", label: "Communities" },
 ];
+const morePages = pageDirectory.filter(
+  (page) => page.slug !== "philosophy" && page.slug !== "communities",
+);
+const projects = communities.map((project) => ({
+  label: project.name,
+  href: `/communities/#${project.id}`,
+}));
 
 export function Navigation({
   onVisit,
@@ -20,15 +28,10 @@ export function Navigation({
   onVisit: () => void;
   interior?: boolean;
 }) {
-  const primary = interior
-    ? [
-        { href: "/about-us/", label: "About us" },
-        { href: "/philosophy/", label: "Philosophy" },
-        { href: "/communities/", label: "Communities" },
-      ]
-    : links;
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
+  const projectDropdown = useRef<HTMLDetailsElement>(null);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 45);
@@ -37,30 +40,52 @@ export function Navigation({
     return () => window.removeEventListener("scroll", update);
   }, []);
   useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      if (!projectDropdown.current?.contains(event.target as Node))
+        projectDropdown.current?.removeAttribute("open");
+    };
+    const closeEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && projectDropdown.current?.open) {
+        projectDropdown.current.removeAttribute("open");
+        projectDropdown.current.querySelector("summary")?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeEscape);
+    };
+  }, []);
+  useEffect(() => {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const background = document.querySelectorAll<HTMLElement>("main, footer, .brand, .skip-link");
+    const background = document.querySelectorAll<HTMLElement>(
+      "main, footer, .brand, .skip-link, .desktop-navigation",
+    );
     background.forEach((element) => (element.inert = true));
     const controls = () =>
       [
         toggle.current,
         ...document.querySelectorAll<HTMLElement>(
-          "#mobile-navigation a, #mobile-navigation button",
+          "#website-navigation a, #website-navigation button",
         ),
-      ].filter(Boolean) as HTMLElement[];
+      ].filter(
+        (element): element is HTMLElement => !!element && element.getClientRects().length > 0,
+      );
     controls()[1]?.focus();
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-      if (e.key === "Tab") {
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Tab") {
         const items = controls();
         const current = items.indexOf(document.activeElement as HTMLElement);
-        if (e.shiftKey && current <= 0) {
-          e.preventDefault();
+        if (event.shiftKey && current <= 0) {
+          event.preventDefault();
           items.at(-1)?.focus();
         }
-        if (!e.shiftKey && current === items.length - 1) {
-          e.preventDefault();
+        if (!event.shiftKey && current === items.length - 1) {
+          event.preventDefault();
           items[0]?.focus();
         }
       }
@@ -80,78 +105,105 @@ export function Navigation({
         <a className="brand" href={interior ? "/" : "#home"} aria-label="Planet Green home">
           <img src="/brand/planet-green.svg" alt="Planet Green" width="167" height="60" />
         </a>
-        <nav className="desktop-navigation" aria-label="Main navigation">
-          {primary.map((link) => (
-            <a key={link.href} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-          <details className="navigation-pages">
-            <summary>
-              Explore <span aria-hidden="true">↗</span>
-            </summary>
-            <div className="navigation-page-list">
-              {pageDirectory.map((page) => (
-                <Link
-                  key={page.slug}
-                  href={`/${page.slug}/`}
-                  onClick={(e) => {
-                    e.currentTarget.closest("details")?.removeAttribute("open");
-                  }}
-                >
-                  {page.label}
-                </Link>
-              ))}
-            </div>
-          </details>
-          <Action onClick={onVisit}>Visit us</Action>
-        </nav>
-        <button
-          ref={toggle}
-          className="menu-toggle"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Close navigation" : "Open navigation"}
-          aria-expanded={open}
-          aria-controls="mobile-navigation"
-        >
-          {open ? <X /> : <Menu />}
-        </button>
+        <div className="navigation-controls">
+          <nav className="desktop-navigation" aria-label="Main navigation">
+            {primary.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={
+                  pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "") ? "page" : undefined
+                }
+              >
+                {link.label}
+              </Link>
+            ))}
+            <details ref={projectDropdown} className="navigation-pages project-dropdown">
+              <summary>
+                Projects <ChevronDown size={15} aria-hidden="true" />
+              </summary>
+              <div className="navigation-page-list">
+                {projects.map((project) => (
+                  <Link
+                    key={project.href}
+                    href={project.href}
+                    onClick={() => projectDropdown.current?.removeAttribute("open")}
+                  >
+                    {project.label}
+                  </Link>
+                ))}
+              </div>
+            </details>
+            <Action onClick={onVisit}>Visit us</Action>
+          </nav>
+          <button
+            ref={toggle}
+            className="menu-toggle"
+            onClick={() => {
+              projectDropdown.current?.removeAttribute("open");
+              setOpen(!open);
+            }}
+            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-expanded={open}
+            aria-controls="website-navigation"
+          >
+            {open ? <X /> : <Menu />}
+          </button>
+        </div>
       </header>
       <AnimatePresence>
         {open && (
           <motion.nav
-            id="mobile-navigation"
-            className="mobile-navigation has-page-links"
-            aria-label="Mobile navigation"
+            id="website-navigation"
+            className="site-navigation-panel"
+            aria-label="More navigation"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {primary.map((link, i) => (
-              <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
-                <span>0{i + 1}</span>
-                {link.label}
-              </a>
-            ))}
-            <div className="mobile-page-links">
-              {pageDirectory
-                .filter((page) => !primary.some((link) => link.href === `/${page.slug}/`))
-                .map((page) => (
-                  <Link key={page.slug} href={`/${page.slug}/`} onClick={() => setOpen(false)}>
-                    {page.label}
+            <div className="menu-intro">
+              <p className="eyebrow">Explore Planet Green</p>
+              <p>
+                A little closer
+                <br />
+                to nature.
+              </p>
+            </div>
+            <div className="menu-links">
+              <div className="menu-primary">
+                {primary.map((link) => (
+                  <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
+                    {link.label}
                   </Link>
                 ))}
+                <p className="eyebrow">Projects</p>
+                <div className="menu-projects">
+                  {projects.map((project) => (
+                    <Link key={project.href} href={project.href} onClick={() => setOpen(false)}>
+                      {project.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="menu-rest-pages">
+                {morePages.map((page, i) => (
+                  <Link key={page.slug} href={`/${page.slug}/`} onClick={() => setOpen(false)}>
+                    <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                    {page.label}
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                ))}
+              </div>
+              <Action
+                onClick={() => {
+                  setOpen(false);
+                  onVisit();
+                }}
+              >
+                Visit us
+              </Action>
             </div>
-            <Action
-              onClick={() => {
-                setOpen(false);
-                onVisit();
-              }}
-            >
-              Plan a visit
-            </Action>
-            <p>A little closer to nature.</p>
           </motion.nav>
         )}
       </AnimatePresence>
