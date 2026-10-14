@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Preloader } from "@/components/preloader";
 import { MotionProvider } from "@/components/motion-provider";
 import "./globals.css";
 
@@ -17,8 +18,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="preloading">
       <head>
+        <noscript>
+          <style>{".site-preloader { display: none !important; }"}</style>
+        </noscript>
         <link
           rel="preload"
           as="image"
@@ -40,6 +44,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body>
+        <Preloader />
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>

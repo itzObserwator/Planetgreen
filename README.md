@@ -123,3 +123,7 @@ Latest recorded audits are in `research/performance-results.json`: the Farm Natu
 The eleven live Planet Green pages are rebuilt in the landing page theme. Routes and labels live in `src/data/page-directory.ts`; original editorial copy lives in `src/data/live-pages.json`. The [content audit](research/live-pages-audit.md) documents every source URL and handling of the empty Careers page and historical 2023 events. Edit copy separately from `page-content.tsx` and shared `page-shell.tsx`.
 
 Gallery images and video IDs are the originals from the live site. Run `node scripts/import-live-assets.mjs` to restore missing optimized media, or append `--refresh` to re-download. The contact form prepares an email draft; this static build has no PHP mail endpoint. Inner-page QA: `npm run test:e2e -- tests/pages.spec.ts`.
+
+### Preloader
+
+`src/components/preloader.tsx` provides the first-page loading veil, sharing the logo, light Earth artwork and existing typography. It waits for the logo, globe and first-paint fonts with a 1.2s hydration timeout, then fades away in 380ms. It never waits for WebGL or adds a fake progress percentage. The root layout persists it across internal navigation, so the loader does not replay for every link. A no-JavaScript style and independent 3s CSS escape prevent the veil from blocking a page if initialization fails. Reduced motion disables the orbit/breathing animation and removes the exit transition. Verification: `npm run test:e2e -- tests/preloader.spec.ts`.
