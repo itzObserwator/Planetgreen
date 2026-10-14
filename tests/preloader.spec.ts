@@ -67,3 +67,34 @@ test.describe("reduced motion", () => {
     await expect(page.getByRole("navigation", { name: "More navigation" })).toBeVisible();
   });
 });
+
+test("cached assets still leave enough time to see the preloader", async ({ page }) => {
+  await page.addInitScript(() => {
+    const timing = { appeared: 0, exiting: 0 };
+    (window as unknown as { preloaderTiming: typeof timing }).preloaderTiming = timing;
+    const observer = new MutationObserver(() => {
+      const loader = document.querySelector<HTMLElement>(".site-preloader");
+      if (loader && !timing.appeared) timing.appeared = performance.now();
+      if (loader?.dataset.phase === "exiting") {
+        timing.exiting = performance.now();
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["data-phase"],
+    });
+  });
+  await page.goto("/about-us/", { waitUntil: "domcontentloaded" });
+  const loader = page.locator(".site-preloader");
+  await expect(loader).toHaveAttribute("data-phase", "loading");
+  await expect(loader).toHaveCount(0, { timeout: 5000 });
+  const duration = await page.evaluate(() => {
+    const timing = (window as unknown as { preloaderTiming: { appeared: number; exiting: number } })
+      .preloaderTiming;
+    return timing.exiting - timing.appeared;
+  });
+  expect(duration).toBeGreaterThanOrEqual(1750);
+});

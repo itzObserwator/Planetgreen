@@ -2833,14 +2833,14 @@ dialog[open] {
   opacity: 0;
   pointer-events: none;
   transition:
-    opacity 380ms ease,
-    transform 380ms ease;
+    opacity 600ms ease,
+    transform 600ms ease;
 }
 .preloading .site-preloader {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
-  animation: preloader-release 0s 3s forwards;
+  animation: preloader-release 0s 5s forwards;
 }
 .preloading .site-preloader[data-phase="exiting"] {
   opacity: 0;

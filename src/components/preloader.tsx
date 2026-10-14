@@ -17,6 +17,7 @@ export function Preloader() {
     let cancelled = false;
     let exitTimer: ReturnType<typeof setTimeout>;
     let deadline: ReturnType<typeof setTimeout>;
+    let minimumTimer: ReturnType<typeof setTimeout>;
     const background = Array.from(
       document.querySelectorAll<HTMLElement>("header.navigation, main, footer, .skip-link"),
     );
@@ -34,7 +35,11 @@ export function Preloader() {
     const bounded = new Promise<void>((resolve) => {
       deadline = setTimeout(resolve, 1200);
     });
-    Promise.race([ready, bounded]).then(() => {
+    // Let the branding breathe even when assets are already cached.
+    const minimumDisplay = new Promise<void>((resolve) => {
+      minimumTimer = setTimeout(resolve, 1800);
+    });
+    Promise.all([Promise.race([ready, bounded]), minimumDisplay]).then(() => {
       if (cancelled) return;
       clearTimeout(deadline);
       restore();
@@ -44,13 +49,14 @@ export function Preloader() {
           root.classList.remove("preloading");
           setPhase("done");
         },
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 380,
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 600,
       );
     });
     return () => {
       cancelled = true;
       clearTimeout(deadline);
       clearTimeout(exitTimer);
+      clearTimeout(minimumTimer);
       restore();
     };
   }, []);
