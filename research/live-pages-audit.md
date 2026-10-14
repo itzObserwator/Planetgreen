@@ -18,9 +18,9 @@ Audited 14 October 2026. The live navigation at https://planetgreen.co.in/index.
 
 ## Content rules
 
-- `src/data/live-pages.json` preserves published editorial paragraphs, headings, policy wording, original gallery entries, video IDs and source URLs. Whitespace is normalized; the legacy site's wording is retained. The malformed unclosed philosophy paragraph is separated into its two original paragraphs. The nested award carousel appears once.
-- About includes the original three images, founder biography, statement, seven award images, vision and mission. No extra founder achievements are invented.
-- Communities keeps the four short descriptions on the live community page and links to the existing official venture sites.
+- `research/live-pages-original.json` preserves the normalized editorial content originally imported. `src/data/live-pages.json` now contains revised source-based copy for About, Philosophy, Communities and Collaborations, while preserving policy wording, historical event content, gallery entries, video IDs and source URLs. See `sustainable-development-content-audit.md` for the revision. The malformed unclosed philosophy paragraph is separated into its two original paragraphs. The nested award carousel appears once.
+- About includes the original three images, founder biography, statement, seven award images, vision and mission. No extra founder achievements are invented; the biography and vision/mission are now clearer paraphrases.
+- Communities expands the four brief project descriptions using freshly verified official venture websites and links to the existing official venture sites.
 - Gallery contains all 46 photographs: Dates County 12, Farm Natura 12, Green Land Capital 10, Veda Bharath 12. Image descriptions come from the original images' alt text, prefixed with the community name.
 - Collaborations retains all eight source YouTube IDs and names, plus the team photograph. Player iframes are loaded on click, not at page load.
 - Careers has an empty main content section on the live site. Its published phone is +91 9100666124 and its Cloudflare-obfuscated email decodes to hr@planetgreen.co.in. No roles, salary claims, benefits or application requirements are added.

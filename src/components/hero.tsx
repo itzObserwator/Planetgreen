@@ -93,20 +93,22 @@ export function Hero() {
           <WordReveal
             as="h1"
             id="hero-title"
-            lines={["A little closer to nature.", "A better way to live."]}
+            lines={["Sustainable development.", "Rooted in nature."]}
             visible={scene === "opening"}
           />
-          <p className="hero-summary">Nature-led communities. Rooted in a better tomorrow.</p>
+          <p className="hero-summary">
+            Natural farming and green communities that bring people closer to nature.
+          </p>
         </div>
         <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>
           <WordReveal
-            lines={["We create communities", "where people and", "nature grow together."]}
+            lines={["We create communities", "where sustainable", "development takes root."]}
             visible={scene === "introduction"}
           />
           <p>
-            Thoughtfully imagined places. Deeply rooted values.
-            <br />A life connected to what really matters.
+            Natural farming. Green eco-habitats.
+            <br />A closer connection between people and land.
           </p>
         </div>
         <div className="hero-bottom">

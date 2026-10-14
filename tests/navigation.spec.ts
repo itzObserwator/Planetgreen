@@ -35,7 +35,7 @@ test("navbar links use the sourced pages and projects reach the correct communit
       .click();
   }
   await expect(page).toHaveURL(/\/philosophy\/$/);
-  await expect(page.locator("main")).toContainText("That's where Planet Green steps in");
+  await expect(page.locator("main")).toContainText("Our approach to sustainable development");
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();
   if (page.viewportSize()!.width < 980) {
     await page

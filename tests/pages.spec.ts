@@ -4,12 +4,15 @@ import { pageDirectory } from "../src/data/page-directory";
 import live from "../src/data/live-pages.json";
 
 test.use({ reducedMotion: "reduce" });
-test("all editorial routes preserve published copy and fit the viewport", async ({ page }) => {
+test("all editorial routes use the revised source-based copy and fit the viewport", async ({
+  page,
+}) => {
   test.setTimeout(120_000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   for (const entry of pageDirectory) {
     const response = await page.goto(`/${entry.slug}/`);
+    await expect(page.locator(".site-preloader")).toBeHidden();
     expect(response?.status(), entry.slug).toBe(200);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${entry.title}.`);
     const main = page.locator("main");
@@ -28,6 +31,7 @@ test("all editorial routes preserve published copy and fit the viewport", async 
 
 test("gallery filters, keyboard controls and photo viewer work", async ({ page }) => {
   await page.goto("/gallery/");
+  await expect(page.locator(".site-preloader")).toBeHidden();
   const tabs = page.getByRole("tab");
   await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
   await expect(page.locator(".page-photo")).toHaveCount(12);
@@ -54,14 +58,16 @@ test("gallery filters, keyboard controls and photo viewer work", async ({ page }
 test("collaborations load the original videos only on play", async ({ page }) => {
   await page.route("https://www.youtube-nocookie.com/**", (route) => route.abort());
   await page.goto("/collaborations/");
+  await expect(page.locator(".site-preloader")).toBeHidden();
   await expect(page.locator(".video-frame")).toHaveCount(8);
   await expect(page.locator(".video-frame iframe")).toHaveCount(0);
-  await page.getByRole("button", { name: "Play Diya Mirza on Sustainable Living" }).click();
+  await page.getByRole("button", { name: "Play Dia Mirza on Sustainable Living" }).click();
   await expect(page.locator(".video-frame iframe")).toHaveAttribute("src", /qDiovuw6kxc/);
 });
 
 test("contact prepares an email and careers use the published HR details", async ({ page }) => {
   await page.goto("/contact-us/");
+  await expect(page.locator(".site-preloader")).toBeHidden();
   const form = page.locator(".page-enquiry");
   await form.getByLabel("Your Name").fill("Asha");
   await form.getByLabel("Email Address").fill("asha@example.com");
@@ -75,6 +81,7 @@ test("contact prepares an email and careers use the published HR details", async
   );
   expect(decodeURIComponent(href!)).toContain("Please share visiting times.");
   await page.goto("/careers/");
+  await expect(page.locator(".site-preloader")).toBeHidden();
   await expect(page.locator('main a[href="mailto:hr@planetgreen.co.in"]')).toBeVisible();
   await expect(page.locator('main a[href="tel:+919100666124"]')).toBeVisible();
 });
@@ -83,6 +90,7 @@ test("navigation and footer expose every new page, and all imported images exist
   page,
 }) => {
   await page.goto("/about-us/");
+  await expect(page.locator(".site-preloader")).toBeHidden();
   for (const entry of pageDirectory)
     await expect(
       page.locator(".footer-page-links a").filter({ hasText: entry.label }),

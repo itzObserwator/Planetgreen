@@ -2,7 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function openHome(page: Page) {
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("A little closer to nature.");
+  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Sustainable development.");
 }
 
 async function openEnquiry(page: Page) {
@@ -63,7 +64,7 @@ test("navigation reaches communities and the mobile menu closes with Escape", as
   }
   await expect(page).toHaveURL(/\/communities\/$/);
   await expect(
-    page.getByRole("heading", { name: /Creating Communities for Nature to Live On/ }),
+    page.getByRole("heading", { name: /Creating communities for nature to live on/i }),
   ).toBeInViewport();
 });
 
@@ -203,7 +204,7 @@ test("gallery moves forward and back and stops at its boundaries", async ({ page
   const next = page.getByRole("button", { name: "Next gallery photograph" });
   const first = page
     .locator("figure")
-    .filter({ has: page.getByRole("heading", { name: "Room to come home to yourself" }) });
+    .filter({ has: page.getByRole("heading", { name: "Farm Natura farmhouse" }) });
   await next.scrollIntoViewIfNeeded();
   await expect(previous).toBeDisabled();
   const initialLeft = (await first.boundingBox())!.x;
@@ -257,12 +258,12 @@ test.describe("reduced motion", () => {
     await page
       .locator("#philosophy")
       .evaluate((element) => element.scrollIntoView({ behavior: "instant", block: "start" }));
-    await expect(page.getByRole("heading", { name: /The best way forward/ })).toBeInViewport();
+    await expect(page.getByRole("heading", { name: /Nature and people/ })).toBeInViewport();
     await expect
       .poll(() =>
         page
           .locator("#philosophy")
-          .getByRole("heading", { name: /The best way forward/ })
+          .getByRole("heading", { name: /Nature and people/ })
           .evaluate((element) => {
             let node: HTMLElement | null = element as HTMLElement;
             let opacity = 1;

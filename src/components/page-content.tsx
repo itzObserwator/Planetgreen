@@ -130,7 +130,7 @@ export function PageContent({ entry }: { entry: PageEntry }) {
           <section className="page-editorial with-media">
             <div className="page-editorial-copy">
               <Eyebrow>Careers</Eyebrow>
-              <Heading lines={["Be part of an opulent lifestyle."]} />
+              <Heading lines={["Talk to our team."]} />
               <p>For More Information Call</p>
               <a className="page-contact-number" href="tel:+919100666124">
                 +91 9100666124
@@ -150,15 +150,15 @@ export function PageContent({ entry }: { entry: PageEntry }) {
           <>
             <section className="page-contact-grid">
               <div>
-                <Eyebrow>Have Question?</Eyebrow>
+                <Eyebrow>Have a question?</Eyebrow>
                 <a href={contact.phoneHref}>+91 9555 700 900</a>
               </div>
               <div>
-                <Eyebrow>Write Email</Eyebrow>
+                <Eyebrow>Write to us</Eyebrow>
                 <a href="mailto:marketing@planetgreen.co.in">marketing@planetgreen.co.in</a>
               </div>
               <div>
-                <Eyebrow>Visit Office</Eyebrow>
+                <Eyebrow>Visit our office</Eyebrow>
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`}
                   target="_blank"

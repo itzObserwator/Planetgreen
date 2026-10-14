@@ -16,10 +16,11 @@ export function Philosophy() {
           <Eyebrow>Our vision and philosophy</Eyebrow>
           <Heading
             className="statement"
-            lines={["The best way forward", "is a little closer to nature."]}
+            lines={["Nature and people.", "A relationship to renew."]}
           />
           <p className="section-lead">
-            We believe in a life that gives back. To you. To the land. To the future.
+            Planet Green promotes sustainable development through natural farming and green living
+            communities. Our aim is to help families reconnect with nature and care for the land.
           </p>
         </Reveal>
         <div className="three-columns pillars">
@@ -42,25 +43,24 @@ export function FarmExperience({ onVisit }: { onVisit: () => void }) {
       <div className="container editorial-grid">
         <Reveal className="editorial-copy">
           <Eyebrow>Life at Farm Natura</Eyebrow>
-          <Heading lines={["Less rush.", "More roots."]} />
+          <Heading lines={["Natural farming.", "Managed with care."]} />
           <p className="large-copy">
-            There’s a different kind of life waiting. One with your feet on the earth and a little
-            more room to breathe.
+            Farm Natura is Planet Green’s managed natural-farming estate near Kandukur, on the
+            Srisailam Highway.
           </p>
           <p>
-            At Farm Natura, we bring people back to the land. A thoughtfully managed farming
-            community where you can grow your own produce, share meaningful moments, and rediscover
-            the simple pleasures of a life in nature.
+            Families can own farmland and take part in growing seasonal produce, while dedicated
+            agronomy staff manage everyday farming operations.
           </p>
           <p>
-            Rooted in Vedic farming and years of soil revitalisation, this is a place to slow down,
-            get involved, and grow together.
+            The project’s approach centres on natural farming, soil revitalisation and indigenous
+            seeds, bringing farm living and care for the land together.
           </p>
           <Action onClick={onVisit}>Experience Farm Natura</Action>
         </Reveal>
         <div>
           <PhotoStack
-            label="Little moments. A fuller life."
+            label="Natural farming at Farm Natura."
             photos={[
               {
                 src: "/images/farm-natura-01.webp",
@@ -80,30 +80,31 @@ export function FarmExperience({ onVisit }: { onVisit: () => void }) {
 export function Impact() {
   const metrics = [
     {
-      label: "A landscape to belong to",
+      label: "Dates County",
       value: "300",
       suffix: "+",
-      text: "acres at Dates County. Space for nature, community, and a life well lived.",
+      text: "acres in the Dates County residential villa plot community.",
     },
     {
-      label: "Room to put down roots",
+      label: "Farm Natura",
       value: "110",
       suffix: "+",
-      text: "acres at Farm Natura. A managed farm community with the earth at its heart.",
+      text: "acres of managed farmland at Farm Natura.",
     },
     {
-      label: "Good things take time",
+      label: "Soil revitalisation",
       value: "6",
       suffix: "+",
-      text: "years of soil revitalisation at Farm Natura. Nurturing the foundation of life.",
+      text: "years of soil revitalisation reported by Farm Natura.",
     },
   ];
   return (
     <section className="section impact">
       <div className="container">
         <Reveal>
-          <Eyebrow>Our world, growing with purpose</Eyebrow>
-          <Heading lines={["Real roots.", "A lasting difference."]} />
+          <Eyebrow>Our projects, in context</Eyebrow>
+          <Heading lines={["Grounded in land.", "Focused on nature."]} />
+          <p>Figures published by our project websites.</p>
         </Reveal>
         <div className="three-columns metrics">
           {metrics.map((metric, i) => (
@@ -127,8 +128,8 @@ export function BrandMarquee() {
     <section className="brand-section" aria-label="The Planet Green family">
       <div className="container">
         <Reveal>
-          <Eyebrow>One shared vision. Many ways to live it.</Eyebrow>
-          <Heading lines={["A world rooted in nature."]} />
+          <Eyebrow>Four ventures. One shared purpose.</Eyebrow>
+          <Heading lines={["Sustainable development,", "in different forms."]} />
         </Reveal>
       </div>
       <div className="brand-marquees" aria-hidden="true">
@@ -172,12 +173,12 @@ export function Communities({
         <div className="editorial-grid community-intro">
           <Reveal>
             <Eyebrow>The Planet Green world</Eyebrow>
-            <Heading lines={["Different paths.", "One greener future."]} />
+            <Heading lines={["Different paths.", "Sustainable development."]} />
             <p>
-              From a home among the trees to a farm of your own, from restoring the land to
-              preserving our heritage. Discover four expressions of the same belief.
+              Residential communities, managed natural farming, farmland restoration and traditional
+              rice cultivation. Explore four ventures shaped by a shared connection with nature.
             </p>
-            <p>Nature isn’t somewhere we go. It’s how we choose to live.</p>
+            <p>Our approach brings land, farming and community life together.</p>
             <Action onClick={onVisit}>Find your connection</Action>
           </Reveal>
           <Reveal className="visit-timeline" delay={0.15}>
@@ -185,15 +186,15 @@ export function Communities({
             {[
               {
                 title: "Discover",
-                text: "Explore our communities, our farms, and the values that bring them together.",
+                text: "Explore the four ventures and their approach to living and farming with nature.",
               },
               {
                 title: "Experience",
-                text: "Walk the land. Feel the difference. Let nature show you another way.",
+                text: "Speak with our team to learn about a project and arrange a site visit.",
               },
               {
                 title: "Belong",
-                text: "Find your place in a community growing towards a better tomorrow.",
+                text: "Understand the project, its location and the farming or living experience it offers.",
               },
             ].map((step, i) => (
               <div className={`timeline-item ${i === 0 ? "is-current" : ""}`} key={step.title}>
@@ -276,21 +277,19 @@ export function OurStory() {
       <div className="container editorial-grid">
         <Reveal className="editorial-copy">
           <Eyebrow>Our story</Eyebrow>
-          <Heading lines={["A return to", "what matters."]} />
+          <Heading lines={["Natural farming.", "A shared vision."]} />
           <p className="large-copy">
-            The soil. The seasons.
-            <br />
-            The people we call our own.
+            Planet Green brings natural farming and green eco-habitats together to help urban
+            families reconnect with nature.
           </p>
           <p>
-            Planet Green began with a simple idea: a healthier relationship with nature can change
-            how we live. Our world brings together natural farming, green communities, and the
-            wisdom of the land.
+            Vinay Ram’s experience in natural farming led to the idea of combining farming and
+            living through Planet Green. This connection between land and everyday life continues to
+            shape our work.
           </p>
           <p>
-            We’re here to help people rediscover that connection. Through places that bring us
-            together, food that comes from living soil, and choices that leave a little more good
-            behind.
+            Our vision of sustainable development is expressed through nature-led communities,
+            managed farmlands and the preservation of traditional farming knowledge.
           </p>
           <div className="story-signature">
             <img src="/brand/planet-green.svg" alt="Planet Green" loading="lazy" />
@@ -299,7 +298,7 @@ export function OurStory() {
         </Reveal>
         <Reveal delay={0.15}>
           <PhotoStack
-            label="Rooted in the everyday."
+            label="Farming and community life."
             photos={[
               { src: "/images/farm-natura-08.webp", alt: "Botanical life flourishing on the farm" },
               {
@@ -337,8 +336,8 @@ export function Gallery() {
     <section className="section gallery-section">
       <div className="container gallery-header">
         <Reveal>
-          <Eyebrow>There’s life beyond the everyday</Eyebrow>
-          <Heading lines={["A glimpse of the good life."]} />
+          <Eyebrow>Visual stories of Planet Green</Eyebrow>
+          <Heading lines={["Farming. Places. People."]} />
         </Reveal>
         <div className="gallery-controls">
           <button
@@ -391,16 +390,16 @@ export function Gallery() {
 
 const thoughts = [
   {
-    text: "A better life begins with a deeper connection. To the land. To each other. To ourselves.",
-    label: "A life rooted in connection",
+    text: "Bring people closer to nature through natural farming and green living communities.",
+    label: "Our purpose",
   },
   {
-    text: "Grow something good. A garden. A friendship. A future worth leaving behind.",
-    label: "A life rooted in purpose",
+    text: "Help people relearn how to grow food, cultivate produce and replenish soil.",
+    label: "Our mission",
   },
   {
-    text: "Some of the best things in life happen when we slow down enough to notice them.",
-    label: "A life rooted in presence",
+    text: "Create farming ecosystems and living communities where people can indulge, involve and impact nature in a positive way.",
+    label: "Our approach",
   },
 ];
 
@@ -463,27 +462,34 @@ export function Conversations() {
     <section className="section conversations">
       <div className="container">
         <Reveal>
-          <Eyebrow>Conversations that inspire</Eyebrow>
-          <Heading lines={["Ideas for a greener everyday."]} />
-          <p>Sustainable Living with Shilpa Reddy. Conversations powered by Farm Natura.</p>
+          <Eyebrow>Sustainable Living with Shilpa Reddy</Eyebrow>
+          <Heading lines={["Conversations about", "sustainable living."]} />
+          <p>
+            Planet Green’s collaboration with Shilpa Reddy explores personal choices, sustainable
+            living and our relationship with nature.
+          </p>
         </Reveal>
         <div className="conversation-grid">
           {[
             {
               name: "Dia Mirza",
               url: "https://www.youtube.com/watch?v=qDiovuw6kxc",
-              image: "/images/nature-01.webp",
+              image: "https://i.ytimg.com/vi/qDiovuw6kxc/hqdefault.jpg",
             },
             {
               name: "Samantha",
               url: "https://www.youtube.com/watch?v=N_iSKzS9c2E",
-              image: "/images/farm-natura-07.webp",
+              image: "https://i.ytimg.com/vi/N_iSKzS9c2E/hqdefault.jpg",
             },
           ].map((video, i) => (
             <Reveal key={video.name} delay={i * 0.1}>
               <a href={video.url} target="_blank" rel="noreferrer" className="conversation-link">
                 <div className="conversation-image">
-                  <img src={video.image} alt="Nature and sustainable living" loading="lazy" />
+                  <img
+                    src={video.image}
+                    alt={`${video.name} on Sustainable Living`}
+                    loading="lazy"
+                  />
                   <span className="play-button">
                     <Play size={23} strokeWidth={1.2} />
                   </span>
@@ -507,17 +513,17 @@ export function Footer({ onVisit }: { onVisit: () => void }) {
       <div className="container">
         <div className="footer-top editorial-grid">
           <Reveal>
-            <Eyebrow>Let’s grow something good</Eyebrow>
-            <Heading lines={["Your next chapter.", "Closer to nature."]} />
+            <Eyebrow>Connect with Planet Green</Eyebrow>
+            <Heading lines={["Let’s build a", "greener future."]} />
           </Reveal>
           <Reveal className="footer-copy" delay={0.1}>
             <p>
-              A home, a farm, a fresh perspective. Wherever your journey begins, we’d love to help
-              you find your connection to the Planet Green world.
+              Explore our communities, natural farming and heritage rice ventures. We also welcome
+              conversations with people and organisations who share our commitment to sustainable
+              development.
             </p>
             <p>
-              Come walk the land with us. Let’s explore what a life rooted in nature could look like
-              for you.
+              Get in touch to learn about our projects, arrange a visit or discuss a collaboration.
             </p>
             <Action onClick={onVisit}>Let’s get in touch</Action>
           </Reveal>

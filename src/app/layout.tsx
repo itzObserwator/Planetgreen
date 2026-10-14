@@ -6,11 +6,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Planet Green — Move to Nature",
   description:
-    "A little closer to nature. A better way to live. Discover Planet Green's world of natural farming, green communities and heritage food: Farm Natura, Dates County, Green Land Capital and Veda Bharath.",
+    "Planet Green promotes sustainable development through natural farming, green living communities, farmland restoration and traditional rice cultivation. Discover our four ventures.",
   metadataBase: new URL("https://planet-green-nature.techgylink-0150.chatgpt.site"),
   openGraph: {
     title: "Planet Green — Move to Nature",
-    description: "Nature-led communities. Rooted in a better tomorrow.",
+    description: "Sustainable development through natural farming and green living communities.",
     images: ["/images/farm-natura-living.webp"],
   },
   icons: { icon: "/favicon.svg" },

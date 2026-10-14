@@ -120,10 +120,14 @@ Latest recorded audits are in `research/performance-results.json`: the Farm Natu
 
 ### Inner pages
 
-The eleven live Planet Green pages are rebuilt in the landing page theme. Routes and labels live in `src/data/page-directory.ts`; original editorial copy lives in `src/data/live-pages.json`. The [content audit](research/live-pages-audit.md) documents every source URL and handling of the empty Careers page and historical 2023 events. Edit copy separately from `page-content.tsx` and shared `page-shell.tsx`.
+The eleven live Planet Green pages are rebuilt in the landing page theme. Routes and labels live in `src/data/page-directory.ts`; source-based editorial copy lives in `src/data/live-pages.json`. The [content audit](research/live-pages-audit.md) documents every source URL and handling of the empty Careers page and historical 2023 events. Edit copy separately from `page-content.tsx` and shared `page-shell.tsx`.
 
 Gallery images and video IDs are the originals from the live site. Run `node scripts/import-live-assets.mjs` to restore missing optimized media, or append `--refresh` to re-download. The contact form prepares an email draft; this static build has no PHP mail endpoint. Inner-page QA: `npm run test:e2e -- tests/pages.spec.ts`.
 
 ### Preloader
 
 `src/components/preloader.tsx` provides the first-page loading veil, sharing the logo, light Earth artwork and existing typography. It waits for the logo, globe and first-paint fonts with a 1.2s asset timeout, stays visible for at least 3s, then fades away in 600ms. It never waits for WebGL or adds a fake progress percentage. The root layout persists it across internal navigation, so the loader does not replay for every link. A no-JavaScript style and independent 5s CSS escape prevent the veil from blocking a page if initialization fails. Reduced motion disables the orbit/breathing animation and removes the exit transition. Verification: `npm run test:e2e -- tests/preloader.spec.ts`.
+
+### Sustainable development messaging
+
+The main messaging now explicitly reflects Planet Green’s promotion of sustainable development through natural farming and green living communities. See [the content audit](research/sustainable-development-content-audit.md) for current source URLs and the reasoning behind each factual claim. The originally imported inner-page text is retained in `research/live-pages-original.json`; revised editorial content is in `src/data/live-pages.json`. Policy wording and historical events retain their original content.
