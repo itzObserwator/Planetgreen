@@ -60,7 +60,7 @@ test.describe("reduced motion", () => {
     });
     await page.goto("/about-us/", { waitUntil: "domcontentloaded" });
     await expect(page.locator(".preloader-orbit").first()).toHaveCSS("animation-name", "none");
-    await expect(page.locator(".preloader-planet > img")).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".preloader-globe")).toHaveCSS("animation-name", "none");
     releaseFont();
     await expect(page.locator(".site-preloader")).toHaveCount(0);
     await page.getByRole("button", { name: "Open navigation", exact: true }).click();

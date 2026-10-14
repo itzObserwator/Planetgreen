@@ -3105,25 +3105,20 @@ dialog[open] {
   transform: translateY(-2%);
   pointer-events: none;
 }
-.preloading .site-preloader[data-phase="exiting"][data-morph="true"] {
+.preloading .site-preloader[data-phase="exiting"][data-globe-handoff="true"] {
   opacity: 1;
   transform: none;
   background: transparent;
-  transition: background 800ms ease;
+  transition: background 600ms ease;
 }
-.site-preloader[data-morph="true"] .preloader-inner > :not(.preloader-planet),
-.site-preloader[data-morph="true"] .preloader-footnote,
-.site-preloader[data-morph="true"] .preloader-orbit {
+.site-preloader[data-globe-handoff="true"] .preloader-inner > :not(.preloader-planet),
+.site-preloader[data-globe-handoff="true"] .preloader-footnote,
+.site-preloader[data-globe-handoff="true"] .preloader-orbit {
   opacity: 0;
-  transition: opacity 250ms ease;
+  transition: opacity 600ms ease;
 }
-.site-preloader[data-morph="true"] .preloader-planet {
+.site-preloader[data-globe-handoff="true"] .preloader-planet {
   background: none;
-}
-.site-preloader[data-morph="true"] .preloader-planet > img {
-  opacity: 0;
-  transition: opacity 300ms ease 900ms;
-  will-change: transform;
 }
 .preloader-inner {
   display: flex;
@@ -3146,11 +3141,28 @@ dialog[open] {
   margin-bottom: 32px;
   background: radial-gradient(circle, #e1ead7 5%, #e9eee05c 55%, transparent 72%);
 }
-.preloader-planet > img {
+.preloader-globe {
+  position: relative;
   width: 160px;
   height: 160px;
-  object-fit: contain;
   animation: preloader-breathe 2.8s ease-in-out infinite;
+}
+.preloader-globe > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.preloader-globe-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 82% 42% at 50% 45%,
+    #f6f5eef5 0%,
+    #f6f5eee0 45%,
+    #f6f5ee65 75%,
+    transparent 100%
+  );
 }
 .preloader-orbit {
   position: absolute;
@@ -3255,7 +3267,7 @@ dialog[open] {
   .site-preloader {
     transition: none;
   }
-  .preloader-planet > img,
+  .preloader-globe,
   .preloader-orbit,
   .preloader-track > span {
     animation: none;
@@ -3370,10 +3382,6 @@ dialog[open] {
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   .preloading .hero-earth .earth-artwork {
     opacity: 0;
-  }
-  .preloading:has(.site-preloader[data-morph="true"]) .hero-earth .earth-artwork {
-    opacity: 1;
-    transition: opacity 300ms ease 900ms;
   }
   .preloading .hero-opening .reveal-word-inner {
     opacity: 0;
