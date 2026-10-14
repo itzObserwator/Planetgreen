@@ -975,21 +975,17 @@ textarea:focus-visible {
 .community-intro p {
   max-width: 580px;
 }
-/* The journey uses the same cream surfaces, pill shapes and fine rules as the site. */
+/* Open editorial steps mirror the site's venture rows and large type. */
 .journey-panel {
   width: 100%;
   max-width: 600px;
   justify-self: end;
-  padding: clamp(26px, 3vw, 42px);
-  border: 1px solid var(--rule);
-  border-radius: 28px;
-  background: #f6f5eed9;
-  box-shadow: 0 20px 60px #243d3005;
+  padding-top: 10px;
 }
 .journey-panel > .eyebrow {
-  margin-bottom: 26px;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
 }
 .journey-steps {
   list-style: none;
@@ -998,51 +994,34 @@ textarea:focus-visible {
 }
 .journey-step {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  gap: 20px;
-  padding-block: 25px;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 24px;
+  padding-block: 30px;
   border-top: 1px solid var(--rule);
 }
-.journey-step:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
 .journey-step:last-child {
-  padding-bottom: 0;
+  border-bottom: 1px solid var(--rule);
 }
 .journey-step-number {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #e4ecd8;
-  color: #617748;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-family: var(--heading);
+  font-size: clamp(36px, 3.5vw, 50px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  color: #829767;
+  align-self: start;
 }
-.journey-step-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 12px;
-  min-height: 42px;
-}
-.journey-step-heading h3 {
-  font-size: clamp(24px, 2.2vw, 30px);
-  line-height: 1.15;
-}
-.journey-step-icon {
-  color: #7e9461;
-  flex-shrink: 0;
+.journey-step-copy h3 {
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.2;
+  margin-bottom: 14px;
 }
 .journey-step-copy p {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.65;
-  color: #66715f;
+  color: var(--muted);
   margin: 0;
+  max-width: 420px;
 }
 .ventures-label {
   margin-bottom: 24px;
@@ -1916,23 +1895,26 @@ dialog[open] {
   }
   .journey-panel {
     max-width: none;
-    padding: 24px;
-    border-radius: 22px;
+    padding-top: 0;
+  }
+  .journey-panel > .eyebrow {
+    margin-bottom: 24px;
+    font-size: 12px;
   }
   .journey-step {
-    grid-template-columns: 34px minmax(0, 1fr);
-    gap: 14px;
-    padding-block: 22px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 20px;
+    padding-block: 26px;
   }
   .journey-step-number {
-    width: 34px;
-    height: 34px;
+    font-size: 36px;
   }
-  .journey-step-heading {
-    min-height: 34px;
+  .journey-step-copy h3 {
+    font-size: 28px;
+    margin-bottom: 12px;
   }
   .journey-step-copy p {
-    font-size: 15px;
+    font-size: 16px;
   }
   .community-row-button {
     padding-block: 23px;
