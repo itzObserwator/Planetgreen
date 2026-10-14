@@ -52,7 +52,7 @@ test("navigation reaches communities and the mobile menu closes with Escape", as
     await open.click();
     await page
       .getByRole("navigation", { name: "Mobile navigation" })
-      .getByRole("link", { name: /Communities/ })
+      .locator('a[href="#communities"]')
       .click();
     await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeHidden();
   } else {
