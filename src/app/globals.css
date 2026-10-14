@@ -2840,7 +2840,7 @@ dialog[open] {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
-  animation: preloader-release 0s 5s forwards;
+  animation: preloader-release 0s 10s forwards;
 }
 .preloading .site-preloader[data-phase="exiting"] {
   opacity: 0;

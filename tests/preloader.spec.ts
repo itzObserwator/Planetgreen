@@ -19,7 +19,7 @@ test("themed preloader releases a slow page and does not return on internal navi
   await expect(loader).toContainText("Move to Nature.");
   await expect(page.locator("main")).toHaveAttribute("inert", "");
   // Even while the font is still held, first-paint waiting must be bounded.
-  await expect(loader).toHaveCount(0, { timeout: 4000 });
+  await expect(loader).toHaveCount(0, { timeout: 9000 });
   await expect(page.locator("main")).not.toHaveAttribute("inert", "");
   releaseFont();
   if (page.viewportSize()!.width < 980) {
@@ -90,11 +90,11 @@ test("cached assets still leave enough time to see the preloader", async ({ page
   await page.goto("/about-us/", { waitUntil: "domcontentloaded" });
   const loader = page.locator(".site-preloader");
   await expect(loader).toHaveAttribute("data-phase", "loading");
-  await expect(loader).toHaveCount(0, { timeout: 5000 });
+  await expect(loader).toHaveCount(0, { timeout: 9000 });
   const duration = await page.evaluate(() => {
     const timing = (window as unknown as { preloaderTiming: { appeared: number; exiting: number } })
       .preloaderTiming;
     return timing.exiting - timing.appeared;
   });
-  expect(duration).toBeGreaterThanOrEqual(2950);
+  expect(duration).toBeGreaterThanOrEqual(5950);
 });
