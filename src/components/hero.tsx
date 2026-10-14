@@ -5,8 +5,8 @@ import { DeferredEarth } from "./deferred-earth";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown } from "lucide-react";
-import { WordReveal } from "./ui";
+import { ArrowDown, Leaf, Sprout, Trees, Wheat } from "lucide-react";
+import { Action, WordReveal } from "./ui";
 import type { EarthMotion } from "./earth-scene";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -89,16 +89,52 @@ export function Hero() {
           <DeferredEarth hero={root} motion={earthMotion} />
         </div>
         <div className="hero-opening" aria-hidden={scene !== "opening"}>
-          <p className="hero-kicker">Rooted in nature. Made for life.</p>
+          <p className="hero-kicker">
+            <Leaf size={18} strokeWidth={1.3} aria-hidden="true" />
+            Rooted in nature. Made for life.
+          </p>
           <WordReveal
             as="h1"
             id="hero-title"
-            lines={["Sustainable development.", "Rooted in nature."]}
+            lines={["Sustainable", "development.", "Rooted in nature."]}
             visible={scene === "opening"}
           />
           <p className="hero-summary">
             Natural farming and green communities that bring people closer to nature.
           </p>
+          <Action href="#communities" className="hero-action">
+            Explore our ventures
+          </Action>
+        </div>
+        <div className="hero-details" aria-hidden="true">
+          <svg className="hero-botanical" viewBox="0 0 260 300" fill="none">
+            <path d="M30 290C80 220 108 134 182 28M77 209C7 213 8 129 21 98C70 119 103 161 77 209ZM114 147C176 158 223 98 223 60C162 56 114 91 114 147ZM150 80C112 75 104 25 116 4C147 20 169 47 150 80Z" />
+            <path d="M77 209L21 98M114 147L223 60M150 80L116 4" />
+          </svg>
+          <div className="hero-world-note">
+            <span />
+            People · Land · Life
+          </div>
+          <div className="hero-nature-label hero-nature-farming">
+            <Sprout size={23} strokeWidth={1.2} />
+            <span>Natural farming</span>
+          </div>
+          <div className="hero-nature-label hero-nature-living">
+            <Trees size={23} strokeWidth={1.2} />
+            <span>Green communities</span>
+          </div>
+          <div className="hero-nature-label hero-nature-rice">
+            <Wheat size={23} strokeWidth={1.2} />
+            <span>Traditional rice</span>
+          </div>
+          <div className="hero-globe-caption">
+            <span>Our connection to the earth</span>
+            <p>
+              A closer connection
+              <br />
+              between people and land.
+            </p>
+          </div>
         </div>
         <div className="hero-introduction" aria-hidden={scene !== "introduction"}>
           <p className="eyebrow">Move to nature</p>

@@ -28,7 +28,7 @@ test("globe grows and descends around the same center as the introduction replac
       .toBeCloseTo(1 + progress, 2);
     const zoomed = (await canvas.boundingBox())!;
     expect(zoomed.y).toBeGreaterThan(expanded.y);
-    expect(Math.abs(zoomed.x + zoomed.width / 2 - viewport.width / 2)).toBeLessThan(2);
+    expect(Math.abs(zoomed.x + zoomed.width / 2 - (initial.x + initial.width / 2))).toBeLessThan(2);
     // Growing CSS bounds must not resize the renderer and cancel the visual zoom.
     expect(await canvas.evaluate((element) => element.clientWidth)).toBe(renderWidth);
   }

@@ -496,7 +496,7 @@ textarea:focus-visible {
   height: 100vh;
   height: 100svh;
   top: 0;
-  left: 0;
+  left: 18vw;
   z-index: 1;
   opacity: 1;
   transform: translate3d(0, 6%, 0);
@@ -609,62 +609,60 @@ textarea:focus-visible {
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  text-align: center;
-  padding: 0 24px;
+  text-align: left;
+  padding: 60px 5vw 0;
   z-index: 5;
   isolation: isolate;
-  opacity: 1;
   pointer-events: none;
 }
-.hero[data-scene="opening"] .hero-opening {
-  opacity: 1;
+.hero[data-scene="opening"] .hero-action {
   pointer-events: auto;
 }
+.hero-opening[aria-hidden="true"] {
+  visibility: hidden;
+  transition: visibility 0s 0.35s;
+}
 .hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  position: absolute;
-  top: calc(50% - 170px);
+  transition: opacity 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.13em;
-  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-size: 11px;
   color: #4d6043;
-  margin-bottom: 32px;
+  margin: 0 0 25px;
 }
 .hero[data-scene="opening"] .hero-kicker {
-  color: var(--ink);
-  text-shadow: none;
   opacity: 1;
   transition-duration: 0.6s;
 }
 .hero-opening h1 {
   color: var(--ink);
-  text-shadow: 0 1px 2px rgba(255, 253, 245, 0.6);
-  font-size: clamp(36px, 5vw, 68px);
-  line-height: 1.2;
-  max-width: 18em;
-  letter-spacing: -0.025em;
+  font-size: clamp(44px, 5vw, 76px);
+  line-height: 1.12;
+  max-width: 12em;
+  letter-spacing: -0.045em;
+}
+.hero-opening h1 .heading-line:last-child {
+  color: #647e4e;
 }
 .line-mask {
   display: block;
   overflow: hidden;
   padding-bottom: 0.1em;
 }
-/* Keep copy above WebGL, with a soft contrast layer across green terrain. */
+/* Paper protects the copy while leaving the globe unobstructed. */
 .hero-opening::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse 65% 27% at 50% 50%,
-    rgba(246, 245, 238, 0.94) 0%,
-    rgba(246, 245, 238, 0.8) 48%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg, #f6f5eef5 0%, #f6f5eed9 29%, #f6f5ee85 43%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -672,12 +670,12 @@ textarea:focus-visible {
   opacity: 1;
 }
 .hero-summary {
-  color: #243d30;
-  font-size: clamp(16px, 1.35vw, 20px);
-  font-weight: 500;
-  line-height: 1.65;
-  max-width: 36em;
-  margin: 24px 0 0;
+  color: #4e5d4a;
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 400;
+  line-height: 1.7;
+  max-width: 24em;
+  margin: 26px 0 0;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -685,8 +683,125 @@ textarea:focus-visible {
   opacity: 1;
   transition-duration: 0.6s;
 }
-.hero-heading-line {
-  display: block;
+.hero-action {
+  margin-top: 28px;
+  font-size: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.hero[data-scene="opening"] .hero-action {
+  opacity: 1;
+}
+.hero-details {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+}
+.hero[data-scene="opening"] .hero-details {
+  opacity: 1;
+  visibility: visible;
+}
+.hero-botanical {
+  position: absolute;
+  left: -55px;
+  bottom: 30px;
+  width: 230px;
+  stroke: #78915a;
+  stroke-width: 0.8;
+  opacity: 0.17;
+}
+.hero-world-note {
+  position: absolute;
+  top: 15%;
+  left: 61%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: #3f5934;
+}
+.hero-world-note > span {
+  width: 32px;
+  height: 1px;
+  background: #80946e;
+}
+.hero-nature-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 17px;
+  border: 1px solid #526b3933;
+  border-radius: 999px;
+  background: #f6f5eeed;
+  color: #3f5934;
+  font-size: 12px;
+  box-shadow: 0 6px 24px #243d3005;
+  animation: nature-drift 8s ease-in-out infinite;
+}
+.hero-nature-farming {
+  left: 57%;
+  top: 32%;
+}
+.hero-nature-living {
+  right: 5%;
+  top: 44%;
+  animation-delay: -3s;
+}
+.hero-nature-rice {
+  left: 60%;
+  bottom: 22%;
+  animation-delay: -5s;
+}
+.hero-globe-caption {
+  position: absolute;
+  right: 5vw;
+  bottom: 13%;
+  padding-left: 17px;
+  border-left: 1px solid #526b3944;
+}
+.hero-globe-caption > span {
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #657558;
+}
+.hero-globe-caption p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+@keyframes nature-drift {
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@media (max-width: 1000px) and (min-width: 640px) {
+  .hero-opening h1 {
+    font-size: 5.8vw;
+  }
+  .hero-summary {
+    max-width: 21em;
+  }
+  .hero-nature-label {
+    font-size: 10px;
+    padding: 10px 12px;
+  }
+  .hero-nature-farming {
+    left: 61%;
+    top: 29%;
+  }
+  .hero-nature-rice {
+    bottom: 27%;
+  }
 }
 .hero-introduction {
   position: fixed;
@@ -763,7 +878,7 @@ textarea:focus-visible {
   font-size: 11px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  z-index: 3;
+  z-index: 7;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1738,24 +1853,69 @@ dialog[open] {
     top: 50%;
   }
   .hero-opening {
-    padding: 0 16px;
+    padding: clamp(112px, 17svh, 145px) 24px 0;
+    justify-content: flex-start;
   }
   .hero-opening h1 {
-    font-size: clamp(28px, 7.4vw, 40px);
-    line-height: 1.25;
+    font-size: clamp(32px, 8.8vw, 48px);
+    line-height: 1.13;
   }
-  .hero[data-scene="opening"] .hero-kicker {
-    top: calc(50% - 150px);
-    color: var(--ink);
-    text-shadow: none;
+  .hero-kicker {
     font-size: 9px;
-    letter-spacing: 0.09em;
-    margin-bottom: 26px;
+    letter-spacing: 0.06em;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .hero-opening::before {
+    background: linear-gradient(180deg, #f6f5eee8 0%, #f6f5eeda 30%, transparent 58%);
   }
   .hero-summary {
-    font-size: 15px;
-    max-width: 22em;
+    font-size: 14px;
+    max-width: 23em;
+    margin-top: 18px;
+  }
+  .hero-action {
     margin-top: 20px;
+    font-size: 13px;
+  }
+  .hero-action .action-label {
+    padding: 11px 18px;
+  }
+  .hero-action .action-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  .hero-earth {
+    left: -5vw;
+    top: 19svh;
+  }
+  .hero-world-note,
+  .hero-globe-caption,
+  .hero-nature-rice {
+    display: none;
+  }
+  .hero-nature-label {
+    padding: 9px 12px;
+    font-size: 10px;
+    gap: 7px;
+  }
+  .hero-nature-label svg {
+    width: 18px;
+    height: 18px;
+  }
+  .hero-nature-farming {
+    left: 6%;
+    top: 63%;
+  }
+  .hero-nature-living {
+    right: 5%;
+    top: auto;
+    bottom: 13%;
+  }
+  .hero-botanical {
+    width: 155px;
+    left: -65px;
+    bottom: 35px;
   }
   .hero-introduction h2 {
     font-size: 28px;
@@ -3056,5 +3216,14 @@ dialog[open] {
   }
   .community-row-description {
     padding-left: 126px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-details {
+    position: absolute;
+  }
+  .hero-nature-label {
+    animation: none;
   }
 }
