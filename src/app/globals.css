@@ -2998,3 +2998,31 @@ dialog[open] {
     width: 160px;
   }
 }
+
+/* Venture wordmarks need a wide, uncropped box instead of a circular photo. */
+.community-row-main > img.community-row-logo {
+  width: 144px;
+  height: 70px;
+  flex: 0 0 144px;
+  object-fit: contain;
+  border-radius: 0;
+}
+.community-row-main,
+.community-row-main > span:last-child {
+  min-width: 0;
+}
+@media (max-width: 979px) {
+  .community-row-description {
+    padding-left: 188px;
+  }
+}
+@media (max-width: 639px) {
+  .community-row-main > img.community-row-logo {
+    width: 92px;
+    height: 55px;
+    flex-basis: 92px;
+  }
+  .community-row-description {
+    padding-left: 126px;
+  }
+}
