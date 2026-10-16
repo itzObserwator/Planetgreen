@@ -5,7 +5,20 @@ import { DeferredEarth } from "./deferred-earth";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, Bean, Layers3, Leaf, Sprout, TreePine, Trees, Wheat } from "lucide-react";
+import {
+  ArrowDown,
+  Bean,
+  Flower2,
+  HandHeart,
+  House,
+  Layers3,
+  Leaf,
+  LeafyGreen,
+  Sprout,
+  TreePine,
+  Trees,
+  Wheat,
+} from "./icons";
 import { sustainabilityThemes } from "@/data/content";
 import { Action, WordReveal } from "./ui";
 import type { EarthMotion } from "./earth-scene";
@@ -19,6 +32,10 @@ const sustainabilityIcons = {
   soil: Layers3,
   restoration: TreePine,
   seeds: Bean,
+  parks: Flower2,
+  indigenous: LeafyGreen,
+  "farm-living": House,
+  farmers: HandHeart,
 };
 
 // Fixed irregular angles avoid hydration mismatches while keeping the topics mixed.
@@ -27,7 +44,9 @@ const sustainabilityOrbits = [
     circle: "two",
     members: [
       { id: "restoration", angle: 24 },
+      { id: "parks", angle: 102 },
       { id: "farming", angle: 171 },
+      { id: "farm-living", angle: 226 },
       { id: "seeds", angle: 282 },
     ],
   },
@@ -35,7 +54,9 @@ const sustainabilityOrbits = [
     circle: "three",
     members: [
       { id: "soil", angle: 61 },
+      { id: "indigenous", angle: 132 },
       { id: "rice", angle: 207 },
+      { id: "farmers", angle: 266 },
       { id: "living", angle: 329 },
     ],
   },
@@ -159,9 +180,9 @@ export function Hero() {
                     <div
                       key={id}
                       className="hero-badge-slot"
-                      style={{ "--badge-angle": `${angle}deg` } as CSSProperties}
+                      style={{ "--badge-start": `${(angle / 360) * 100}%` } as CSSProperties}
                     >
-                      <div className="hero-badge-counter">
+                      <div className="hero-badge-content">
                         <button
                           type="button"
                           className={`hero-nature-label hero-nature-${id}`}

@@ -8,6 +8,36 @@ export const contact = {
     "2nd Floor, Regent Square Building, Q-City Road, Beside Heritage Fresh, Gowlidoddi, Hyderabad 500075",
 };
 
+// Footer details supplied in the reference; social URLs retained from the source site.
+export const footerInformation = {
+  description:
+    "Planet Green aspires to create a new dimension in the natural farming and alternate real estate segments in India. Through their Vedic farming practices and the creation of green eco-habitats.",
+  email: "info@planetgreen.co.in",
+  address: "2nd Floor, Regent Square Building, Q-City Road, Gowlidoddi, Hyderabad - 500075",
+  socials: [
+    {
+      name: "Facebook",
+      icon: "Facebook",
+      href: "https://www.facebook.com/people/PlanetGreen/100077443677660/",
+    },
+    {
+      name: "Instagram",
+      icon: "Instagram",
+      href: "https://www.instagram.com/planetgreeneco_official/",
+    },
+    {
+      name: "YouTube",
+      icon: "YouTube",
+      href: "https://www.youtube.com/channel/UCoClvBsQCNd5kgbN12dMYDA",
+    },
+    {
+      name: "LinkedIn",
+      icon: "LinkedIn",
+      href: "https://www.linkedin.com/company/planet-green-infra-pvt-ltd/",
+    },
+  ],
+} as const;
+
 export const pillars = [
   {
     number: "01",
@@ -33,7 +63,7 @@ export const communities = [
     name: "Ecoworld",
     category: "Nature-led residential villa plots",
     logo: "/brand/ecoworld.png",
-    image: "/images/dates-county.webp",
+    image: "/images/ecoworld-valley-greens-park.webp",
     detailImage: "/images/dates-county-community.webp",
     description:
       "A 300+ acre villa plot community in Kandukur, where green landscapes and shared spaces bring families closer to nature.",
@@ -49,7 +79,7 @@ export const communities = [
     category: "Managed natural farming estate",
     logo: "/brand/farm-natura.svg",
     image: "/images/farm-natura.webp",
-    detailImage: "/images/farm-natura-building.webp",
+    detailImage: "/images/farmnatura-collection-01.webp",
     description:
       "A 110+ acre managed natural-farming estate near Kandukur, focused on soil health, indigenous seeds and farm living.",
     detail:
@@ -99,6 +129,10 @@ export const sustainabilityThemes = [
   { id: "soil", label: "Soil health" },
   { id: "restoration", label: "Land restoration" },
   { id: "seeds", label: "Seed preservation" },
+  { id: "parks", label: "Green parks" },
+  { id: "indigenous", label: "Indigenous seeds" },
+  { id: "farm-living", label: "Farm living" },
+  { id: "farmers", label: "Farmer communities" },
 ] as const;
 
 export const gallery = [

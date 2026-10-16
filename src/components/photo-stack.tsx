@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./icons";
 
 type Photo = { src: string; alt: string };
 const rotations = [-7, 6, -3, 4];

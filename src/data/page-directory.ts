@@ -13,18 +13,6 @@ export const pageDirectory = [
   { slug: "careers", sourceKey: "careers", title: "Careers", label: "Careers" },
   { slug: "contact-us", sourceKey: "contact-us", title: "Contact Us", label: "Contact us" },
   {
-    slug: "singapore-expo-2023",
-    sourceKey: "singapore-expo-2023",
-    title: "Singapore",
-    label: "Singapore · 2023",
-  },
-  {
-    slug: "behrain-expo-2023",
-    sourceKey: "behrain-expo-2023",
-    title: "Bahrain Expo",
-    label: "Bahrain · 2023",
-  },
-  {
     slug: "privacy-policy",
     sourceKey: "privacy_policy",
     title: "Privacy Policy",

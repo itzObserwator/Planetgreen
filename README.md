@@ -33,6 +33,7 @@ src/
     contact-dialog.tsx     Enquiry form and email draft
     motion-provider.tsx    Lenis smooth scrolling and GSAP integration
     ui.tsx                 Shared typography, reveals and buttons
+    icons.tsx              Shared Hugeicons shapes, hover and state transitions
   lib/
     earth-palette.mjs       Shared land/ocean color grading for the light globe
   data/
@@ -46,6 +47,8 @@ research/                  Reference analysis and source-content notes
 ```
 
 Start with `src/data/content.ts` to edit communities, images, contact details or gallery captions. The opening headline lives in `hero.tsx`; section headlines and introductory paragraphs live in `sections.tsx`. Images use paths such as `/images/farm-natura.jpg`, which resolve to files in `public/images/`.
+
+All UI icons use Hugeicons Stroke Rounded, centralized in `src/components/icons.tsx`. Static icons use the official `@hugeicons/react` renderer with tree-shaken shapes from `@hugeicons/core-free-icons`; interactive icons use the same Hugeicons shapes with Morphicons to preserve smooth state transitions. Import named icons from `./icons`, or use `<SiteIcon name="Menu" activeName={open ? "X" : "Menu"} />`. Button arrows retain their side-switch and angle change, and animated state transitions respect reduced motion. Add new shapes and hover pairs in this single file.
 
 To change the visual style, edit the color variables, typography and section rules in `globals.css`. It also contains the mobile breakpoints. Tailwind utility classes can be used alongside these named styles.
 

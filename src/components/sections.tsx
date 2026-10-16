@@ -3,8 +3,15 @@ import { pageDirectory } from "@/data/page-directory";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Plus, Play } from "lucide-react";
-import { communities, contact, gallery, pillars, type Community } from "@/data/content";
+import { ArrowLeft, ArrowRight, ArrowUpRight, SiteIcon, Play } from "./icons";
+import {
+  communities,
+  contact,
+  footerInformation,
+  gallery,
+  pillars,
+  type Community,
+} from "@/data/content";
 import { Action, Eyebrow, Heading, Reveal } from "./ui";
 import { PhotoStack } from "./photo-stack";
 
@@ -248,7 +255,11 @@ export function Communities({
                 </span>
                 <span className="community-row-description">{c.description}</span>
                 <span className="community-plus">
-                  <Plus strokeWidth={1} />
+                  <SiteIcon
+                    name="Plus"
+                    activeName={expanded === c.id ? "X" : "Plus"}
+                    strokeWidth={1.5}
+                  />
                 </span>
               </button>
               <AnimatePresence initial={false}>
@@ -537,11 +548,7 @@ export function Footer({ onVisit }: { onVisit: () => void }) {
             <Heading lines={["Let’s build a", "greener future."]} />
           </Reveal>
           <Reveal className="footer-copy" delay={0.1}>
-            <p>
-              Explore our communities, natural farming and heritage rice ventures. We also welcome
-              conversations with people and organisations who share our commitment to sustainable
-              development.
-            </p>
+            <p>{footerInformation.description}</p>
             <p>
               Get in touch to learn about our projects, arrange a visit or discuss a collaboration.
             </p>
@@ -550,45 +557,38 @@ export function Footer({ onVisit }: { onVisit: () => void }) {
         </div>
         <div className="footer-contacts">
           <div>
-            <Eyebrow>Say hello</Eyebrow>
-            <a href={`mailto:${contact.email}`}>
-              {contact.email}
-              <ArrowUpRight size={18} />
-            </a>
+            <Eyebrow>Contact us</Eyebrow>
             <a href={contact.phoneHref}>
+              <SiteIcon name="Phone" size={20} />
               {contact.phone}
-              <ArrowUpRight size={18} />
+            </a>
+            <a href={`mailto:${footerInformation.email}`}>
+              <SiteIcon name="Mail" size={20} />
+              {footerInformation.email}
             </a>
           </div>
           <div className="footer-address">
-            <Eyebrow>Find us</Eyebrow>
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {contact.address}
-              <ArrowUpRight size={18} />
-            </a>
+            <Eyebrow>Our office</Eyebrow>
+            <p>
+              <SiteIcon name="Location" size={22} /> <span>{footerInformation.address}</span>
+            </p>
           </div>
           <div>
             <Eyebrow>Follow the journey</Eyebrow>
-            <a
-              href="https://www.instagram.com/planetgreeneco_official/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram
-              <ArrowUpRight size={18} />
-            </a>
-            <a
-              href="https://www.youtube.com/channel/UCoClvBsQCNd5kgbN12dMYDA"
-              target="_blank"
-              rel="noreferrer"
-            >
-              YouTube
-              <ArrowUpRight size={18} />
-            </a>
+            <div className="footer-social-links">
+              {footerInformation.socials.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Planet Green on ${social.name}`}
+                >
+                  <SiteIcon name={social.icon} size={21} />
+                  <span>{social.name}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
         <nav className="footer-page-links" aria-label="Website pages">

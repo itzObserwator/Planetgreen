@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const GLOBE_TRANSITION_MS = 1200;
+const GLOBE_TRANSITION_MS = 1800;
 const PRELOADER_FADE_MS = 600;
+const CLOUD_ENTRANCE_MS = 900;
 
 /** A first-visit veil: wait for first-paint assets, never the whole WebGL scene. */
 export function Preloader() {
@@ -24,6 +25,7 @@ export function Preloader() {
     let exitTimer: ReturnType<typeof setTimeout>;
     let deadline: ReturnType<typeof setTimeout>;
     let minimumTimer: ReturnType<typeof setTimeout>;
+    let entranceTimer: ReturnType<typeof setTimeout>;
     let globeExpansion: Animation | undefined;
     let heroReveal: Animation | undefined;
     const background = Array.from(
@@ -78,6 +80,12 @@ export function Preloader() {
         !!heroArtwork &&
         hero?.dataset.scene === "opening";
       const finish = () => {
+        if (canHandoff) {
+          root.dataset.heroEntrance = "clouds";
+          entranceTimer = setTimeout(() => {
+            root.dataset.heroEntrance = "orbits";
+          }, CLOUD_ENTRANCE_MS);
+        }
         root.classList.remove("preloading");
         restore();
         setPhase("done");
@@ -108,7 +116,7 @@ export function Preloader() {
               transform: fromTransform,
               opacity: 1,
               offset: 0,
-              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              easing: "cubic-bezier(0.45, 0, 0.2, 1)",
             },
             { opacity: 1, offset: 0.8 },
             {
@@ -136,6 +144,8 @@ export function Preloader() {
       clearTimeout(deadline);
       clearTimeout(exitTimer);
       clearTimeout(minimumTimer);
+      clearTimeout(entranceTimer);
+      delete root.dataset.heroEntrance;
       globeExpansion?.cancel();
       heroReveal?.cancel();
       window.removeEventListener("resize", syncGlobeVeil);
@@ -184,7 +194,9 @@ export function Preloader() {
           </div>
         </div>
         <p className="preloader-heading">
-          Move to Nature<span>.</span>
+          Built with nature.{" "}
+          <br />
+          For people<span>.</span>
         </p>
         <p className="preloader-caption">Rooted in nature. Made for life.</p>
         <div className="preloader-track" aria-hidden="true">

@@ -26,12 +26,14 @@ export function DeferredEarth({
       if (idle !== undefined) window.cancelIdleCallback(idle);
     };
     let loaded = false;
+    let entranceObserver: MutationObserver | undefined;
     const load = () => {
-      if (loaded) return;
+      if (loaded || document.documentElement.classList.contains("preloading")) return;
       loaded = true;
       cancel();
       setEnhanced(true);
       observer.disconnect();
+      entranceObserver?.disconnect();
       window.removeEventListener("scroll", onScroll);
     };
     const onScroll = () => {
@@ -50,12 +52,22 @@ export function DeferredEarth({
       }, 750);
     });
     observer.observe(element);
+    // Keep WebGL clouds out of the globe-growth handoff. Enhance only afterwards.
+    entranceObserver = new MutationObserver(() => {
+      const bounds = element.getBoundingClientRect();
+      if (bounds.bottom > 0 && bounds.top < window.innerHeight) load();
+    });
+    entranceObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => {
       window.removeEventListener("scroll", onScroll);
       cancel();
       observer.disconnect();
+      entranceObserver.disconnect();
     };
   }, [hero]);
   return (

@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Play, X } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Play, X } from "./icons";
 
 type Photo = { src: string; alt: string };
 export function PhotoCollection({ photos, label }: { photos: Photo[]; label: string }) {
@@ -45,7 +45,7 @@ export function PhotoCollection({ photos, label }: { photos: Photo[]; label: str
               decoding="async"
             />
             <span aria-hidden="true">
-              {String(i + 1).padStart(2, "0")} <span>↗</span>
+              {String(i + 1).padStart(2, "0")} <ArrowUpRight size={18} aria-hidden="true" />
             </span>
           </button>
         ))}
@@ -94,12 +94,19 @@ export function PhotoCollection({ photos, label }: { photos: Photo[]; label: str
   );
 }
 
-export function GalleryCollection({ groups }: { groups: { name: string; images: Photo[] }[] }) {
+export function GalleryCollection({
+  groups,
+  label = "Gallery communities",
+}: {
+  groups: { name: string; images: Photo[] }[];
+  label?: string;
+}) {
+  const galleryId = useId();
   const [active, setActive] = useState(0);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   return (
     <>
-      <div className="gallery-filters" role="tablist" aria-label="Gallery communities">
+      <div className="gallery-filters" role="tablist" aria-label={label}>
         {groups.map((group, i) => (
           <button
             key={group.name}
@@ -107,9 +114,9 @@ export function GalleryCollection({ groups }: { groups: { name: string; images: 
               tabs.current[i] = node;
             }}
             role="tab"
-            id={`gallery-tab-${i}`}
+            id={`${galleryId}-tab-${i}`}
             aria-selected={active === i}
-            aria-controls={`gallery-panel-${i}`}
+            aria-controls={`${galleryId}-panel-${i}`}
             tabIndex={active === i ? 0 : -1}
             onClick={() => setActive(i)}
             onKeyDown={(e) => {
@@ -132,8 +139,8 @@ export function GalleryCollection({ groups }: { groups: { name: string; images: 
       <div
         key={active}
         role="tabpanel"
-        id={`gallery-panel-${active}`}
-        aria-labelledby={`gallery-tab-${active}`}
+        id={`${galleryId}-panel-${active}`}
+        aria-labelledby={`${galleryId}-tab-${active}`}
         tabIndex={0}
       >
         <PhotoCollection photos={groups[active].images} label={groups[active].name} />

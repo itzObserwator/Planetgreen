@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight, SiteIcon } from "./icons";
 import { motion, useInView } from "framer-motion";
 import {
   Children,
@@ -33,9 +33,12 @@ export function Action({
 }) {
   const content = (
     <>
+      <span className="action-arrow action-arrow-left" aria-hidden="true">
+        <SiteIcon name="ArrowRight" activeName="ArrowRight" size={20} strokeWidth={1.3} />
+      </span>
       <span className="action-label">{children}</span>
       <span className="action-arrow" aria-hidden="true">
-        <ArrowRight size={20} strokeWidth={1.3} />
+        <SiteIcon name="ArrowRight" activeName="ArrowRight" size={20} strokeWidth={1.3} />
       </span>
     </>
   );
@@ -112,7 +115,15 @@ export function WordReveal({
   );
 }
 
-export function Heading({ lines, className = "" }: { lines: string[]; className?: string }) {
+export function Heading({
+  lines,
+  className = "",
+  id,
+}: {
+  lines: string[];
+  className?: string;
+  id?: string;
+}) {
   const element = useRef<HTMLHeadingElement>(null);
   const inherited = useContext(RevealVisibility);
   const visible = useInView(element, { amount: 0, once: false });
@@ -120,6 +131,7 @@ export function Heading({ lines, className = "" }: { lines: string[]; className?
     <WordReveal
       lines={lines}
       className={className}
+      id={id}
       elementRef={element}
       visible={inherited ?? visible}
     />

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { SiteIcon, ArrowUpRight } from "./icons";
 import { Action } from "./ui";
 import { communities } from "@/data/content";
 import { pageDirectory } from "@/data/page-directory";
@@ -30,6 +30,7 @@ export function Navigation({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [projectOpen, setProjectOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const projectDropdown = useRef<HTMLDetailsElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -118,9 +119,19 @@ export function Navigation({
                 {link.label}
               </Link>
             ))}
-            <details ref={projectDropdown} className="navigation-pages project-dropdown">
+            <details
+              ref={projectDropdown}
+              className="navigation-pages project-dropdown"
+              onToggle={(event) => setProjectOpen(event.currentTarget.open)}
+            >
               <summary>
-                Projects <ChevronDown size={15} aria-hidden="true" />
+                Projects{" "}
+                <SiteIcon
+                  name="ChevronDown"
+                  activeName={projectOpen ? "ChevronUp" : "ChevronDown"}
+                  size={15}
+                  aria-hidden="true"
+                />
               </summary>
               <div className="navigation-page-list">
                 {projects.map((project) => (
@@ -147,7 +158,7 @@ export function Navigation({
             aria-expanded={open}
             aria-controls="website-navigation"
           >
-            {open ? <X /> : <Menu />}
+            <SiteIcon name="Menu" activeName={open ? "X" : "Menu"} />
           </button>
         </div>
       </header>
@@ -191,7 +202,7 @@ export function Navigation({
                   <Link key={page.slug} href={`/${page.slug}/`} onClick={() => setOpen(false)}>
                     <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                     {page.label}
-                    <span aria-hidden="true">↗</span>
+                    <ArrowUpRight size={18} aria-hidden="true" />
                   </Link>
                 ))}
               </div>

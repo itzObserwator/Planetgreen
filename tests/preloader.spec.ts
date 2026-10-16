@@ -16,7 +16,7 @@ test("themed preloader releases a slow page and does not return on internal navi
   await page.goto("/about-us/", { waitUntil: "domcontentloaded" });
   const loader = page.locator(".site-preloader");
   await expect(loader).toBeVisible();
-  await expect(loader).toContainText("Move to Nature.");
+  await expect(loader).toContainText("Built with nature. For people.");
   await expect(page.locator("main")).toHaveAttribute("inert", "");
   // Even while the font is still held, first-paint waiting must be bounded.
   await expect(loader).toHaveCount(0, { timeout: 9000 });

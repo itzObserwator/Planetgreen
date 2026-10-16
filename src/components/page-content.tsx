@@ -1,10 +1,13 @@
+import { ArrowDown, ArrowUpRight } from "./icons";
 import Link from "next/link";
+import { AboutPage } from "./about-page";
 import live from "@/data/live-pages.json";
 import { communities, contact } from "@/data/content";
 import { pageDirectory, type PageEntry } from "@/data/page-directory";
 import { Eyebrow, Heading, Action } from "./ui";
 import { PhotoCollection, GalleryCollection, VideoCollection } from "./page-media";
 import { PageEnquiry } from "./page-enquiry";
+import { bahrainPhotos } from "@/data/event-gallery";
 
 type Block = { tag: string; text: string };
 type EditorialSection = { blocks: Block[]; images: string[] };
@@ -45,6 +48,18 @@ function Editorial({
 function CommunityList({ section }: { section: EditorialSection }) {
   const titles = section.blocks.filter((b) => b.tag === "h3");
   const descriptions = section.blocks.filter((b) => b.tag === "p").slice(-4);
+  // Reorder complete entries so their original editorial copy stays with the project.
+  const orderedCommunities = communities
+    .map((community, index) => ({
+      community,
+      title: titles[index].text,
+      description: descriptions[index].text,
+    }))
+    .sort(
+      (a, b) =>
+        Number(a.community.id === "green-land-capital") -
+        Number(b.community.id === "green-land-capital"),
+    );
   return (
     <>
       <div className="page-introduction">
@@ -52,12 +67,16 @@ function CommunityList({ section }: { section: EditorialSection }) {
         {section.blocks.filter((b) => b.tag === "p").length > 4 && <p>{section.blocks[1].text}</p>}
       </div>
       <div className="page-community-list">
-        {communities.map((community, i) => (
+        {orderedCommunities.map(({ community, title, description }, i) => (
           <article key={community.id} id={community.id}>
             <div className="page-community-image">
               <img
                 src={community.image}
-                alt={community.name}
+                alt={
+                  community.id === "ecoworld"
+                    ? "Ecoworld park visualization with gardens, pathways and a footbridge"
+                    : community.name
+                }
                 width={1000}
                 height={700}
                 loading="lazy"
@@ -66,8 +85,8 @@ function CommunityList({ section }: { section: EditorialSection }) {
             </div>
             <div>
               <Eyebrow>{String(i + 1).padStart(2, "0")}</Eyebrow>
-              <Heading lines={[titles[i].text]} />
-              <p>{descriptions[i].text}</p>
+              <Heading lines={[title]} />
+              <p>{description}</p>
               <Action href={community.url} external>
                 More detail
               </Action>
@@ -80,8 +99,8 @@ function CommunityList({ section }: { section: EditorialSection }) {
 }
 
 export function PageContent({ entry }: { entry: PageEntry }) {
+  if (entry.slug === "about-us") return <AboutPage />;
   const page = live[entry.sourceKey];
-  const isEvent = entry.slug.includes("expo");
   const legal = entry.slug === "privacy-policy" || entry.slug === "terms-and-conditions";
   return (
     <>
@@ -91,7 +110,7 @@ export function PageContent({ entry }: { entry: PageEntry }) {
           <span aria-hidden="true">/</span>
           <span>{entry.label}</span>
         </div>
-        <Eyebrow>{isEvent ? "Events · 2023 archive" : "Building a serene ecosystem"}</Eyebrow>
+        <Eyebrow>Building a serene ecosystem</Eyebrow>
         <h1>
           {entry.title}
           <span className="page-title-dot" aria-hidden="true">
@@ -100,15 +119,26 @@ export function PageContent({ entry }: { entry: PageEntry }) {
         </h1>
         <div className="inner-hero-foot">
           <span>Planet Green · Move to Nature</span>
-          <span aria-hidden="true">↓</span>
+          <ArrowDown size={24} aria-hidden="true" />
         </div>
       </header>
       <div className="container inner-content">
         {entry.slug === "gallery" ? (
-          <section className="page-gallery">
-            <Heading lines={["Visual Stories of Planet Green"]} />
-            <GalleryCollection groups={live.galleryGroups} />
-          </section>
+          <>
+            <section className="page-gallery" aria-labelledby="community-gallery-title">
+              <Heading id="community-gallery-title" lines={["Visual Stories of Planet Green"]} />
+              <GalleryCollection groups={live.galleryGroups} />
+            </section>
+            <section
+              className="page-gallery event-gallery"
+              id="bahrain-visuals"
+              aria-labelledby="event-gallery-title"
+            >
+              <Eyebrow>Bahrain · 2023 archive</Eyebrow>
+              <Heading id="event-gallery-title" lines={["Visuals from Bahrain"]} />
+              <PhotoCollection photos={bahrainPhotos} label="Bahrain" />
+            </section>
+          </>
         ) : entry.slug === "communities" ? (
           <CommunityList section={page.sections[0]} />
         ) : entry.slug === "collaborations" ? (
@@ -187,37 +217,9 @@ export function PageContent({ entry }: { entry: PageEntry }) {
           </>
         ) : (
           <>
-            {isEvent && (
-              <section className="event-introduction">
-                <Eyebrow>Past event · 2023</Eyebrow>
-                <Heading
-                  lines={["Embrace Nature with Planet Green's Open Villa Plots and Farmlands!"]}
-                />
-                {entry.slug === "behrain-expo-2023" && (
-                  <div className="event-facts">
-                    <p>
-                      15th March to 18th March 2023
-                      <br />
-                      10.00am to 8.00pm
-                    </p>
-                    <p>
-                      Location Details:
-                      <br />
-                      Block 1062 Road 6204 Gulf of Bahrain Road Sakhir
-                    </p>
-                  </div>
-                )}
-                <Action href="mailto:info@planetgreen.co.in">Enquire now</Action>
-              </section>
-            )}
-            {page.sections.map((section, i) =>
-              isEvent && i === 1 ? (
-                <CommunityList key={i} section={section} />
-              ) : (
-                <Editorial key={i} section={section} index={i} legal={legal} />
-              ),
-            )}
-            {isEvent && <VideoCollection videos={live.videos.slice(0, 2)} />}
+            {page.sections.map((section, i) => (
+              <Editorial key={i} section={section} index={i} legal={legal} />
+            ))}
           </>
         )}
         <nav className="page-directory" aria-label="Explore Planet Green">
@@ -232,7 +234,7 @@ export function PageContent({ entry }: { entry: PageEntry }) {
             .map((page) => (
               <Link key={page.slug} href={`/${page.slug}/`}>
                 {page.label}
-                <span aria-hidden="true">↗</span>
+                <ArrowUpRight size={20} aria-hidden="true" />
               </Link>
             ))}
         </nav>

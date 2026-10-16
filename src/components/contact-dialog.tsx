@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, X } from "lucide-react";
+import { ArrowUpRight, Check, X } from "./icons";
 import { communities, contact, type Community } from "@/data/content";
 import { Action, Eyebrow } from "./ui";
 
@@ -220,7 +220,7 @@ export function CommunityDialog({
               Get in touch
             </Action>
             <a className="text-link" href={community.url} target="_blank" rel="noreferrer">
-              Visit the {community.name} website ↗
+              Visit the {community.name} website <ArrowUpRight size={17} aria-hidden="true" />
             </a>
           </div>
         </div>

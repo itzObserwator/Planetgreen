@@ -4,7 +4,7 @@ test("globe grows and descends around the same center as the introduction replac
   page,
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   const earth = page.locator(".hero-earth");
   const canvas = earth.locator("canvas");
   await expect(canvas).toBeVisible();
@@ -45,7 +45,7 @@ test("hero words reveal in sequence, copy enters after them, and reversing reset
   page,
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   const openingWords = page.locator(".hero-opening .reveal-word-inner");
   await expect(openingWords.last()).toHaveCSS("opacity", "1");
   const height = page.viewportSize()!.height;
@@ -84,7 +84,7 @@ test("Earth backgrounds load behind the footer and keep their placement when a v
   page,
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   const landscape = page.locator(".earth-landscape-footer");
   const image = landscape.locator("img");
   const top = await landscape.evaluate((element) =>
@@ -135,7 +135,7 @@ test.describe("reduced-motion Earth", () => {
   test.use({ reducedMotion: "reduce" });
   test("globe leaves with the hero and does not cover later page content", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    await expect(page.locator(".site-preloader")).toBeHidden();
+    await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
     await expect(page.locator(".hero-earth")).toHaveCSS("position", "absolute");
     await page.getByRole("heading", { name: /Different paths/ }).scrollIntoViewIfNeeded();
     await expect(page.getByRole("heading", { name: /Different paths/ })).toBeInViewport();
@@ -147,7 +147,7 @@ test("realistic Earth renders and its geographic fallback survives a lost WebGL 
   page,
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   const artwork = page.locator(".earth-artwork");
   await expect(artwork).toHaveAttribute("data-ready", "true");
   await expect(artwork.locator("canvas")).toHaveCSS("opacity", "1");
@@ -184,7 +184,7 @@ test("scroll rotates the geographic surface and reversing returns it to India", 
         : interval(handler, delay, ...args)) as typeof window.setInterval;
   });
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
   await expect(page.locator(".hero-earth canvas")).toHaveCSS("opacity", "1");
   // Hold the CSS zoom/descent still and hide copy: a geographic change must
@@ -256,7 +256,7 @@ test.describe("hero copy before JavaScript", () => {
     page,
   }) => {
     await page.goto("/", { waitUntil: "networkidle" });
-    await expect(page.locator(".site-preloader")).toBeHidden();
+    await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator(".hero-summary")).toHaveText(
       "Natural farming and green communities that bring people closer to nature.",
@@ -285,7 +285,7 @@ test("opening Farm Natura skips offscreen WebGL and paints the first photograph 
       globeRequests.push(request.url());
   });
   await page.goto("/#farm-natura", { waitUntil: "networkidle" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   await expect(page.locator("#farm-natura")).toBeInViewport();
   await expect(page.locator("#farm-natura .stack-front")).toHaveCSS("opacity", "1");
   await page.waitForTimeout(1600);
@@ -304,7 +304,7 @@ test("scrolling activates the 3D globe even while idle loading is delayed", asyn
     window.cancelIdleCallback = () => {};
   });
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator(".site-preloader")).toBeHidden();
+  await expect(page.locator(".site-preloader")).toBeHidden({ timeout: 12000 });
   await page.evaluate(() => window.scrollTo(0, innerHeight * 0.15));
   await expect(page.locator(".earth-artwork")).toHaveAttribute("data-ready", "true");
   await expect(page.locator(".hero-earth canvas")).toHaveCSS("opacity", "1");
